@@ -7,9 +7,9 @@
     "build:desktop": "tsc --project desktop-tsconfig.json",
     "build": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client' 'yarn build:desktop'",
     "build:watch": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client -w' 'yarn build:desktop -w'",
+    "start": "concurrently -n client,desktop-watch,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn serve:client' 'yarn build:desktop -w' 'yarn start:desktop'",
     "serve:client": "webpack serve -c client-webpack.config.js --progress",
-    "start": "electron dist/desktop/index.js",
-    "start:watch": "concurrently 'yarn build:watch' 'nodemon --exec electron dist/desktop/index.js'"
+    "start:desktop": "nodemon --exec electron dist/desktop/desktop.js --inspect"
   },
   "private": "true",
   "devDependencies": {

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 export function Client() {
-  return <>Poppinsg the client</>;
+  return <>Doing the thisngs</>;
 }
 
 addEventListener("DOMContentLoaded", () => {
