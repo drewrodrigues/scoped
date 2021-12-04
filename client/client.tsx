@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { MainRoutes } from "./components/mainRoutes";
+import { Sidebar } from "./components/sidebar";
 
-import "./styles/reset.scss";
+import "./styles/styles.scss";
+import "./_client.scss";
 
 declare global {
   interface Window {
@@ -12,7 +16,14 @@ declare global {
 }
 
 export function Client() {
-  return <>Doing the thisngs</>;
+  return (
+    <BrowserRouter>
+      <div className="client">
+        <Sidebar />
+        <MainRoutes />
+      </div>
+    </BrowserRouter>
+  );
 }
 
 addEventListener("DOMContentLoaded", () => {
