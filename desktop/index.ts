@@ -8,11 +8,11 @@ const createWindow = () => {
     width: 500,
     height: 500,
     webPreferences: {
-      preload: path.join(__dirname, "..", "client", "client.html"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  window.loadFile("main.html");
+  window.loadFile("../client/client.html");
 };
 
 app.whenReady().then(() => {

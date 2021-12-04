@@ -7,12 +7,15 @@
     "build:desktop": "tsc --project desktop-tsconfig.json",
     "build": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client' 'yarn build:desktop'",
     "build:watch": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client -w' 'yarn build:desktop -w'",
-    "start": "electron dist/desktop/index.js"
+    "start": "electron dist/desktop/index.js",
+    "start:watch": "concurrently 'yarn build:watch' 'nodemon --exec electron dist/desktop/index.js'"
   },
   "private": "true",
   "devDependencies": {
+    "concurrently": "6.4.0",
     "electron": "^16.0.4",
     "html-webpack-plugin": "^5.5.0",
+    "nodemon": "^2.0.15",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
     "webpack": "^5.64.4",
