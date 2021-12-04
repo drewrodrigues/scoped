@@ -2,13 +2,12 @@
   "name": "scoped",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "build:electron": "tsc index.ts"
   },
-  "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^16.0.4"
+    "electron": "^16.0.4",
+    "typescript": "^4.5.2"
   }
 }

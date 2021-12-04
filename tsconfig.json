@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "dir",
+  },
+  "files": ["index.ts"]
+}
