@@ -5,7 +5,8 @@
   "scripts": {
     "build:client": "webpack -c client-webpack.config.js",
     "build:desktop": "tsc --project desktop-tsconfig.json",
-    "build": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client' 'yarn build:desktop'"
+    "build": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client' 'yarn build:desktop'",
+    "build:watch": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client -w' 'yarn build:desktop -w'"
   },
   "private": "true",
   "devDependencies": {
