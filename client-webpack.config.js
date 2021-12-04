@@ -25,5 +25,5 @@ module.exports = {
     extensions: [".tsx", ".ts"],
   },
   mode: "development",
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin({ filename: "client.html" })],
 };
