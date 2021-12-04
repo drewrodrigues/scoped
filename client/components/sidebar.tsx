@@ -1,64 +1,86 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   FaHome,
   FaCog,
   FaBrain,
   FaCheck,
-  FaEye,
-  FaDotCircle,
   FaBullseye,
   FaUndo,
+  FaChevronDown,
+  FaCaretDown,
+  FaCaretRight,
 } from "react-icons/fa";
 
 import "./_sidebar.scss";
 
 interface SidebarProps {}
 
+const links: { to: string; name: string; icon: JSX.Element }[] = [
+  {
+    to: "/dashboard",
+    name: "Dashboard",
+    icon: <FaHome />,
+  },
+  {
+    to: "/goals",
+    name: "Goals",
+    icon: <FaBullseye />,
+  },
+  {
+    to: "/tasks",
+    name: "Tasks",
+    icon: <FaCheck />,
+  },
+  {
+    to: "/habits",
+    name: "Habits",
+    icon: <FaUndo />,
+  },
+  {
+    to: "/reminders",
+    name: "Reminders",
+    icon: <FaBrain />,
+  },
+];
+
 export function Sidebar({}: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar__main">
         <h1 className="sidebar__logo">Scoped</h1>
-        <Link to="/dashboard" className="sidebar__link">
+
+        <h2 className="sidebar__scope">
           <span className="sidebar__link-icon">
-            <FaHome />
+            <FaCaretRight />
           </span>
-          Dashboard
-        </Link>
-        <Link to="/goals" className="sidebar__link">
-          <span className="sidebar__link-icon">
-            <FaBullseye />
-          </span>
-          Goals
-        </Link>
-        <Link to="/tasks" className="sidebar__link">
-          <span className="sidebar__link-icon">
-            <FaCheck />
-          </span>
-          Tasks
-        </Link>
-        <Link to="/habits" className="sidebar__link">
-          <span className="sidebar__link-icon">
-            <FaUndo />
-          </span>
-          Habits
-        </Link>
-        <Link to="/reminders" className="sidebar__link">
-          <span className="sidebar__link-icon">
-            <FaBrain />
-          </span>
-          Reminders
-        </Link>
+          Career
+        </h2>
+
+        {links.map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            className="sidebar__link"
+            activeClassName="sidebar__link--active"
+          >
+            <span className="sidebar__link-icon">{link.icon}</span>
+            {link.name}
+          </NavLink>
+        ))}
       </div>
 
       <footer className="sidebar__footer">
-        <Link to="/settings" className="sidebar__link">
+        <NavLink
+          to="/settings"
+          className="sidebar__link"
+          activeClassName="sidebar__link--active"
+        >
           <span className="sidebar__link-icon">
             <FaCog />
           </span>
           Settings
-        </Link>
+        </NavLink>
       </footer>
     </aside>
   );
