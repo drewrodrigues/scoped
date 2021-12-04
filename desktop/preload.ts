@@ -1,7 +1,8 @@
+console.log("preload script");
+
 addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: string, text: string) => {
     const element = document.getElementById(selector);
-    console.log(selector);
     if (element) element.innerText += text;
   };
 
