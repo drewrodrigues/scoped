@@ -1,10 +1,10 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+import { app, BrowserWindow } from "electron";
+import path from "path";
 
-console.log("do it");
+let browserWindow: BrowserWindow;
 
 const createWindow = () => {
-  const window = new BrowserWindow({
+  browserWindow = new BrowserWindow({
     // width: 500,
     // height: 500,
     webPreferences: {
@@ -12,8 +12,9 @@ const createWindow = () => {
     },
   });
 
+  // when in prod
   // window.loadFile("../client/client.html");
-  window.loadURL("localhost:9000/client.html");
+  browserWindow.loadURL("http://localhost:9000/client.html");
 };
 
 app.whenReady().then(() => {
@@ -26,4 +27,10 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+app.on("quit", () => {
+  if (browserWindow) {
+    browserWindow.destroy();
+  }
 });
