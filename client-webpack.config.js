@@ -2,11 +2,12 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./client/client.ts",
+  entry: "./client/client.tsx",
   output: {
     filename: "client.js",
     path: path.resolve(__dirname, "dist/client"),
   },
+  devtool: "cheap-module-source-map",
   module: {
     rules: [
       {
@@ -22,7 +23,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts"],
+    extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
   mode: "development",
   plugins: [
@@ -31,4 +32,7 @@ module.exports = {
       template: "client/client.html",
     }),
   ],
+  devServer: {
+    port: 9000,
+  },
 };

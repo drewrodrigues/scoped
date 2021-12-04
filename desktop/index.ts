@@ -5,14 +5,15 @@ console.log("do it");
 
 const createWindow = () => {
   const window = new BrowserWindow({
-    width: 500,
-    height: 500,
+    // width: 500,
+    // height: 500,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  window.loadFile("../client/client.html");
+  // window.loadFile("../client/client.html");
+  window.loadURL("localhost:9000/client.html");
 };
 
 app.whenReady().then(() => {
