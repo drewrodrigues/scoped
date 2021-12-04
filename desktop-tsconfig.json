@@ -4,7 +4,8 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "sourceMap": true,
-    "outDir": "dist/desktop"
+    "outDir": "dist/desktop",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["desktop/**/*.ts"]
 }
