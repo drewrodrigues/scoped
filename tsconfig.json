@@ -3,7 +3,7 @@
     "module": "ES6",
     "noImplicitAny": true,
     "sourceMap": true,
-    "outDir": "dir",
+    "outDir": "dist/desktop",
   },
-  "files": ["index.ts"]
+  "include": ["desktop/**/*.ts"]
 }
