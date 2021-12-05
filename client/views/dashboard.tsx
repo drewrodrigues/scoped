@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "./view";
 import senior from "../images/senior.jpg";
 import videochat from "../images/videochat.jpg";
