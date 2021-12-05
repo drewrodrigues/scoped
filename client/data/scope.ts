@@ -3,6 +3,7 @@ import db from "./db";
 export interface Scope {
   _id: string;
   title: string;
+  tasks: any[];
   type: "scope";
 }
 
@@ -11,6 +12,7 @@ export async function createScope(name: string) {
     const scope: Scope = {
       _id: name,
       title: name,
+      tasks: [],
       type: "scope",
     };
     console.info("createScope()", { scope });
