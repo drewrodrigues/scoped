@@ -88,10 +88,19 @@ export function Sidebar({}: SidebarProps) {
 
   return (
     <aside className="sidebar">
+      {showScopes && (
+        <div
+          className="sidebar-open-backdrop"
+          onClick={() => setShowScopes(false)}
+        />
+      )}
       <div className="sidebar__main">
         <h1 className="sidebar__logo">Scoped</h1>
 
-        <div className="sidebar__scope">
+        <div
+          className="sidebar__scope"
+          style={showScopes ? { position: "relative", zIndex: 10 } : {}}
+        >
           <button onClick={() => setShowScopes((p) => !p)}>
             <span className="sidebar__link-icon">
               <FaCaretRight />

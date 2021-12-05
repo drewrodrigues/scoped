@@ -85,3 +85,12 @@
   margin-right: 6px;
   font-size: 10px;
 }
+
+.sidebar-open-backdrop {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.3);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
