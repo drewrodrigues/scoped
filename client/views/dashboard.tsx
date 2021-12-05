@@ -132,8 +132,9 @@ export function Dashboard({}: DashboardProps) {
           {/* this is the pulse */}
           <div>
             <ul className="dashboard__habit-list">
-              {new Array(100).fill(0).map(() => (
+              {new Array(100).fill(0).map((_, i) => (
                 <li
+                  key={i}
                   className="dashboard__habit-item"
                   style={{ opacity: randomOpacity() }}
                 ></li>

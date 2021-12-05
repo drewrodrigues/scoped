@@ -4,6 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
 import { Sidebar } from "./components/sidebar";
 
+import "./data/db";
+
 import "./styles/styles.scss";
 import "./_client.scss";
 
