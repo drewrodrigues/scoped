@@ -10,6 +10,7 @@ import {
   FaChevronDown,
   FaCaretDown,
   FaCaretRight,
+  FaCalendar,
 } from "react-icons/fa";
 
 import "./_sidebar.scss";
@@ -41,6 +42,11 @@ const links: { to: string; name: string; icon: JSX.Element }[] = [
     to: "/reminders",
     name: "Reminders",
     icon: <FaBrain />,
+  },
+  {
+    to: "/events",
+    name: "Events",
+    icon: <FaCalendar />,
   },
 ];
 
