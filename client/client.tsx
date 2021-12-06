@@ -4,10 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
 import { Sidebar } from "./components/sidebar";
 
+import { store } from "./store/store";
 import "./data/db";
 
 import "./styles/styles.scss";
 import "./_client.scss";
+import { Provider } from "react-redux";
 
 declare global {
   interface Window {
@@ -19,12 +21,14 @@ declare global {
 
 export function Client() {
   return (
-    <BrowserRouter>
-      <div className="client">
-        <Sidebar />
-        <MainRoutes />
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className="client">
+          <Sidebar />
+          <MainRoutes />
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
