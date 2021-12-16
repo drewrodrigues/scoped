@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+  module: "esnext",
   entry: "./client/client.tsx",
   output: {
     filename: "client.js",
