@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Goal, IGoal } from "../data/couchModel";
-import db from "../data/db";
-import relDb from "../data/db";
+import { goalCreated, useGoalsInSelectedScope } from "../store/goalSlice";
 import { useSelectedScope } from "../store/scopeSlice";
-import { RootState } from "../store/store";
 
 import "./_goals.scss";
 
@@ -15,15 +13,15 @@ export function Goals({}: GoalsProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
   const [images, setImages] = useState<Record<string, string>>({});
-  // const goals = useGoalsInSelectedScope();
+  const goals = useGoalsInSelectedScope();
 
   const [goalTitle, setGoalTitle] = useState("");
 
   async function createGoalOnClick() {
     console.log({ selectedScope });
     const goal = new Goal({ title: goalTitle }, selectedScope);
-    goal.save();
-    // dispatch(goalCreated({ goal }));
+    const savedGoal = await goal.save();
+    dispatch(goalCreated({ goal: savedGoal }));
   }
 
   async function getGoalAttachment(goal: IGoal) {
@@ -78,18 +76,18 @@ export function Goals({}: GoalsProps) {
         Add Goal
       </button>
 
-      {/* {goals.map((goal) => {
+      {goals.map((goal) => {
         return (
           <>
-            <img src={images[goal.photoId]} alt="Something goes here" />
-            <li>
-              <input type="file" onChange={(e) => attachPhoto(e, goal)} />
-              {images[goal.photoId]}
+            {/* <img src={images[goal.photoId]} alt="Something goes here" /> */}
+            <li key={goal._id}>
+              {/* <input type="file" onChange={(e) => attachPhoto(e, goal)} /> */}
+              {/* {images[goal.photoId]} */}
               {goal.title}
             </li>
           </>
         );
-      })} */}
+      })}
     </main>
   );
 }

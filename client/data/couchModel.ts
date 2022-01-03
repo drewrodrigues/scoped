@@ -25,6 +25,7 @@ export interface IGoal {
   title: string;
   photoContainerId?: string;
   photoId?: string;
+  Scope_id?: string;
 }
 
 export abstract class CouchModel<T> {
@@ -100,7 +101,11 @@ export abstract class CouchModel<T> {
         ...this.attributes,
         _id: this._id,
       });
-      const createdRecord = { _rev: createResponse.rev, ...this.attributes };
+      const createdRecord = {
+        _rev: createResponse.rev,
+        _id: createResponse.id,
+        ...this.attributes,
+      };
       console.info(`✅ ${this._type} created`, {
         createResponse,
         createdRecord,

@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import ScopeSliceReducer from "./scopeSlice";
-// import GoalSliceReducer from "./goalSlice";
+import GoalSliceReducer from "./goalSlice";
 
 export const store = configureStore({
   reducer: {
     scope: ScopeSliceReducer,
-    // goal: GoalSliceReducer,
+    goal: GoalSliceReducer,
   },
 });
 

@@ -11,7 +11,8 @@ import "./data/db";
 import "./styles/styles.scss";
 import "./_client.scss";
 import { scopesLoaded } from "./store/scopeSlice";
-import { IScope, Scope } from "./data/couchModel";
+import { Goal, IGoal, IScope, Scope } from "./data/couchModel";
+import { goalsLoaded } from "./store/goalSlice";
 
 declare global {
   interface Window {
@@ -40,8 +41,13 @@ function Client() {
   useEffect(() => {
     Scope.all<IScope>().then((scopes) => {
       dispatch(scopesLoaded({ scopes, selectedScopeId: scopes[0]?._id }));
-      setLoadingState("loaded");
       console.log("👍🏽 Scoped Loaded");
+    });
+
+    Goal.all<IGoal>().then((goals) => {
+      dispatch(goalsLoaded({ goals }));
+      setLoadingState("loaded");
+      console.log("👍🏽 Goals Loaded");
     });
 
     // getScopes()
