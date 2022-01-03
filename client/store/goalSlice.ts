@@ -36,6 +36,12 @@ export const scopeSlice = createSlice({
     ) => {
       state.goalRecords[goal._id] = goal;
     },
+    goalDeleted: (
+      state,
+      { payload: { goal } }: PayloadAction<{ goal: SavedType<IGoal> }>
+    ) => {
+      delete state.goalRecords[goal._id];
+    },
   },
 });
 
@@ -53,6 +59,7 @@ export function useGoalsInSelectedScope() {
   return filteredGoals;
 }
 
-export const { goalsLoaded, goalCreated, goalUpdated } = scopeSlice.actions;
+export const { goalsLoaded, goalCreated, goalUpdated, goalDeleted } =
+  scopeSlice.actions;
 
 export default scopeSlice.reducer;

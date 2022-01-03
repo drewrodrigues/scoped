@@ -56,7 +56,7 @@ export abstract class CouchModel<T> {
     return docs as unknown as SavedType<S>[];
   }
 
-  constructor(attributes: UnsavedConstructor<T> | SavedConstructor<T>) {
+  constructor(attributes: UnsavedConstructor<T> | SavedType<T>) {
     if (!this._type)
       throw new Error("typeName must be defined in class definition");
 
@@ -109,6 +109,10 @@ export abstract class CouchModel<T> {
     }
   }
 
+  public async destroy() {
+    await db.remove(this.attributes as SavedType<T>);
+  }
+
   public setAttributes(attributes: T) {
     for (const key in attributes) {
       this._isDirty = true;
@@ -126,9 +130,9 @@ export abstract class CouchModel<T> {
   }
 
   private isSavedAttributes<T>(
-    attributes: UnsavedConstructor<T> | SavedConstructor<T>
-  ): attributes is SavedConstructor<T> {
-    return !!(attributes as SavedConstructor<T>)._rev;
+    attributes: UnsavedConstructor<T> | SavedType<T>
+  ): attributes is SavedType<T> {
+    return !!(attributes as SavedType<T>)._rev;
   }
 
   private get _type(): string {

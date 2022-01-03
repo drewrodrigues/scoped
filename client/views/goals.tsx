@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Goal, IGoal } from "../data/couchModel";
-import { goalCreated, useGoalsInSelectedScope } from "../store/goalSlice";
+import { Goal, IGoal, SavedType } from "../data/couchModel";
+import {
+  goalCreated,
+  goalDeleted,
+  goalsLoaded,
+  useGoalsInSelectedScope,
+} from "../store/goalSlice";
 import { useSelectedScope } from "../store/scopeSlice";
 
 import "./_goals.scss";
@@ -48,19 +53,11 @@ export function Goals({}: GoalsProps) {
     // }
   }
 
-  useEffect(() => {
-    // getGoals(selectedScope).then((goals) => {
-    //   dispatch(goalsLoaded({ goals }));
-    // });
-  }, [selectedScope]);
-
-  // useEffect(() => {
-  //   goals?.forEach((goal) => {
-  //     getGoalAttachment(goal);
-  //   });
-  // }, [goals]);
-
-  // if (!goals) return <p>Loading</p>;
+  async function onDeleteGoalClick(goal: SavedType<IGoal>) {
+    const savedGoal = new Goal(goal);
+    await savedGoal.destroy();
+    dispatch(goalDeleted({ goal }));
+  }
 
   return (
     <main className="goals">
@@ -76,18 +73,19 @@ export function Goals({}: GoalsProps) {
         Add Goal
       </button>
 
-      {goals.map((goal) => {
-        return (
-          <>
-            {/* <img src={images[goal.photoId]} alt="Something goes here" /> */}
-            <li key={goal._id}>
+      <ul className="goal-list">
+        {goals.map((goal) => {
+          return (
+            <li key={goal._id} className="goal-list__item">
+              {/* <img src={images[goal.photoId]} alt="Something goes here" /> */}
               {/* <input type="file" onChange={(e) => attachPhoto(e, goal)} /> */}
               {/* {images[goal.photoId]} */}
               {goal.title}
+              <button onClick={() => onDeleteGoalClick(goal)}>Delete</button>
             </li>
-          </>
-        );
-      })}
+          );
+        })}
+      </ul>
     </main>
   );
 }
