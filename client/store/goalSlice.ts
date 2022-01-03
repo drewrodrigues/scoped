@@ -50,7 +50,7 @@ export function useGoalsInSelectedScope() {
   const allGoals = useSelector((state: RootState) => state.goal.goalRecords);
   const filteredGoals = [];
 
-  for (const [id, goalRecord] of Object.entries(allGoals)) {
+  for (const [_, goalRecord] of Object.entries(allGoals)) {
     if (goalRecord.scopeId === selectedScope?._id) {
       filteredGoals.push(goalRecord);
     }

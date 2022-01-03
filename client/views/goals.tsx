@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Goal, IGoal, SavedType } from "../data/couchModel";
@@ -7,6 +7,7 @@ import {
   goalDeleted,
   useGoalsInSelectedScope,
 } from "../store/goalSlice";
+import moment from "moment";
 import { useSelectedScope } from "../store/scopeSlice";
 
 import "./_goals.scss";
@@ -92,6 +93,7 @@ export function Goals({}: GoalsProps) {
               {/* {images[goal.photoId]} */}
               {goal.title}
               <button onClick={() => onDeleteGoalClick(goal)}>Delete</button>
+              {goal.dueDate && "due " + moment(goal.dueDate).fromNow()}
             </li>
           );
         })}
