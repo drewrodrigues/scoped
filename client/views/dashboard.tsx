@@ -25,31 +25,6 @@ export function Dashboard({}: DashboardProps) {
 
   return (
     <View>
-      <section className="dashboard__section--base">
-        <ul className="dashboard__events">
-          <li className="dashboard__event">
-            <span>December 20th</span>
-            <p>Private Beta Release</p>
-          </li>
-          <li className="dashboard__event">
-            <span>December 24th</span>
-            <p>Year End Code Freeze</p>
-          </li>
-          <li className="dashboard__event">
-            <span>December 25th</span>
-            <p>Christmas Day Off</p>
-          </li>
-          <li className="dashboard__event">
-            <span>December 30th</span>
-            <p>New Years Eve Day Off</p>
-          </li>
-          <li className="dashboard__event">
-            <span>December 31st</span>
-            <p>New Years Day Off</p>
-          </li>
-        </ul>
-      </section>
-
       <section className="dashboard__section">
         <div className="dashboard__header">
           <h5 className="dashboard__header-title">Goals</h5>

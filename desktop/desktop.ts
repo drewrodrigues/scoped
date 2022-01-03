@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
+import installExtension, { REDUX_DEVTOOLS } from "electron-devtools-installer";
 
 let browserWindow: BrowserWindow;
 
@@ -29,6 +30,13 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
+  installExtension(REDUX_DEVTOOLS)
+    .then(() => {
+      console.log("Added redux devtools");
+    })
+    .catch(() => {
+      console.log("Failed to add redux devtools");
+    });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

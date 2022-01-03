@@ -1,7 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import ScopeSliceReducer from "./scopeSlice";
+// import GoalSliceReducer from "./goalSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    scope: ScopeSliceReducer,
+    // goal: GoalSliceReducer,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -86,7 +86,10 @@ export abstract class CouchModel<T> {
       console.info(`ℹ️ Creating ${newOrOld} ${this._type} record`, {
         attributes: this.attributes,
       });
-      const createResponse = await db.put(this.attributes);
+      const createResponse = await db.put({
+        ...this.attributes,
+        _id: this._id,
+      });
       const createdRecord = { _rev: createResponse.rev, ...this.attributes };
       console.info(`✅ ${this._type} created`, {
         createResponse,

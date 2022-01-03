@@ -12,12 +12,12 @@ interface RouterProps {}
 export function MainRoutes({}: RouterProps) {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/goals" component={Goals} />
+      <Route path="/" component={Goals} />
       <Route path="/tasks" component={Tasks} />
       <Route path="/habits" component={Habits} />
       <Route path="/reminders" component={Reminders} />
       <Route path="/settings" component={Settings} />
+      <Route path="/" component={Dashboard} />
     </Switch>
   );
 }

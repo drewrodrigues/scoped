@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   FaHome,
@@ -12,9 +12,16 @@ import {
 } from "react-icons/fa";
 
 import "./_sidebar.scss";
-import { createScope, getScopes, Scope } from "../data/scope";
-
-interface SidebarProps {}
+import { createScope } from "../data/scope";
+import {
+  scopeSelected,
+  scopeCreated,
+  useSelectedScope,
+  useAllScopes,
+} from "../store/scopeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { Scope } from "../data/couchModel";
 
 const links: { to: string; name: string; icon: JSX.Element }[] = [
   {
@@ -49,41 +56,26 @@ const links: { to: string; name: string; icon: JSX.Element }[] = [
   },
 ];
 
-export function Sidebar({}: SidebarProps) {
-  const [scopes, setScopes] = useState<Scope[]>(null);
-  const [selectedScope, setSelectedScope] = useState<Scope>(null);
-  const [showScopes, setShowScopes] = useState(false);
+export function Sidebar() {
+  const dispatch = useDispatch();
+  const selectedScope = useSelectedScope();
+  const scopes = useAllScopes();
 
+  const [showScopes, setShowScopes] = useState(false);
   const [newScopeText, setNewScopeText] = useState("");
-  function onCreateNewScope() {
-    createScope(newScopeText).then((scope) => {
-      setSelectedScope(scope);
-      setShowScopes(false);
-      setScopes((scopes) => [...scopes, scope]);
-      setNewScopeText("");
-    });
+
+  async function onCreateNewScope() {
+    const newScope = new Scope({ title: newScopeText });
+    const savedScope = await newScope.save();
+
+    dispatch(scopeCreated({ scope: savedScope }));
+    dispatch(scopeSelected({ selectedScopeId: savedScope._id }));
+    setShowScopes(false);
+    setNewScopeText("");
   }
 
-  useEffect(() => {
-    getScopes()
-      .then((scopes) => {
-        setSelectedScope(scopes[0]);
-        setScopes(scopes);
-      })
-      .catch((e) => {});
-  }, []);
-
-  useEffect(() => {
-    createScope("Another")
-      .then(() => {})
-      .catch((e) => {});
-  }, []);
-
-  console.log("--->");
-  console.log(scopes);
-
   if (!scopes) {
-    return null;
+    return <p>TODO: @drew design for empty states or create general scope?</p>;
   }
 
   return (
@@ -105,7 +97,7 @@ export function Sidebar({}: SidebarProps) {
             <span className="sidebar__link-icon">
               <FaCaretRight />
             </span>
-            <p>{selectedScope.title}</p>
+            {selectedScope && <p>{selectedScope.title}</p>}
           </button>
 
           {scopes && showScopes && (
@@ -115,7 +107,7 @@ export function Sidebar({}: SidebarProps) {
                 return (
                   <li
                     onClick={() => {
-                      setSelectedScope(scope);
+                      dispatch(scopeSelected({ selectedScopeId: scope._id }));
                       setShowScopes(false);
                     }}
                   >
