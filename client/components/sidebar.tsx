@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa";
 
 import "./_sidebar.scss";
-import { createScope } from "../data/scope";
 import {
   scopeSelected,
   scopeCreated,

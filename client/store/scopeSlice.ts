@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { SavedType } from "../data/couchModel";
-import { Scope } from "../data/scope";
+import { IScope, SavedType } from "../data/couchModel";
 import { RootState } from "./store";
 
 export interface ScopeState {
   selectedScopeId: string | null;
-  scopeRecords: Record<string, SavedType<Scope>>;
+  scopeRecords: Record<string, SavedType<IScope>>;
 }
 
 const initialState: ScopeState = {
@@ -22,7 +21,7 @@ export const scopeSlice = createSlice({
       state,
       {
         payload: { scopes, selectedScopeId },
-      }: PayloadAction<{ scopes: SavedType<Scope>[]; selectedScopeId: string }>
+      }: PayloadAction<{ scopes: SavedType<IScope>[]; selectedScopeId: string }>
     ) => {
       scopes.forEach((scope) => {
         state.scopeRecords[scope._id] = scope;
@@ -39,30 +38,30 @@ export const scopeSlice = createSlice({
     },
     scopeCreated: (
       state,
-      { payload: { scope } }: PayloadAction<{ scope: SavedType<Scope> }>
+      { payload: { scope } }: PayloadAction<{ scope: SavedType<IScope> }>
     ) => {
       state.scopeRecords[scope._id] = scope;
     },
     scopeUpdated: (
       state,
-      { payload: scope }: PayloadAction<SavedType<Scope>>
+      { payload: scope }: PayloadAction<SavedType<IScope>>
     ) => {
       state.scopeRecords[scope._id] = scope;
     },
   },
 });
 
-export function useSelectedScope() {
+export function useSelectedScope(): SavedType<IScope> | undefined {
   const { scopeRecords, selectedScopeId } = useSelector(
     (state: RootState) => state.scope
   );
   for (const scopeId in scopeRecords) {
     const scope = scopeRecords[scopeId];
     if (scope._id === selectedScopeId) {
-      return scope;
+      return scope as SavedType<IScope>;
     }
   }
-  return null;
+  return undefined;
 }
 
 export function useAllScopes() {

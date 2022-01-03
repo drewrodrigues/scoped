@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { Goal, IGoal } from "../data/couchModel";
 import db from "../data/db";
 import relDb from "../data/db";
-import {
-  createGoal,
-  getGoals,
-  Goal,
-  useGoalsInSelectedScope,
-} from "../data/goal";
-// import { goalCreated } from "../store/goalSlice";
 import { useSelectedScope } from "../store/scopeSlice";
 import { RootState } from "../store/store";
 
@@ -21,49 +15,18 @@ export function Goals({}: GoalsProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
   const [images, setImages] = useState<Record<string, string>>({});
-  const goals = useGoalsInSelectedScope();
+  // const goals = useGoalsInSelectedScope();
 
   const [goalTitle, setGoalTitle] = useState("");
 
   async function createGoalOnClick() {
-    // const goal = await createGoal(selectedScope, goalTitle);
+    console.log({ selectedScope });
+    const goal = new Goal({ title: goalTitle }, selectedScope);
+    goal.save();
     // dispatch(goalCreated({ goal }));
   }
 
-  async function attachPhoto(
-    event: React.ChangeEvent<HTMLInputElement>,
-    goal: Goal
-  ) {
-    // try {
-    //   const photo = event.target.files[0];
-    //   if (photo) {
-    //     console.log(photo);
-    //     const photoId = Date.now().toString();
-    //     const photoAttachment = await relDb.rel.putAttachment(
-    //       "goal",
-    //       { id: photoId },
-    //       "photo",
-    //       photo,
-    //       photo.type
-    //     );
-    //     console.log({ photoAttachment });
-    //     const updatedGoal: Goal = {
-    //       ...goal,
-    //       photoId,
-    //     };
-    //     console.log("attempting goal save: ", updatedGoal);
-    //     const updatedGoalResponse = await db.rel.save("goal", updatedGoal);
-    //     dispatch(goalUpdated({ goal: { ...goal, ...updatedGoalResponse } }));
-    //     console.log({ updatedGoalResponse });
-    //   } else {
-    //     console.warn("no file found");
-    //   }
-    // } catch (e) {
-    //   console.error("attachPhoto failed: ", e);
-    // }
-  }
-
-  async function getGoalAttachment(goal: Goal) {
+  async function getGoalAttachment(goal: IGoal) {
     // if (!goal.photoId) return;
     // try {
     //   const attachment = (await db.rel.getAttachment(

@@ -2,20 +2,20 @@ import db from "./db";
 
 export interface UnsavedModel {
   _id: string;
-  _type: string;
+  type: string;
 }
 
 export interface SavedModel {
   _id: string;
   _rev: string;
-  _type: string;
+  type: string;
 }
 
 export type UnsavedType<T> = T & UnsavedModel & Object;
-type UnsavedConstructor<T> = T & Omit<UnsavedModel, "_type" | "_id">;
+type UnsavedConstructor<T> = T & Omit<UnsavedModel, "type" | "_id">;
 
 export type SavedType<T> = T & SavedModel & Object;
-type SavedConstructor<T> = T & Omit<SavedModel, "_type">;
+type SavedConstructor<T> = T & Omit<SavedModel, "type">;
 
 export interface IScope {
   title: string;
@@ -32,9 +32,6 @@ export abstract class CouchModel<T> {
 
   public readonly _id: string;
   public readonly _rev?: string;
-
-  // model only -- no save (metadata)
-  public readonly _type: string;
 
   private _isDirty: boolean;
   private _attributes: T;
@@ -53,11 +50,12 @@ export abstract class CouchModel<T> {
     return docs as unknown as SavedType<S>[];
   }
 
-  constructor(attributes: UnsavedConstructor<T> | SavedConstructor<T>) {
-    // @ts-ignore
-    const typeName = this.constructor.typeName;
-    if (!typeName) throw new Error("typeName must be defined");
-    this._type = typeName;
+  constructor(
+    attributes: UnsavedConstructor<T> | SavedConstructor<T>,
+    parent?: any
+  ) {
+    if (!this._type)
+      throw new Error("typeName must be defined in class definition");
 
     if (this.isSavedAttributes(attributes)) {
       console.log(`ℹ️ Init saved ${this._type} record`);
@@ -68,7 +66,19 @@ export abstract class CouchModel<T> {
       this._id = `${this._type}-${Date.now().toString()}`;
       this._isDirty = true;
     }
-    this._attributes = attributes;
+
+    if (parent) {
+      if (!parent.type) throw new Error("Cannot add a parent without a type");
+
+      const parentProperty = `${parent.type}_id`;
+      // @ts-ignore
+      if (!attributes[parentProperty]) {
+        // @ts-ignore
+        attributes[parentProperty] = parent._id;
+      }
+    }
+
+    this._attributes = { ...attributes, type: this._type };
   }
 
   public async save(parentRecord?: SavedType<any>) {
@@ -123,6 +133,11 @@ export abstract class CouchModel<T> {
     attributes: UnsavedConstructor<T> | SavedConstructor<T>
   ): attributes is SavedConstructor<T> {
     return !!(attributes as SavedConstructor<T>)._rev;
+  }
+
+  private get _type(): string {
+    // @ts-ignore
+    return this.constructor.typeName;
   }
 
   public savableAttributes() {
