@@ -51,7 +51,7 @@ export function useGoalsInSelectedScope() {
   const filteredGoals = [];
 
   for (const [id, goalRecord] of Object.entries(allGoals)) {
-    if (goalRecord.Scope_id === selectedScope?._id) {
+    if (goalRecord.scopeId === selectedScope?._id) {
       filteredGoals.push(goalRecord);
     }
   }

@@ -5,7 +5,6 @@ import { Goal, IGoal, SavedType } from "../data/couchModel";
 import {
   goalCreated,
   goalDeleted,
-  goalsLoaded,
   useGoalsInSelectedScope,
 } from "../store/goalSlice";
 import { useSelectedScope } from "../store/scopeSlice";
@@ -21,12 +20,18 @@ export function Goals({}: GoalsProps) {
   const goals = useGoalsInSelectedScope();
 
   const [goalTitle, setGoalTitle] = useState("");
+  const [goalDueDate, setGoalDueDate] = useState("");
 
   async function createGoalOnClick() {
     console.log({ selectedScope });
-    const goal = new Goal({ title: goalTitle, Scope_id: selectedScope!._id });
+    const goal = new Goal({
+      title: goalTitle,
+      dueDate: goalDueDate,
+      scopeId: selectedScope!._id,
+    });
     const savedGoal = await goal.save();
     dispatch(goalCreated({ goal: savedGoal }));
+    setGoalTitle("");
   }
 
   async function getGoalAttachment(goal: IGoal) {
@@ -67,6 +72,11 @@ export function Goals({}: GoalsProps) {
         type="text"
         value={goalTitle}
         onChange={(e) => setGoalTitle(e.target.value)}
+      />
+      <input
+        type="date"
+        value={goalDueDate}
+        onChange={(e) => setGoalDueDate(e.target.value)}
       />
       <button onClick={createGoalOnClick}>
         <FaPlus />

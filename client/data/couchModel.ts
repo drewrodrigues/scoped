@@ -23,7 +23,8 @@ export interface IScope {
 
 export interface IGoal {
   title: string;
-  Scope_id: string;
+  scopeId: string;
+  dueDate?: string;
   photoContainerId?: string;
   photoId?: string;
 }
