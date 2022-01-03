@@ -23,10 +23,15 @@ export interface IScope {
 
 export interface IGoal {
   title: string;
+  Scope_id: string;
   photoContainerId?: string;
   photoId?: string;
-  Scope_id?: string;
 }
+
+// TODO: implement
+// export interface IGoalRequiredArgs {
+//   title: string
+// }
 
 export abstract class CouchModel<T> {
   public static readonly typeName: string;
@@ -51,10 +56,7 @@ export abstract class CouchModel<T> {
     return docs as unknown as SavedType<S>[];
   }
 
-  constructor(
-    attributes: UnsavedConstructor<T> | SavedConstructor<T>,
-    parent?: any
-  ) {
+  constructor(attributes: UnsavedConstructor<T> | SavedConstructor<T>) {
     if (!this._type)
       throw new Error("typeName must be defined in class definition");
 
@@ -68,18 +70,7 @@ export abstract class CouchModel<T> {
       this._isDirty = true;
     }
 
-    if (parent) {
-      if (!parent.type) throw new Error("Cannot add a parent without a type");
-
-      const parentProperty = `${parent.type}_id`;
-      // @ts-ignore
-      if (!attributes[parentProperty]) {
-        // @ts-ignore
-        attributes[parentProperty] = parent._id;
-      }
-    }
-
-    this._attributes = { ...attributes, type: this._type };
+    this._attributes = { type: this._type, ...attributes };
   }
 
   public async save(parentRecord?: SavedType<any>) {

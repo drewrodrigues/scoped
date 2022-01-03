@@ -19,7 +19,7 @@ export function Goals({}: GoalsProps) {
 
   async function createGoalOnClick() {
     console.log({ selectedScope });
-    const goal = new Goal({ title: goalTitle }, selectedScope);
+    const goal = new Goal({ title: goalTitle, Scope_id: selectedScope!._id });
     const savedGoal = await goal.save();
     dispatch(goalCreated({ goal: savedGoal }));
   }
