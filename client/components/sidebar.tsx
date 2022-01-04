@@ -18,8 +18,7 @@ import {
   useSelectedScope,
   useAllScopes,
 } from "../store/scopeSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
 import { Scope } from "../data/couchModel";
 
 const links: { to: string; name: string; icon: JSX.Element }[] = [
@@ -27,6 +26,11 @@ const links: { to: string; name: string; icon: JSX.Element }[] = [
     to: "/dashboard",
     name: "Dashboard",
     icon: <FaHome />,
+  },
+  {
+    to: "/calendar",
+    name: "Calendar",
+    icon: <FaCalendar />,
   },
   {
     to: "/goals",
