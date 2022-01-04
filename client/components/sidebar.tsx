@@ -7,11 +7,9 @@ import {
   FaCheck,
   FaBullseye,
   FaUndo,
-  FaCaretRight,
   FaCalendar,
 } from "react-icons/fa";
 
-import "./_sidebar.scss";
 import {
   scopeSelected,
   scopeCreated,
@@ -20,8 +18,9 @@ import {
 } from "../store/scopeSlice";
 import { useDispatch } from "react-redux";
 import { Scope } from "../data/couchModel";
+import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
 
-const links: { to: string; name: string; icon: JSX.Element }[] = [
+const links: SidebarLinkProps[] = [
   {
     to: "/dashboard",
     name: "Dashboard",
@@ -64,7 +63,6 @@ export function Sidebar() {
   const selectedScope = useSelectedScope();
   const scopes = useAllScopes();
 
-  const [showScopes, setShowScopes] = useState(false);
   const [newScopeText, setNewScopeText] = useState("");
 
   async function onCreateNewScope() {
@@ -73,7 +71,6 @@ export function Sidebar() {
 
     dispatch(scopeCreated({ scope: savedScope }));
     dispatch(scopeSelected({ selectedScopeId: savedScope._id }));
-    setShowScopes(false);
     setNewScopeText("");
   }
 
@@ -82,28 +79,13 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="sidebar">
-      {showScopes && (
-        <div
-          className="sidebar-open-backdrop"
-          onClick={() => setShowScopes(false)}
-        />
-      )}
-      <div className="sidebar__main">
-        <h1 className="sidebar__logo">Scoped</h1>
+    <aside className="flex flex-col w-[160px] justify-between">
+      <div className="">
+        <h1 className="">Scoped</h1>
 
-        <div
-          className="sidebar__scope"
-          style={showScopes ? { position: "relative", zIndex: 10 } : {}}
-        >
-          <button onClick={() => setShowScopes((p) => !p)}>
-            <span className="sidebar__link-icon">
-              <FaCaretRight />
-            </span>
-            {selectedScope && <p>{selectedScope.title}</p>}
-          </button>
-
-          {scopes && showScopes && (
+        <div className="">
+          {selectedScope && <p className="font-bold">{selectedScope.title}</p>}
+          {scopes && (
             <ul>
               {scopes.map((scope) => {
                 if (scope === selectedScope) return null;
@@ -111,7 +93,6 @@ export function Sidebar() {
                   <li
                     onClick={() => {
                       dispatch(scopeSelected({ selectedScopeId: scope._id }));
-                      setShowScopes(false);
                     }}
                   >
                     {scope.title}
@@ -121,42 +102,21 @@ export function Sidebar() {
             </ul>
           )}
 
-          {showScopes && (
-            <>
-              <input
-                type="text"
-                value={newScopeText}
-                onChange={(e) => setNewScopeText(e.target.value)}
-              />
-              <button onClick={onCreateNewScope}>+</button>
-            </>
-          )}
+          <input
+            type="text"
+            value={newScopeText}
+            onChange={(e) => setNewScopeText(e.target.value)}
+          />
+          <button onClick={onCreateNewScope}>+</button>
         </div>
 
         {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className="sidebar__link"
-            activeClassName="sidebar__link--active"
-          >
-            <span className="sidebar__link-icon">{link.icon}</span>
-            {link.name}
-          </NavLink>
+          <SidebarLink {...link} />
         ))}
       </div>
 
-      <footer className="sidebar__footer">
-        <NavLink
-          to="/settings"
-          className="sidebar__link"
-          activeClassName="sidebar__link--active"
-        >
-          <span className="sidebar__link-icon">
-            <FaCog />
-          </span>
-          Settings
-        </NavLink>
+      <footer className="mb-[7px]">
+        <SidebarLink to="/settings" icon={<FaCog />} name="Settings" />
       </footer>
     </aside>
   );

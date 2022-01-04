@@ -8,8 +8,7 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "./store/store";
 import "./data/db";
 
-import "./styles/styles.scss";
-import "./_client.scss";
+import "./styles/output.css";
 import { scopesLoaded } from "./store/scopeSlice";
 import { Goal, IGoal, IScope, Scope } from "./data/couchModel";
 import { goalsLoaded } from "./store/goalSlice";

@@ -10,7 +10,6 @@ import {
 import moment from "moment";
 import { useSelectedScope } from "../store/scopeSlice";
 
-import "./_goals.scss";
 import { getPhotoListFromTerm } from "../external/unsplashApi";
 import classNames from "classnames";
 
@@ -52,30 +51,6 @@ export function Goals({}: GoalsProps) {
     setGoalTitle("");
   }
 
-  async function getGoalAttachment(goal: IGoal) {
-    // if (!goal.photoId) return;
-    // try {
-    //   const attachment = (await db.rel.getAttachment(
-    //     "goal",
-    //     goal.photoId,
-    //     "photo"
-    //   )) as Blob;
-    //   console.log("✅ Found attachment: ", attachment);
-    //   setImages((images) => ({
-    //     ...images,
-    //     [goal.photoId]: URL.createObjectURL(attachment),
-    //   }));
-    // } catch (e) {
-    //   if (e.status === 404) {
-    //     console.error(
-    //       `Image not found on goal: ${goal._id} w/ attachmentId=${goal.photoId}`
-    //     );
-    //   } else {
-    //     console.error(e);
-    //   }
-    // }
-  }
-
   async function onDeleteGoalClick(goal: SavedType<IGoal>) {
     const savedGoal = new Goal(goal);
     await savedGoal.destroy();
@@ -83,31 +58,39 @@ export function Goals({}: GoalsProps) {
   }
 
   return (
-    <main className="goals">
-      <input
-        type="text"
-        value={goalTitle}
-        onChange={(e) => setGoalTitle(e.target.value)}
-        placeholder="Title"
-      />
-      <input
-        type="date"
-        value={goalDueDate}
-        onChange={(e) => setGoalDueDate(e.target.value)}
-      />
-      <input
-        type="text"
-        value={coverPhotoSearch}
-        onChange={(e) => setCoverPhotoSearch(e.target.value)}
-        placeholder="Unsplash Search"
-      />
-      <button onClick={createGoalOnClick}>
-        <FaPlus />
-        Add Goal
-      </button>
+    <main className="pt-[20px] pl-[20px]">
+      <header className="mb-[20px] flex">
+        <input
+          type="text"
+          value={goalTitle}
+          onChange={(e) => setGoalTitle(e.target.value)}
+          placeholder="Title"
+          className="rounded-[5px] p-[10px] mr-[5px]"
+        />
+        <input
+          type="date"
+          value={goalDueDate}
+          onChange={(e) => setGoalDueDate(e.target.value)}
+          className="rounded-[5px] p-[10px] mr-[5px] cursor-pointer"
+        />
+        <input
+          type="text"
+          value={coverPhotoSearch}
+          onChange={(e) => setCoverPhotoSearch(e.target.value)}
+          placeholder="Unsplash Search"
+          className="rounded-[5px] p-[10px] mr-[5px]"
+        />
+        <button
+          onClick={createGoalOnClick}
+          className="text-white px-[15px] py-[7px] bg-green-500 flex items-center rounded-[5px] hover:bg-green-600 transition-colors text-[14px]"
+        >
+          <FaPlus className="mr-[5px]" />
+          Add Goal
+        </button>
+      </header>
 
       {coverPhotos.length ? (
-        <div className="cover-photo-options">
+        <div className="">
           {coverPhotos.map((photoUrl) => (
             <img
               src={photoUrl}
@@ -120,36 +103,38 @@ export function Goals({}: GoalsProps) {
         </div>
       ) : null}
 
-      <h2 className="goal-title">Goals</h2>
-      <ul className="goal-list">
+      <h2 className="mb-[20px]">Goals</h2>
+      <ul className="flex">
         {goals.map((goal, i) => {
           return (
-            <li
+            <div
               key={goal._id}
-              className="goal-list__item"
-              style={{
-                backgroundImage: `url(${goal.coverPhotoUrl})`,
-                opacity: `${100 - i * 30}%`,
-              }}
+              className="flex flex-col w-[400px] shrink-0 h-[250px] relative mr-[20px] hover:opacity-100 transition-opacity cursor-pointer"
+              style={{ opacity: `${100 - 35 * i}%` }}
             >
-              {/* <img src={images[goal.photoId]} alt="Something goes here" /> */}
-              {/* <input type="file" onChange={(e) => attachPhoto(e, goal)} /> */}
-              {/* {images[goal.photoId]} */}
-              <div className="goal-list__item-body">
-                <p>{goal.title}</p>
-                <button
-                  onClick={() => onDeleteGoalClick(goal)}
-                  className="goal-delete-button"
-                >
-                  Delete
-                </button>
+              <img
+                src={goal.coverPhotoUrl}
+                alt="Something goes here"
+                className="w-full rounded-[10px] object-cover h-full"
+              />
+
+              <button
+                onClick={() => onDeleteGoalClick(goal)}
+                className="absolute top-[10px] right-[10px] bg-white py-[7px] px-[10px] rounded-[5px] text-[12px] opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
+              >
+                Delete
+              </button>
+
+              <div>
+                <p className="text-[14px] mt-[20px]">{goal.title}</p>
+
                 {goal.dueDate && (
-                  <footer className="">
+                  <footer className="text-[12px]">
                     {"due " + moment(goal.dueDate).fromNow()}
                   </footer>
                 )}
               </div>
-            </li>
+            </div>
           );
         })}
       </ul>
