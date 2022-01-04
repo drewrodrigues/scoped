@@ -79,7 +79,7 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex flex-col w-[160px] justify-between">
+    <aside className="flex flex-col w-[160px] justify-between border shadow-md bg-white">
       <div className="">
         <h1 className="">Scoped</h1>
 

@@ -1,55 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Goal, IGoal, SavedType } from "../data/couchModel";
-import {
-  goalCreated,
-  goalDeleted,
-  useGoalsInSelectedScope,
-} from "../store/goalSlice";
+import { goalDeleted, useGoalsInSelectedScope } from "../store/goalSlice";
 import moment from "moment";
-import { useSelectedScope } from "../store/scopeSlice";
-
-import { getPhotoListFromTerm } from "../external/unsplashApi";
-import classNames from "classnames";
+import { GoalForm } from "../components/goals/goalForm";
 
 interface GoalsProps {}
 
 export function Goals({}: GoalsProps) {
   const dispatch = useDispatch();
-  const selectedScope = useSelectedScope();
-  const [images, setImages] = useState<Record<string, string>>({});
   const goals = useGoalsInSelectedScope();
-
-  const [goalTitle, setGoalTitle] = useState("");
-  const [goalDueDate, setGoalDueDate] = useState("");
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
-
-  const [coverPhotoSearch, setCoverPhotoSearch] = useState("");
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
-
-  useEffect(() => {
-    const timeout: NodeJS.Timeout = setTimeout(async () => {
-      if (!coverPhotoSearch.length) return;
-      const response = await getPhotoListFromTerm(coverPhotoSearch);
-      setCoverPhotos(response);
-      console.log({ response });
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, [coverPhotoSearch]);
-
-  async function createGoalOnClick() {
-    console.log({ selectedScope });
-    const goal = new Goal({
-      title: goalTitle,
-      dueDate: goalDueDate,
-      coverPhotoUrl,
-      scopeId: selectedScope!._id,
-    });
-    const savedGoal = await goal.save();
-    dispatch(goalCreated({ goal: savedGoal }));
-    setGoalTitle("");
-  }
 
   async function onDeleteGoalClick(goal: SavedType<IGoal>) {
     const savedGoal = new Goal(goal);
@@ -59,53 +19,12 @@ export function Goals({}: GoalsProps) {
 
   return (
     <main className="pt-[20px] pl-[20px]">
-      <header className="mb-[20px] flex">
-        <input
-          type="text"
-          value={goalTitle}
-          onChange={(e) => setGoalTitle(e.target.value)}
-          placeholder="Title"
-          className="rounded-[5px] p-[10px] mr-[5px]"
-        />
-        <input
-          type="date"
-          value={goalDueDate}
-          onChange={(e) => setGoalDueDate(e.target.value)}
-          className="rounded-[5px] p-[10px] mr-[5px] cursor-pointer"
-        />
-        <input
-          type="text"
-          value={coverPhotoSearch}
-          onChange={(e) => setCoverPhotoSearch(e.target.value)}
-          placeholder="Unsplash Search"
-          className="rounded-[5px] p-[10px] mr-[5px]"
-        />
-        <button
-          onClick={createGoalOnClick}
-          className="text-white px-[15px] py-[7px] bg-green-500 flex items-center rounded-[5px] hover:bg-green-600 transition-colors text-[14px]"
-        >
-          <FaPlus className="mr-[5px]" />
-          Add Goal
-        </button>
-      </header>
-
-      {coverPhotos.length ? (
-        <div className="">
-          {coverPhotos.map((photoUrl) => (
-            <img
-              src={photoUrl}
-              className={classNames("cover-photo-option", {
-                "cover-photo-option--select": coverPhotoUrl === photoUrl,
-              })}
-              onClick={() => setCoverPhotoUrl(photoUrl)}
-            />
-          ))}
-        </div>
-      ) : null}
-
+      <GoalForm />
       <h2 className="mb-[20px]">Goals</h2>
       <ul className="flex">
         {goals.map((goal, i) => {
+          const goalModel = new Goal(goal);
+
           return (
             <div
               key={goal._id}
@@ -130,9 +49,23 @@ export function Goals({}: GoalsProps) {
 
                 {goal.dueDate && (
                   <footer className="text-[12px]">
-                    {"due " + moment(goal.dueDate).fromNow()}
+                    {"due " + goalModel.timeUntilDue}
                   </footer>
                 )}
+
+                <p>Tracking Type: {goal.trackingType}</p>
+                <p>isOnTrack: {goalModel.isOnTrack ? "true" : "false"}</p>
+                <p>TrackedQuantity: {goalModel.trackedQuantity}</p>
+                <p>Togo: {goalModel.attributes.trackingGoalQuantity}</p>
+                <p>Start: {goalModel.attributes.startDate}</p>
+                <p>Due Date: {goalModel.attributes.dueDate}</p>
+                <p>Total days to complete: {goalModel.totalDaysToComplete}</p>
+                <p>Days left to complete: {goalModel.daysLeftUntilDue}</p>
+                <p>
+                  averageMinutesPerDayNeeded:
+                  {goalModel.averageMinutesPerDayNeeded}
+                </p>
+                <p>quantity should be done {goalModel.quantityShouldBeDone}</p>
               </div>
             </div>
           );

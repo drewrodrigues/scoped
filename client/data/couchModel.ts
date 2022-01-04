@@ -1,4 +1,5 @@
 import db from "./db";
+import moment from "moment";
 
 export interface UnsavedModel {
   _id: string;
@@ -25,9 +26,28 @@ export interface IGoal {
   title: string;
   scopeId: string;
   coverPhotoUrl?: string;
+
+  // TODO: make these different subtypes of goal
+  tracking: Record<string, string>; // date, string
+  trackingType: "none" | "duration" | "checkable";
+  trackingGoalQuantity: string;
+
+  // make these a pair
+  startDate?: string;
   dueDate?: string;
+
   photoContainerId?: string;
   photoId?: string;
+}
+
+export type TrackerType = "checkable" | "duration";
+
+export interface IHabit {
+  title: string;
+  scopeId: string;
+  tracking: string[];
+  tracker: TrackerType;
+  archived?: boolean;
 }
 
 // TODO: implement
@@ -157,6 +177,55 @@ export abstract class CouchModel<T> {
 
 export class Goal extends CouchModel<IGoal> {
   public static readonly typeName = "Goal";
+
+  public get trackedQuantity(): number | string {
+    let totalTracked = 0;
+    if (
+      this.attributes.tracking &&
+      this.attributes.trackingType === "duration"
+    ) {
+      return Object.keys(this.attributes.tracking)
+        .map((date) => parseInt(this.attributes.tracking[date]))
+        .reduce((total, num) => total + num, 0);
+    }
+    return "Nothing to go";
+  }
+
+  public get isOnTrack(): boolean {
+    return this.quantityShouldBeDone <= this.trackedQuantity;
+  }
+
+  public get averageMinutesPerDayNeeded(): number {
+    return (
+      (parseInt(this.attributes.trackingGoalQuantity.split(":")[0]) * 60) /
+      this.totalDaysToComplete
+    );
+  }
+
+  // public get averageDurationPerDay(): number {}
+
+  public get totalDaysToComplete(): number {
+    return moment(this.attributes.dueDate).diff(
+      this.attributes.startDate,
+      "days"
+    );
+  }
+
+  public get daysLeftUntilDue(): number {
+    return moment(this.attributes.dueDate).diff(new Date(), "days");
+  }
+
+  public get timeUntilDue(): string {
+    return moment(this.attributes.dueDate).fromNow();
+  }
+
+  public get elapsedDaysIntoGoal(): number {
+    return this.totalDaysToComplete - this.daysLeftUntilDue;
+  }
+
+  public get quantityShouldBeDone(): number {
+    return this.elapsedDaysIntoGoal * this.averageMinutesPerDayNeeded;
+  }
 }
 
 export class Scope extends CouchModel<IScope> {

@@ -1,16 +1,16 @@
 import axios from "axios";
 
 export async function getPhotoListFromTerm(term: string) {
-  const response = await axios(
-    `https://api.unsplash.com/search/photos?query=${term}&squarish=squarish`,
-    {
-      headers: {
-        "Accept-Version": "v1",
-        Authorization: "Client-ID LiWknz3W0r8IpWHcQQYwdhiz6D_aRaYU3Ve53Qj4OZ4",
-      },
-    }
-  );
-  return response.data?.results?.map((res: any) => res.urls?.small);
+  // const response = await axios(
+  //   `https://api.unsplash.com/search/photos?query=${term}&squarish=squarish`,
+  //   {
+  //     headers: {
+  //       "Accept-Version": "v1",
+  //       Authorization: "Client-ID LiWknz3W0r8IpWHcQQYwdhiz6D_aRaYU3Ve53Qj4OZ4",
+  //     },
+  //   }
+  // );
+  // return response.data?.results?.map((res: any) => res.urls?.small);
   return [
     "https://images.unsplash.com/photo-1617333387457-e5d7e2c43a99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODgxNTF8MHwxfHNlYXJjaHwxfHxEb3xlbnwwfHx8fDE2NDEyNTM5NDY&ixlib=rb-1.2.1&q=80&w=400",
     "https://images.unsplash.com/photo-1628977479910-583755967ec1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODgxNTF8MHwxfHNlYXJjaHwyfHxEb3xlbnwwfHx8fDE2NDEyNTM5NDY&ixlib=rb-1.2.1&q=80&w=400",
