@@ -120,6 +120,7 @@ export function Goals({}: GoalsProps) {
         </div>
       ) : null}
 
+      <h2 className="goal-title">Goals</h2>
       <ul className="goal-list">
         {goals.map((goal, i) => {
           return (
