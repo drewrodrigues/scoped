@@ -128,7 +128,7 @@ export function Goals({}: GoalsProps) {
               key={goal._id}
               className="goal-list__item"
               style={{
-                background: `url(${goal.coverPhotoUrl})`,
+                backgroundImage: `url(${goal.coverPhotoUrl})`,
                 opacity: `${100 - i * 30}%`,
               }}
             >

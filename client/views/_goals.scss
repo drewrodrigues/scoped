@@ -36,6 +36,8 @@
   overflow: hidden;
   transition: opacity 150ms;
   cursor: pointer;
+  background-position: center;
+  background-size: cover;
 
   &:hover {
     opacity: 1 !important;
