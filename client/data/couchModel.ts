@@ -24,6 +24,7 @@ export interface IScope {
 export interface IGoal {
   title: string;
   scopeId: string;
+  coverPhotoUrl?: string;
   dueDate?: string;
   photoContainerId?: string;
   photoId?: string;

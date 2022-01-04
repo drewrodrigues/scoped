@@ -1,5 +1,5 @@
 .goals {
-  width: 100%;
+  width: calc(100% - 160px);
 
   img {
     max-width: 100%;
@@ -19,6 +19,59 @@
   border-radius: 10px;
   margin-top: 20px;
   margin-right: 20px;
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 250px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  transition: opacity 150ms;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+.goal-list__item-body {
+  background: white;
+  padding: 20px;
+  width: 100%;
+  line-height: 1.5;
+}
+
+.goal-delete-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.cover-photo-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cover-photo-option {
+  width: 150px;
+  height: 150px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &--select {
+    border: 5px solid green;
+  }
 }
