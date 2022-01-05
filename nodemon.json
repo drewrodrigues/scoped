@@ -1,5 +1,5 @@
 {
   "verbose": "true",
   "watch": ["dist/desktop"],
-  "delay": 1500
+  "delay": 5000
 }
