@@ -22,14 +22,15 @@ export interface IScope {
   title: string;
 }
 
+export type TrackingMethod = "yes/no" | "minutes" | "hours";
+
 export interface IGoal {
   title: string;
   scopeId: string;
   coverPhotoUrl?: string;
 
   // TODO: make these different subtypes of goal
-  tracking: Record<string, string>; // date, string
-  trackingType: "none" | "duration" | "checkable";
+  trackingMethod: "none" | TrackingMethod;
   trackingGoalQuantity: string;
 
   // make these a pair
@@ -40,11 +41,22 @@ export interface IGoal {
   photoId?: string;
 }
 
+export interface ITracking {
+  trackingMethod: TrackingMethod;
+  value: number;
+  createdOn: string;
+  goalId: string;
+}
+
 export type TrackerType = "checkable" | "duration";
 
 export interface IHabit {
   title: string;
-  scopeId: string;
+
+  // make this specify only 1 parent
+  scopeId?: string;
+  goalId?: string;
+
   tracking: string[];
   tracker: TrackerType;
   archived?: boolean;
@@ -139,7 +151,6 @@ export abstract class CouchModel<T> {
     for (const key in attributes) {
       this._isDirty = true;
       this._attributes = attributes;
-      // @ts-ignore -- meta
     }
   }
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Cleave from "cleave.js/react";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Goal } from "../../data/couchModel";
+import { Goal, TrackingMethod } from "../../data/couchModel";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
 import { goalCreated } from "../../store/goalSlice";
 import { useSelectedScope } from "../../store/scopeSlice";
@@ -17,7 +17,7 @@ export function GoalForm({}: GoalFormProps) {
   const [goalTitle, setGoalTitle] = useState("");
   const [goalStartDate, setGoalStartDate] = useState("");
   const [goalTrackingType, setGoalTrackingType] = useState<
-    "none" | "duration" | "checkable"
+    "none" | TrackingMethod
   >("none");
   const [goalDueDate, setGoalDueDate] = useState("");
   const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
@@ -40,12 +40,11 @@ export function GoalForm({}: GoalFormProps) {
     console.log({ selectedScope });
     const goal = new Goal({
       title: goalTitle,
-      trackingType: goalTrackingType,
+      trackingMethod: goalTrackingType,
       startDate: goalStartDate,
       dueDate: goalDueDate,
       coverPhotoUrl,
       scopeId: selectedScope!._id,
-      tracking: {},
       trackingGoalQuantity,
     });
     const savedGoal = await goal.save();
@@ -112,17 +111,17 @@ export function GoalForm({}: GoalFormProps) {
           <input
             type="radio"
             name="trackingType"
-            value="checkable"
-            checked={goalTrackingType == "checkable"}
-            onChange={() => setGoalTrackingType("checkable")}
+            value="yes/no"
+            checked={goalTrackingType == "yes/no"}
+            onChange={() => setGoalTrackingType("yes/no")}
           />
           <label htmlFor="">Duration</label>
           <input
             type="radio"
             name="trackingType"
             value="duration"
-            checked={goalTrackingType == "duration"}
-            onChange={() => setGoalTrackingType("duration")}
+            checked={goalTrackingType == "hours"}
+            onChange={() => setGoalTrackingType("hours")}
           />
         </div>
 
