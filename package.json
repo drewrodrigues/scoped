@@ -7,9 +7,10 @@
     "build:desktop": "tsc --project desktop-tsconfig.json",
     "build": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client' 'yarn build:desktop'",
     "build:watch": "concurrently -n client,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn build:client -w' 'yarn build:desktop -w'",
-    "start": "concurrently -n client,desktop-watch,desktop -c 'bgGreen.bold,bgBlue.bold' 'yarn serve:client' 'yarn build:desktop -w' 'yarn start:desktop'",
+    "start": "concurrently -n client,desktop-watch,desktop,styles -c 'bgGreen.bold,bgBlue.bold,bgYellow.bold,bgPink.bold' 'yarn serve:client' 'yarn build:desktop -w' 'yarn start:desktop' 'yarn styles'",
     "serve:client": "webpack serve -c client-webpack.config.js --progress",
-    "start:desktop": "nodemon --exec electron dist/desktop/desktop.js --inspect"
+    "start:desktop": "nodemon --exec electron dist/desktop/desktop.js --inspect",
+    "styles": "npx tailwind -i ./client/styles/styles.css -o ./client/styles/output.css --watch"
   },
   "private": "true",
   "devDependencies": {
