@@ -1,6 +1,6 @@
 module.exports = {
   important: true,
-  content: ["./client/**/*.{html,js,ts,tsx,jsx}"],
+  content: ["./client/src/**/*.{html,js,ts,tsx,jsx}"],
   theme: {
     extend: {},
   },

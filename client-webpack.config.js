@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   module: "esnext",
-  entry: "./client/client.tsx",
+  entry: "./client/src/client.tsx",
   output: {
     filename: "client.js",
     path: path.resolve(__dirname, "dist/client"),
@@ -49,7 +49,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: "client.html",
-      template: "client/client.html",
+      template: "client/src/client.html",
     }),
   ],
   devServer: {

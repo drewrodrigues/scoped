@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import { ITracking, SavedType } from "../data/couchModel";
+import { RootState } from "./store";
 import {
   sliceAdded,
   sliceDeleted,
@@ -33,6 +35,21 @@ export const trackingSlice = createSlice({
     ),
   },
 });
+
+export function useTrackingInGoal(goalId: string) {
+  const allTracking = useSelector(
+    (state: RootState) => state.tracking.trackingRecords
+  );
+  const filteredTracking = [];
+
+  for (const [_, trackingRecord] of Object.entries(allTracking)) {
+    if (trackingRecord.goalId === goalId) {
+      filteredTracking.push(trackingRecord);
+    }
+  }
+
+  return filteredTracking;
+}
 
 export const { trackingLoaded, trackingAdded } = trackingSlice.actions;
 

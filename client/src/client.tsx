@@ -48,14 +48,6 @@ function Client() {
       setLoadingState("loaded");
       console.log("👍🏽 Goals Loaded");
     });
-
-    // getScopes()
-    //   .then((scopes) => {
-    //     if (scopes) {
-    //       dispatch(scopesLoaded({ scopes, selectedScopeId: scopes[0]?._id }));
-    //     }
-    //   })
-    //   .catch((e) => {});
   }, []);
 
   if (loadingState === "loading") {
@@ -63,7 +55,7 @@ function Client() {
   }
 
   return (
-    <div className="client">
+    <div className="flex bg-[#f7f7f7] h-[100vh]">
       <Sidebar />
       <MainRoutes />
     </div>

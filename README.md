@@ -1,0 +1,1 @@
+- `babel` & `.babelrc.json` is for storybook

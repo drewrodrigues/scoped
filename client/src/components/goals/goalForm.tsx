@@ -107,7 +107,7 @@ export function GoalForm({}: GoalFormProps) {
             checked={goalTrackingType == "none"}
             onChange={() => setGoalTrackingType("none")}
           />
-          <label htmlFor="">Checkable</label>
+          <label htmlFor="">Yes/No</label>
           <input
             type="radio"
             name="trackingType"
@@ -115,7 +115,7 @@ export function GoalForm({}: GoalFormProps) {
             checked={goalTrackingType == "yes/no"}
             onChange={() => setGoalTrackingType("yes/no")}
           />
-          <label htmlFor="">Duration</label>
+          <label htmlFor="">Hours</label>
           <input
             type="radio"
             name="trackingType"
@@ -129,7 +129,7 @@ export function GoalForm({}: GoalFormProps) {
           <label htmlFor="">Goal Quantity</label>
           <input
             type="text"
-            placeholder="HH:MM"
+            placeholder="quantity"
             value={trackingGoalQuantity}
             onChange={(e) => setTrackingGoalQuantity(e.target.value)}
           />

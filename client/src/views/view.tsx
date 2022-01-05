@@ -1,5 +1,4 @@
 import React from "react";
-import "./_view.scss";
 
 interface ViewProps {
   children: JSX.Element | JSX.Element[];
