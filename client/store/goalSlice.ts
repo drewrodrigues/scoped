@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { IGoal, SavedType } from "../data/couchModel";
 import { useSelectedScope } from "./scopeSlice";
 import { RootState } from "./store";
+import { sliceLoaded } from "./_sliceHelper";
 
 export interface GoalState {
   goalRecords: Record<string, SavedType<IGoal>>;
