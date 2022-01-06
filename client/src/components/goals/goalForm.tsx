@@ -1,16 +1,21 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import Cleave from "cleave.js/react";
-import { FaPlus } from "react-icons/fa";
+import { FaCross, FaPlus, FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Goal, TrackingMethod } from "../../data/couchModel";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
 import { goalCreated } from "../../store/goalSlice";
 import { useSelectedScope } from "../../store/scopeSlice";
+import { Button } from "../shared/button";
+import { Radio } from "../shared/radio";
+import { Input } from "../shared/input";
 
-interface GoalFormProps {}
+interface GoalFormProps {
+  onClose: () => void;
+}
 
-export function GoalForm({}: GoalFormProps) {
+export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
 
@@ -50,113 +55,103 @@ export function GoalForm({}: GoalFormProps) {
     const savedGoal = await goal.save();
     dispatch(goalCreated({ goal: savedGoal }));
     setGoalTitle("");
+    onCloseProp();
+  }
+
+  function onClose(e: any) {
+    if (e.target != e.currentTarget) return;
+    onCloseProp();
   }
 
   return (
-    <>
-      <header className="mb-[20px] flex items-center pr-[20px] flex-wrap">
-        <div className="flex flex-col">
-          <label htmlFor="">Title</label>
-          <input
-            type="text"
-            value={goalTitle}
-            onChange={(e) => setGoalTitle(e.target.value)}
-            placeholder="Spend 40 hours learning Spanish"
-            className="rounded-[5px] p-[10px] mr-[5px]"
-          />
-        </div>
+    <div
+      className="absolute left-0 right-0 top-0 bottom-0 z-50 bg-[rgba(0,0,0,0.75)] flex justify-center items-center"
+      onClick={onClose}
+    >
+      <div className="flex flex-col p-[40px] bg-white rounded-[10px] shadow w-[400px] flex-shrink-0">
+        <Input
+          type="text"
+          value={goalTitle}
+          onChange={(value) => setGoalTitle(value)}
+          placeholder="Spend 40 hours learning Spanish"
+          label="Title"
+        />
 
-        <div className="flex flex-col">
-          <label htmlFor="">Start Date</label>
-          <input
-            type="date"
-            value={goalStartDate}
-            onChange={(e) => setGoalStartDate(e.target.value)}
-            className="rounded-[5px] p-[10px] mr-[5px] cursor-pointer"
-          />
-        </div>
+        <Input
+          type="date"
+          value={goalStartDate}
+          onChange={(value) => setGoalStartDate(value)}
+          label="Start Date"
+        />
 
-        <div className="flex flex-col">
-          <label htmlFor="">Due Date</label>
-          <input
-            type="date"
-            value={goalDueDate}
-            onChange={(e) => setGoalDueDate(e.target.value)}
-            className="rounded-[5px] p-[10px] mr-[5px] cursor-pointer"
-          />
-        </div>
+        <Input
+          type="date"
+          value={goalDueDate}
+          onChange={(value) => setGoalDueDate(value)}
+          label="Due Date"
+        />
 
-        <div className="flex flex-col">
-          <label htmlFor="">Cover Photo</label>
-          <input
-            type="text"
-            value={coverPhotoSearch}
-            onChange={(e) => setCoverPhotoSearch(e.target.value)}
-            placeholder="Unsplash Search"
-            className="rounded-[5px] p-[10px] mr-[5px]"
-          />
-        </div>
+        <Input
+          onChange={setCoverPhotoSearch}
+          value={coverPhotoSearch}
+          placeholder="Search"
+          label="Cover Photo"
+        />
 
-        <div className="flex flex-col">
-          <label htmlFor="">Tracking Type</label>
-          <label htmlFor="">None</label>
-          <input
-            type="radio"
-            name="trackingType"
+        {coverPhotos.length ? (
+          <div className="flex overflow-x-scroll h-[100px]">
+            {coverPhotos.map((photoUrl) => (
+              <img
+                src={photoUrl}
+                className={classNames("cover-photo-option", {
+                  "border-green-400 border-[5px]": coverPhotoUrl === photoUrl,
+                })}
+                onClick={() => setCoverPhotoUrl(photoUrl)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="h-[100px] w-full bg-gray-300 text-white flex items-center justify-center">
+            No Cover Photo Selected
+          </div>
+        )}
+
+        <h4 className="mb-[5px] block text-[13px] mt-[10px]">Tracking Type</h4>
+        <div className="flex mb-[10px]">
+          <Radio
+            name="None"
             value="none"
-            checked={goalTrackingType == "none"}
-            onChange={() => setGoalTrackingType("none")}
+            checkedValue={goalTrackingType}
+            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
           />
-          <label htmlFor="">Yes/No</label>
-          <input
-            type="radio"
-            name="trackingType"
+
+          <Radio
+            name="Yes/No"
             value="yes/no"
-            checked={goalTrackingType == "yes/no"}
-            onChange={() => setGoalTrackingType("yes/no")}
+            checkedValue={goalTrackingType}
+            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
           />
-          <label htmlFor="">Hours</label>
-          <input
-            type="radio"
-            name="trackingType"
-            value="duration"
-            checked={goalTrackingType == "hours"}
-            onChange={() => setGoalTrackingType("hours")}
+
+          <Radio
+            name="Hours"
+            value="hours"
+            checkedValue={goalTrackingType}
+            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
           />
         </div>
 
-        <div>
-          <label htmlFor="">Goal Quantity</label>
-          <input
-            type="text"
-            placeholder="quantity"
+        {goalTrackingType !== "none" && (
+          <Input
+            label={`Goal ${goalTrackingType}`}
             value={trackingGoalQuantity}
-            onChange={(e) => setTrackingGoalQuantity(e.target.value)}
+            onChange={(value) => setTrackingGoalQuantity(value)}
+            placeholder="50"
+            type="number"
           />
-        </div>
+        )}
 
-        <button
-          onClick={createGoalOnClick}
-          className="text-white px-[15px] py-[7px] bg-green-500 flex items-center rounded-[5px] hover:bg-green-600 transition-colors text-[14px] shrink-0"
-        >
-          <FaPlus className="mr-[5px]" />
-          Add Goal
-        </button>
-      </header>
-
-      {coverPhotos.length ? (
-        <div className="">
-          {coverPhotos.map((photoUrl) => (
-            <img
-              src={photoUrl}
-              className={classNames("cover-photo-option", {
-                "cover-photo-option--select": coverPhotoUrl === photoUrl,
-              })}
-              onClick={() => setCoverPhotoUrl(photoUrl)}
-            />
-          ))}
-        </div>
-      ) : null}
-    </>
+        <Button onClick={createGoalOnClick} text="Create Goal" />
+      </div>
+    </div>
   );
 }
