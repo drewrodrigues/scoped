@@ -66,7 +66,9 @@ export function useSelectedScope(): SavedType<IScope> | undefined {
 
 export function useAllScopes() {
   const { scopeRecords } = useSelector((state: RootState) => state.scope);
-  return Object.values(scopeRecords);
+  return Object.values(scopeRecords).sort((a: any, b: any) =>
+    a.title.localeCompare(b.title)
+  );
 }
 
 // Action creators are generated for each case reducer function
