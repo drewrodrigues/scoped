@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
-import { Sidebar } from "./components/sidebar";
+import { Sidebar } from "./components/sidebar/sidebar";
 import { Provider, useDispatch } from "react-redux";
 
 import { store } from "./store/store";
