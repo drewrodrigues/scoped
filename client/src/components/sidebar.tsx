@@ -19,6 +19,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Scope } from "../data/couchModel";
 import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
+import classNames from "classnames";
 
 const links: SidebarLinkProps[] = [
   {
@@ -80,20 +81,24 @@ export function Sidebar() {
 
   return (
     <aside className="flex flex-col w-[160px] justify-between border shadow-md bg-white">
-      <div className="">
-        <h1 className="">Scoped</h1>
+      <div>
+        <h1 className="py-[14px] px-[14px] text-[13px]">Scoped</h1>
 
-        <div className="">
-          {selectedScope && <p className="font-bold">{selectedScope.title}</p>}
+        <div>
           {scopes && (
             <ul>
               {scopes.map((scope) => {
-                if (scope === selectedScope) return null;
                 return (
                   <li
                     onClick={() => {
                       dispatch(scopeSelected({ selectedScopeId: scope._id }));
                     }}
+                    className={classNames({
+                      "py-[7px] px-[14px] text-[13px]":
+                        selectedScope?._id != scope._id,
+                      "font-bold  py-[7px] px-[14px] text-[13px]":
+                        selectedScope?._id == scope._id,
+                    })}
                   >
                     {scope.title}
                   </li>
