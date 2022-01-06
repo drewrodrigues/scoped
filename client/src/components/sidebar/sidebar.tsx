@@ -8,6 +8,8 @@ import {
   FaBullseye,
   FaUndo,
   FaCalendar,
+  FaChevronCircleDown,
+  FaChevronCircleRight,
 } from "react-icons/fa";
 
 import {
@@ -15,11 +17,13 @@ import {
   scopeCreated,
   useSelectedScope,
   useAllScopes,
-} from "../store/scopeSlice";
+} from "../../store/scopeSlice";
 import { useDispatch } from "react-redux";
-import { Scope } from "../data/couchModel";
+import { Scope } from "../../data/couchModel";
 import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
 import classNames from "classnames";
+import { Button } from "../shared/button";
+import { Input } from "../shared/input";
 
 const links: SidebarLinkProps[] = [
   {
@@ -64,6 +68,8 @@ export function Sidebar() {
   const selectedScope = useSelectedScope();
   const scopes = useAllScopes();
 
+  const [showScopes, setShowScopes] = useState(false);
+
   const [newScopeText, setNewScopeText] = useState("");
 
   async function onCreateNewScope() {
@@ -80,40 +86,53 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex flex-col w-[160px] justify-between border shadow-md bg-white">
+    <aside className="flex flex-col w-[160px] justify-between border shadow-md bg-white flex-shrink-0">
       <div>
         <h1 className="py-[14px] px-[14px] text-[13px]">Scoped</h1>
 
-        <div>
-          {scopes && (
-            <ul>
-              {scopes.map((scope) => {
-                return (
-                  <li
-                    onClick={() => {
-                      dispatch(scopeSelected({ selectedScopeId: scope._id }));
-                    }}
-                    className={classNames({
-                      "py-[7px] px-[14px] text-[13px]":
-                        selectedScope?._id != scope._id,
-                      "font-bold  py-[7px] px-[14px] text-[13px]":
-                        selectedScope?._id == scope._id,
-                    })}
-                  >
-                    {scope.title}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+        {selectedScope && (
+          <button
+            className="font-bold py-[7px] px-[14px] text-[13px] flex items-center"
+            onClick={() => setShowScopes((p) => !p)}
+          >
+            {showScopes ? (
+              <FaChevronCircleDown className="mr-[5px] text-[#ccc]" />
+            ) : (
+              <FaChevronCircleRight className="mr-[5px] text-[#ccc]" />
+            )}
+            {selectedScope.title}
+          </button>
+        )}
 
-          <input
-            type="text"
-            value={newScopeText}
-            onChange={(e) => setNewScopeText(e.target.value)}
-          />
-          <button onClick={onCreateNewScope}>+</button>
-        </div>
+        {scopes && showScopes && (
+          <div>
+            {/* TODO: refactor this out with sidebar link */}
+            {scopes.map((scope) => {
+              if (selectedScope?._id == scope._id) return null;
+
+              return (
+                <button
+                  onClick={() => {
+                    dispatch(scopeSelected({ selectedScopeId: scope._id }));
+                    setShowScopes(false);
+                  }}
+                  className="py-[7px] px-[14px] text-[13px] w-full text-left"
+                >
+                  {scope.title}
+                </button>
+              );
+            })}
+
+            <div className="p-[13px]">
+              <Input
+                value={newScopeText}
+                onChange={(value) => setNewScopeText(value)}
+                placeholder="New scope title"
+              />
+              <Button text="Create Scope" onClick={onCreateNewScope} />
+            </div>
+          </div>
+        )}
 
         {links.map((link) => (
           <SidebarLink {...link} />
