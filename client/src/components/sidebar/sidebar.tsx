@@ -81,6 +81,12 @@ export function Sidebar() {
     setNewScopeText("");
   }
 
+  function onSelectScope(scopeId: string) {
+    dispatch(scopeSelected({ selectedScopeId: scopeId }));
+    localStorage.setItem('lastSelectedScopeId', scopeId);
+    setShowScopes(false);
+  }
+
   if (!scopes) {
     return <p>TODO: @drew design for empty states or create general scope?</p>;
   }
@@ -112,10 +118,7 @@ export function Sidebar() {
 
               return (
                 <button
-                  onClick={() => {
-                    dispatch(scopeSelected({ selectedScopeId: scope._id }));
-                    setShowScopes(false);
-                  }}
+                  onClick={() => onSelectScope(scope._id)}
                   className="py-[7px] px-[14px] text-[13px] w-full text-left"
                 >
                   {scope.title}

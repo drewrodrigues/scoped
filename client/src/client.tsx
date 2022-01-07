@@ -38,8 +38,14 @@ function Client() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const lastSelectedScopeId = localStorage.getItem("lastSelectedScopeId");
     Scope.all<IScope>().then((scopes) => {
-      dispatch(scopesLoaded({ scopes, selectedScopeId: scopes[0]?._id }));
+      dispatch(
+        scopesLoaded({
+          scopes,
+          selectedScopeId: lastSelectedScopeId || scopes[0]?._id,
+        })
+      );
       console.log("👍🏽 Scoped Loaded");
     });
 
