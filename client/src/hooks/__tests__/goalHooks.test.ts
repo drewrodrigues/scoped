@@ -81,7 +81,7 @@ describe("computedGoalDates", () => {
   });
 });
 
-describe.only("actualGoalProgression", () => {
+describe("actualGoalProgression", () => {
   describe("when 0 hours tracked out of 100", () => {
     it("returns 0 `percentComplete`", () => {
       const { percentComplete } = actualGoalProgression(
