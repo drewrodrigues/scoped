@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { ITracking, SavedType } from "../data/couchModel";
+import { ITracking, SavedType } from "../data/modelCrud";
 import { RootState } from "./store";
 import {
   sliceAdded,

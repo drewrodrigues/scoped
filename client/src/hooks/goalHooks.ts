@@ -4,7 +4,7 @@ import {
   IGoalTrackable,
   ITracking,
   SavedType,
-} from "../data/couchModel";
+} from "../data/modelCrud";
 import { todaysDate } from "../helpers/date";
 import { useTrackingInGoal } from "../store/trackingSlice";
 

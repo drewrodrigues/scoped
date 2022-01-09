@@ -1,7 +1,7 @@
 import PouchDB from "pouchdb";
 import find from "pouchdb-find";
 import debug from "pouchdb-debug";
-import { IScope } from "./couchModel";
+import { IScope } from "./modelCrud";
 
 PouchDB.plugin(find).plugin(debug);
 PouchDB.debug.enable("*");

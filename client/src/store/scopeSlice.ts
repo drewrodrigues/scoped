@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { IScope, SavedType } from "../data/couchModel";
+import { IScope, SavedType } from "../data/modelCrud";
 import { RootState } from "./store";
 
 export interface ScopeState {

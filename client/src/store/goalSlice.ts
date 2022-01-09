@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { IGoal, SavedType } from "../data/couchModel";
+import { IGoal, SavedType } from "../data/modelCrud";
 import { useSelectedScope } from "./scopeSlice";
 import { RootState } from "./store";
 import { sliceLoaded } from "./_sliceHelper";
