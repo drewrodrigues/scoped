@@ -3,37 +3,45 @@ import React from "react";
 import { FaCheck } from "react-icons/fa";
 
 interface RadioProps {
-  name: string;
+  label: string;
+  setName: string;
   value: string;
-  checkedValue: string;
+  checkedValue: any;
   onClick: (value: string) => void;
+  children?: JSX.Element;
 }
 
-export function Radio({ onClick, checkedValue, value, name }: RadioProps) {
+export function Radio({
+  onClick,
+  checkedValue,
+  value,
+  setName,
+  label,
+  children,
+}: RadioProps) {
   const isChecked = checkedValue == value;
+  const icon = children ? children : isChecked && <FaCheck />;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center w-full">
       <input
         type="radio"
-        name={name}
+        name={setName}
         value={value}
         checked={isChecked}
         onChange={() => onClick(value)}
-        id={value}
+        id={`${setName}-${value}`}
         className="hidden"
       />
       <label
-        htmlFor={value}
+        htmlFor={`${setName}-${value}`}
         className={classNames(
-          "ml-[3px] mr-[3px] bg-gray-100 py-[5px] px-[10px] flex items-center",
+          "mr-[3px] bg-gray-100 py-[5px] px-[10px] flex items-center text-[12px] w-full cursor-pointer",
           { "bg-green-300": isChecked }
         )}
       >
-        {isChecked && (
-          <FaCheck className="text-green-700 text-[12px] mr-[3px]" />
-        )}
-        {name}
+        <div className="text-green-700 text-[10px] mr-[3px]">{icon}</div>
+        {label}
       </label>
     </div>
   );
