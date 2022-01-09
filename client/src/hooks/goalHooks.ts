@@ -8,7 +8,7 @@ import {
 import { todaysDate } from "../helpers/date";
 import { useTrackingInGoal } from "../store/trackingSlice";
 
-export function shouldBeGoalStats(goal: SavedType<IGoalTrackable>): {
+export function shouldBeGoalProgression(goal: SavedType<IGoalTrackable>): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;
 } {
@@ -35,26 +35,23 @@ export function computedGoalDates(goal: SavedType<IGoal>): {
   return { totalDaysForGoal, daysLeftUntilDue, wholeDaysLeft, daysIntoGoal };
 }
 
-export function useActualGoalStats(
-  goal: SavedType<IGoal>,
+export function actualGoalProgression(
+  goal: SavedType<IGoalTrackable>,
   tracking: SavedType<ITracking>[]
 ): {
-  percentIsComplete: number;
-  quantityIsComplete: number;
+  percentComplete: number;
+  quantityComplete: number;
 } {
-  return { percentIsComplete: 0, quantityIsComplete: 0 };
+  const quantityComplete = tracking.reduce(
+    (total, track) => total + track.value,
+    0
+  );
+  const percentComplete = (quantityComplete / goal.trackingGoalQuantity) * 100;
+
+  return { percentComplete, quantityComplete };
 }
 
-export function useGoalProgressionStatus(
-  goal: SavedType<IGoal>,
-  tracking: SavedType<ITracking>[]
-): {
-  isOnTrack: boolean;
-} {
-  return { isOnTrack: false };
-}
-
-export function useNeededGoalProjections(
+export function neededGoalProjections(
   goal: SavedType<IGoal>,
   tracking: SavedType<ITracking>[]
 ): {

@@ -1,6 +1,10 @@
 import { IGoalTrackable, ITracking, SavedType } from "../../data/couchModel";
 import { nDaysFromNow, todaysDate } from "../../helpers/date";
-import { computedGoalDates, shouldBeGoalStats } from "../goalHooks";
+import {
+  actualGoalProgression,
+  computedGoalDates,
+  shouldBeGoalProgression,
+} from "../goalHooks";
 
 const sameDayGoal = {
   startDate: todaysDate().toUTCString(),
@@ -26,21 +30,21 @@ const tenDayGoal = {
 
 const emptyTracking: SavedType<ITracking>[] = [];
 
-describe.only("shouldBeGoalStats", () => {
+describe("shouldBeGoalStats", () => {
   describe("when on first day of 10 day goal", () => {
     it("returns 10 `percentShouldBeComplete`", () => {
-      const { percentShouldBeComplete } = shouldBeGoalStats(tenDayGoal);
+      const { percentShouldBeComplete } = shouldBeGoalProgression(tenDayGoal);
       expect(percentShouldBeComplete).toEqual(10);
     });
 
     it("returns 10% of goalTracking quantity for `quantityShouldBeComplete`", () => {
-      const { quantityShouldBeComplete } = shouldBeGoalStats(tenDayGoal);
+      const { quantityShouldBeComplete } = shouldBeGoalProgression(tenDayGoal);
       expect(quantityShouldBeComplete).toEqual(10);
     });
   });
 });
 
-describe.only("computedGoalDates", () => {
+describe("computedGoalDates", () => {
   it("returns 0 `totalDaysForGoal` when same day goal", () => {
     const { totalDaysForGoal } = computedGoalDates(sameDayGoal);
     expect(totalDaysForGoal).toEqual(1);
@@ -77,34 +81,70 @@ describe.only("computedGoalDates", () => {
   });
 });
 
-describe("useGoalStats", () => {
-  describe("when current date on start date", () => {
-    describe("and start & due date set to same date", () => {
-      it.todo("returns 1 totalDaysForGoal");
-      it.todo("returns 0 daysLeft");
+describe.only("actualGoalProgression", () => {
+  describe("when 0 hours tracked out of 100", () => {
+    it("returns 0 `percentComplete`", () => {
+      const { percentComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 100,
+        } as SavedType<IGoalTrackable>,
+        [] as SavedType<ITracking>[]
+      );
+      expect(percentComplete).toEqual(0);
     });
 
-    describe("and due date 1 day after start date", () => {
-      it.todo("returns 1 totalDaysForGoal");
-      it.todo("returns 1 day left");
-      it.todo("returns 50% percentShouldBeComplete");
-    });
-
-    describe("and due date 1 month (31d) after start date", () => {
-      it.todo("returns 32 totalDaysForGoal");
-      it.todo("returns 31 daysLeft");
+    it("returns 0 `quantityComplete`", () => {
+      const { percentComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 100,
+        } as SavedType<IGoalTrackable>,
+        []
+      );
+      expect(percentComplete).toEqual(0);
     });
   });
 
-  describe("when current date on due date", () => {
-    it.todo("returns 1 totalDaysForGoal");
-    it.todo("returns 0 daysLeft");
-    it.todo("returns 100% percentShouldBeComplete");
+  describe("when 50 hours tracked out of 100", () => {
+    it("returns 50 `percentComplete`", () => {
+      const { percentComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 100,
+        } as SavedType<IGoalTrackable>,
+        [{ value: 20 }, { value: 20 }, { value: 10 }] as SavedType<ITracking>[]
+      );
+      expect(percentComplete).toEqual(50);
+    });
+
+    it("returns 50 `quantityComplete`", () => {
+      const { percentComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 100,
+        } as SavedType<IGoalTrackable>,
+        [{ value: 20 }, { value: 20 }, { value: 10 }] as SavedType<ITracking>[]
+      );
+      expect(percentComplete).toEqual(50);
+    });
   });
 
-  describe("when current date 1 day after due date", () => {
-    it.todo("returns 1 totalDaysForGoal");
-    it.todo("returns -1 daysLeft");
-    it.todo("returns 100% percentShouldBeComplete");
+  describe("when 20 hours tracked out of 50", () => {
+    it("returns 40 `percentComplete`", () => {
+      const { percentComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 50,
+        } as SavedType<IGoalTrackable>,
+        [{ value: 5 }, { value: 2 }, { value: 13 }] as SavedType<ITracking>[]
+      );
+      expect(percentComplete).toEqual(40);
+    });
+
+    it("returns 20 `quantityComplete`", () => {
+      const { quantityComplete } = actualGoalProgression(
+        {
+          trackingGoalQuantity: 50,
+        } as SavedType<IGoalTrackable>,
+        [{ value: 5 }, { value: 2 }, { value: 13 }] as SavedType<ITracking>[]
+      );
+      expect(quantityComplete).toEqual(20);
+    });
   });
 });
