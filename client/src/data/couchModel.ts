@@ -228,13 +228,6 @@ export class Goal extends CouchModel<IGoal> {
   //   return this.quantityShouldBeDone <= this.trackedQuantity;
   // }
 
-  public get averageMinutesPerDayNeeded(): number {
-    return (
-      (parseInt(this.attributes.trackingGoalQuantity.split(":")[0]) * 60) /
-      this.totalDaysToComplete
-    );
-  }
-
   // public get averageDurationPerDay(): number {}
 
   public get totalDaysToComplete(): number {
@@ -254,10 +247,6 @@ export class Goal extends CouchModel<IGoal> {
 
   public get elapsedDaysIntoGoal(): number {
     return this.totalDaysToComplete - this.daysLeftUntilDue;
-  }
-
-  public get quantityShouldBeDone(): number {
-    return this.elapsedDaysIntoGoal * this.averageMinutesPerDayNeeded;
   }
 }
 
