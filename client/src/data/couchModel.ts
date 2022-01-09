@@ -24,14 +24,15 @@ export interface IScope {
 
 export type TrackingMethod = "yes/no" | "minutes" | "hours";
 
+export interface IGoalTrackable extends IGoal {
+  trackingMethod: TrackingMethod;
+  trackingGoalQuantity: number;
+}
+
 export interface IGoal {
   title: string;
   scopeId: string;
   coverPhotoUrl?: string;
-
-  // TODO: make these different subtypes of goal
-  trackingMethod: "none" | TrackingMethod;
-  trackingGoalQuantity: string;
 
   // make these a pair
   startDate?: string;
