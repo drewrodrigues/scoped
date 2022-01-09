@@ -63,9 +63,7 @@ export function GoalIndexItem({ ..._goal }: SavedType<IGoal>) {
         <div>
           <p className="text-[14px] mt-[20px]">{title}</p>
 
-          {dueDate && (
-            <footer className="text-[12px]">{"due " + timeUntilDue}</footer>
-          )}
+        {isTrackableGoal(goal) && <GoalProgressBar goal={goal} />}
 
           <p>Tracking Type: {trackingType}</p>
           {/* <p>isOnTrack: {isOnTrack ? "true" : "false"}</p>
