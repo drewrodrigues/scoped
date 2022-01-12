@@ -1,24 +1,39 @@
-import React, { useState } from "react";
+import moment from "moment";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   FaArrowLeft,
   FaCalendar,
   FaClock,
-  FaHashtag,
   FaSun,
+  FaTrash,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Tracking } from "../../data/couchModel";
+import { createOrSaveModel } from "../../data/modelCrud";
+import { ISavedTracking, ITracking } from "../../data/modelTypes";
 import { todaysDate, yesterdaysDate } from "../../helpers/date";
 import { trackingAdded } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
 import { Input } from "../shared/input";
 import { Radio } from "../shared/radio";
 
-interface TrackingFormProps {
+interface TrackingSharedFormProps {
+  onTrackingComplete?: () => void;
+  initiatingItemRef?: React.RefObject<HTMLElement>;
+}
+
+interface TrackingNewFormProps extends TrackingSharedFormProps {
   goalId: string;
 }
 
-export function TrackingForm({ goalId }: TrackingFormProps) {
+interface TrackingEditFormProps extends TrackingSharedFormProps {
+  existingTracking: ISavedTracking;
+}
+
+export function NewTrackingForm({
+  goalId,
+  onTrackingComplete,
+  initiatingItemRef,
+}: TrackingNewFormProps) {
   const dispatch = useDispatch();
 
   async function createTrackingOnGoal({
@@ -26,55 +41,104 @@ export function TrackingForm({ goalId }: TrackingFormProps) {
     date,
   }: {
     quantity: string;
-    date: Date;
+    date: string;
   }) {
-    const tracking = new Tracking({
+    const tracking = await createOrSaveModel<ITracking>("Tracking", {
       trackingMethod: "hours",
       value: parseInt(quantity),
       date,
       goalId,
     });
-    const newTracking = await tracking.save();
 
-    dispatch(trackingAdded({ value: newTracking }));
-    console.log({ newTracking });
+    dispatch(trackingAdded({ value: tracking }));
+    onTrackingComplete?.();
   }
 
-  return <_TrackingForm onTrack={createTrackingOnGoal} />;
+  return (
+    <_TrackingForm
+      onSave={createTrackingOnGoal}
+      initiatingItemRef={initiatingItemRef}
+    />
+  );
+}
+
+export function EditTrackingForm({
+  onTrackingComplete,
+  initiatingItemRef,
+  existingTracking,
+}: TrackingEditFormProps) {
+  const dispatch = useDispatch();
+
+  async function createTrackingOnGoal({
+    quantity,
+    date,
+  }: {
+    quantity: string;
+    date: string;
+  }) {
+    const tracking = await createOrSaveModel<ITracking>("Tracking", {
+      ...existingTracking,
+      value: parseInt(quantity),
+      date,
+    });
+
+    dispatch(trackingAdded({ value: tracking }));
+    onTrackingComplete?.();
+  }
+
+  return (
+    <_TrackingForm
+      onSave={createTrackingOnGoal}
+      initiatingItemRef={initiatingItemRef}
+      existingTracking={existingTracking}
+    />
+  );
 }
 
 interface _TrackingFormProps {
-  onTrack?: (trackingAttributes: { quantity: string; date: Date }) => void;
+  onSave?: (trackingAttributes: { quantity: string; date: string }) => void;
+  initiatingItemRef?: React.RefObject<HTMLElement>;
+  existingTracking?: ITracking;
 }
 
-export function _TrackingForm({ onTrack: onTrackProp }: _TrackingFormProps) {
-  const [date, setDate] = useState("");
-  const [quantity, setQuantity] = useState(0);
+export function _TrackingForm({
+  onSave: onSaveProp,
+  initiatingItemRef,
+  existingTracking,
+}: _TrackingFormProps) {
+  const [date, setDate] = useState<string>(
+    existingTracking?.date
+      ? moment(existingTracking.date).format("YYYY-MM-DD")
+      : moment(new Date()).format("YYYY-MM-DD")
+  );
+  const [quantity, setQuantity] = useState(existingTracking?.value || 0);
+
+  console.log({ date });
 
   const [easyDateSelection, setEasyDateSelection] = useState<
     "today" | "yesterday" | "other"
-  >("today");
+  >(existingTracking?.date ? "other" : "today");
   const [easyQuantitySelection, setEasyQuantitySelection] = useState<
     number | "other"
-  >(1);
+  >(existingTracking?.value ? "other" : 1);
 
-  function easyDate(): Date | null {
+  function easyDate(): string | null {
     if (easyDateSelection === "today") {
-      return todaysDate();
+      return todaysDate().toUTCString();
     } else if (easyDateSelection === "yesterday") {
-      return yesterdaysDate();
+      return yesterdaysDate().toUTCString();
     } else {
       return null;
     }
   }
 
   function onTrack() {
-    onTrackProp?.({
+    onSaveProp?.({
       quantity:
         easyQuantitySelection === "other"
           ? quantity.toString()
           : easyQuantitySelection.toString(),
-      date: easyDate() || new Date(date),
+      date: easyDate() || new Date(date).toUTCString(),
     });
     setEasyDateSelection("today");
     setEasyQuantitySelection(1);
@@ -82,8 +146,26 @@ export function _TrackingForm({ onTrack: onTrackProp }: _TrackingFormProps) {
     setQuantity(0);
   }
 
+  const containerRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    // TODO: clean me up -- I'm ugly af
+    if (initiatingItemRef?.current) {
+      const rect = initiatingItemRef.current.getBoundingClientRect();
+      const { left, top } = rect;
+
+      // @ts-ignore
+      containerRef.current?.style.position = "fixed";
+      // @ts-ignore
+      containerRef.current?.style.zIndex = "100";
+      // @ts-ignore
+      containerRef.current?.style.left = `${left}px`;
+      // @ts-ignore
+      containerRef.current?.style.top = `${top + 40}px`;
+    }
+  }, []);
+
   return (
-    <section className="w-[350px] p-[10px] shadow-md bg-white">
+    <section className="w-[350px] p-[10px] shadow bg-white" ref={containerRef}>
       <header className="">
         <label className="mb-[5px] text-[12px]">Date</label>
         <section className="flex">
@@ -170,6 +252,9 @@ export function _TrackingForm({ onTrack: onTrackProp }: _TrackingFormProps) {
 
       <footer className="flex justify-between">
         <Button text="Track" onClick={onTrack} />
+        <Button text="" onClick={() => null} type="gentle">
+          <FaTrash />
+        </Button>
       </footer>
     </section>
   );
