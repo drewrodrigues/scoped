@@ -46,7 +46,8 @@ export function useTrackingInGoal(goalId: string): ISavedTracking[] {
     }
   }
 
-  return filteredTracking;
+  // @ts-ignore
+  return filteredTracking.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
 export const { trackingLoaded, trackingAdded, trackingDeleted } =
