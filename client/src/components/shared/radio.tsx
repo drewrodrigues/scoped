@@ -36,8 +36,8 @@ export function Radio({
       <label
         htmlFor={`${setName}-${value}`}
         className={classNames(
-          "mr-[3px] bg-gray-100 py-[5px] px-[10px] flex items-center text-[12px] w-full cursor-pointer",
-          { "bg-green-300": isChecked }
+          "mr-[3px] py-[5px] px-[10px] flex items-center text-[12px] w-full cursor-pointer",
+          { "bg-green-300": isChecked, "bg-gray-100": !isChecked }
         )}
       >
         <div className="text-green-700 text-[10px] mr-[3px]">{icon}</div>
