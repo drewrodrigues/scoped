@@ -1,10 +1,10 @@
 import React from "react";
 
-import { _GoalTrackingList } from "./trackingList";
+import { _TrackingList } from "./trackingList";
 
 export default {
   title: "Goal/TrackingList",
-  component: _GoalTrackingList,
+  component: _TrackingList,
 };
 
 // export const Presentational = () => (

@@ -89,6 +89,7 @@ export function EditTrackingForm({
   async function deleteTracking() {
     await destroy({ _id: existingTracking._id, _rev: existingTracking._rev });
     dispatch(trackingDeleted({ value: existingTracking }));
+    onTrackingComplete?.();
   }
 
   return (
@@ -125,7 +126,19 @@ export function _TrackingForm({
 
   const [easyDateSelection, setEasyDateSelection] = useState<
     "today" | "yesterday" | "other"
-  >(existingTracking?.date ? "other" : "today");
+  >(() => {
+    if (existingTracking) {
+      if (moment(existingTracking.date).isSame(todaysDate(), "day")) {
+        return "today";
+      } else if (
+        moment(existingTracking.date).isSame(yesterdaysDate(), "day")
+      ) {
+        return "yesterday";
+      }
+    }
+
+    return "other";
+  });
   const [easyQuantitySelection, setEasyQuantitySelection] = useState<
     number | "other"
   >(existingTracking?.value ? "other" : 1);

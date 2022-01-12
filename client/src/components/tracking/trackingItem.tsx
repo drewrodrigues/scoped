@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { ISavedTracking } from "../../data/modelTypes";
@@ -30,6 +31,9 @@ export function TrackingItem({ tracking, maxValueInList }: TrackingItemProps) {
     };
   }, []);
 
+  // TODO: pull out into date helper function
+  const highlightIfIsToday = moment(tracking.date).isSame(new Date(), "day");
+
   return (
     <>
       <button
@@ -37,12 +41,24 @@ export function TrackingItem({ tracking, maxValueInList }: TrackingItemProps) {
         onClick={() => setToggleEditForm((p) => !p)}
         ref={buttonRef}
       >
-        <div className="bg-white relative rounded-[3px] h-[20px] w-[20px] bg-green flex justify-center items-center overflow-hidden">
+        <div className="bg-white relative rounded-[3px] h-[20px] w-[20px] flex justify-center items-center overflow-hidden">
           <div
-            className="w-full h-full bg-green-400 flex items-center justify-center absolute"
+            className={classNames(
+              "w-full h-full flex items-center justify-center absolute",
+              {
+                "bg-blue-400": highlightIfIsToday,
+                "bg-green-400": !highlightIfIsToday,
+              }
+            )}
             style={{ opacity: `${(tracking.value / maxValueInList) * 100}%` }}
           ></div>
-          <p className="text-[8px] relative z-10 text-green-700">
+          <p
+            className={classNames("text-[8px] relative z-10", {
+              "text-blue-700": highlightIfIsToday,
+              "font-bold": highlightIfIsToday,
+              "text-green-700": !highlightIfIsToday,
+            })}
+          >
             {tracking.value}
           </p>
         </div>

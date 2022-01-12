@@ -5,32 +5,21 @@ import { useTrackingInGoal } from "../../store/trackingSlice";
 import { ISavedTracking } from "../../data/modelTypes";
 import { TrackingItem } from "./trackingItem";
 
-interface GoalTrackingListProps {
+interface TrackingListProps {
   goalId: string;
 }
 
-export function GoalTrackingList({ goalId }: GoalTrackingListProps) {
+export function TrackingList({ goalId }: TrackingListProps) {
   const trackingRecords = useTrackingInGoal(goalId);
 
-  function editTracking(tracking: ISavedTracking) {}
-
-  return (
-    <_GoalTrackingList
-      trackingRecords={trackingRecords}
-      onTrackingClick={editTracking}
-    />
-  );
+  return <_TrackingList trackingRecords={trackingRecords} />;
 }
 
-interface _GoalTrackingListProps {
+interface _TrackingListProps {
   trackingRecords: ISavedTracking[];
-  onTrackingClick?: (tracking: ISavedTracking) => void;
 }
 
-export function _GoalTrackingList({
-  trackingRecords,
-  onTrackingClick,
-}: _GoalTrackingListProps) {
+export function _TrackingList({ trackingRecords }: _TrackingListProps) {
   const maxValue = trackingRecords.reduce((max, record) => {
     if (record.value > max) {
       return record.value;
