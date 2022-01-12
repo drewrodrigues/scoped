@@ -9,6 +9,12 @@ export interface IGoalTrackable extends IGoal {
   trackingGoalQuantity: number;
 }
 
+export function isTrackableGoal<T>(
+  goal: IGoal | IGoalTrackable
+): goal is IGoalTrackable {
+  return !!(goal as IGoalTrackable).trackingGoalQuantity;
+}
+
 export interface IGoal {
   title: string;
   scopeId: string;
@@ -27,7 +33,7 @@ export type TrackingMethod = "yes/no" | "minutes" | "hours";
 export interface ITracking {
   trackingMethod: TrackingMethod;
   value: number;
-  date: Date;
+  date: string;
   goalId: string;
 }
 
