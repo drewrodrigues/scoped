@@ -1,14 +1,15 @@
 import moment from "moment";
 import {
-  IGoal,
-  IGoalTrackable,
-  ITracking,
-  SavedType,
-} from "../data/modelCrud";
+  ISavedGoal,
+  ISavedGoalTrackable,
+  ISavedTracking,
+} from "../data/modelTypes";
 import { todaysDate } from "../helpers/date";
 import { useTrackingInGoal } from "../store/trackingSlice";
 
-export function shouldBeGoalProgression(goal: SavedType<IGoalTrackable>): {
+export function shouldBeGoalProgression(
+  goal: ISavedGoalTrackable
+): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;
 } {
@@ -21,7 +22,9 @@ export function shouldBeGoalProgression(goal: SavedType<IGoalTrackable>): {
   return { percentShouldBeComplete, quantityShouldBeComplete };
 }
 
-export function computedGoalDates(goal: SavedType<IGoal>): {
+export function computedGoalDates(
+  goal: ISavedGoal
+): {
   totalDaysForGoal: number;
   daysLeftUntilDue: number;
   wholeDaysLeft: number;
@@ -36,8 +39,8 @@ export function computedGoalDates(goal: SavedType<IGoal>): {
 }
 
 export function actualGoalProgression(
-  goal: SavedType<IGoalTrackable>,
-  tracking: SavedType<ITracking>[]
+  goal: ISavedGoalTrackable,
+  tracking: ISavedTracking[]
 ): {
   percentComplete: number;
   quantityComplete: number;
@@ -52,26 +55,10 @@ export function actualGoalProgression(
 }
 
 export function neededGoalProjections(
-  goal: SavedType<IGoal>,
-  tracking: SavedType<ITracking>[]
+  goal: ISavedGoal,
+  tracking: ISavedTracking
 ): {
   averageQuantityNeededPerDay: number;
 } {
   return { averageQuantityNeededPerDay: 1 };
-}
-
-export function useGoalStats(goal: SavedType<IGoalTrackable>) {
-  const tracking = useTrackingInGoal(goal._id);
-
-  const quantityCompleted = tracking.reduce(
-    (total, track) => total + track.value,
-    0
-  );
-
-  return {
-    // daysLeftUntilDue: 10,
-    // averageQuantityNeededPerDay: 50,
-    quantityCompleted,
-    // percentComplete: 20 / 50,
-  };
 }

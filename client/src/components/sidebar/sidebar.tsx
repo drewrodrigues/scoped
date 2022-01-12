@@ -1,29 +1,27 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
 import {
-  FaHome,
-  FaCog,
   FaBrain,
-  FaCheck,
   FaBullseye,
-  FaUndo,
   FaCalendar,
+  FaCheck,
   FaChevronCircleDown,
   FaChevronCircleRight,
+  FaCog,
+  FaHome,
+  FaUndo,
 } from "react-icons/fa";
-
-import {
-  scopeSelected,
-  scopeCreated,
-  useSelectedScope,
-  useAllScopes,
-} from "../../store/scopeSlice";
 import { useDispatch } from "react-redux";
-import { Scope } from "../../data/couchModel";
-import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
-import classNames from "classnames";
+import { createOrSaveModel } from "../../data/modelCrud";
+import { IScope } from "../../data/modelTypes";
+import {
+  scopeCreated,
+  scopeSelected,
+  useAllScopes,
+  useSelectedScope,
+} from "../../store/scopeSlice";
 import { Button } from "../shared/button";
 import { Input } from "../shared/input";
+import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
 
 const links: SidebarLinkProps[] = [
   {

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { Provider, useDispatch } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
 import { Sidebar } from "./components/sidebar/sidebar";
-import { Provider, useDispatch } from "react-redux";
-
-import { store } from "./store/store";
 import "./data/db";
-
-import "./styles/output.css";
-import { scopesLoaded } from "./store/scopeSlice";
-import { Goal, IGoal, IScope, Scope } from "./data/couchModel";
+import { getAll } from "./data/modelCrud";
+import {
+  ISavedGoal,
+  ISavedGoalTrackable,
+  ISavedScope,
+} from "./data/modelTypes";
 import { goalsLoaded } from "./store/goalSlice";
+import { scopesLoaded } from "./store/scopeSlice";
+import { store } from "./store/store";
+import "./styles/output.css";
 
 declare global {
   interface Window {
@@ -39,17 +42,17 @@ function Client() {
 
   useEffect(() => {
     const lastSelectedScopeId = localStorage.getItem("lastSelectedScopeId");
-    Scope.all<IScope>().then((scopes) => {
+    getAll<ISavedScope>("Scope").then((scopes) => {
       dispatch(
         scopesLoaded({
           scopes,
-          selectedScopeId: lastSelectedScopeId || scopes[0]?._id,
+          selectedScopeId: lastSelectedScopeId,
         })
       );
       console.log("👍🏽 Scoped Loaded");
     });
 
-    Goal.all<IGoal>().then((goals) => {
+    getAll<ISavedGoal | ISavedGoalTrackable>("Goal").then((goals) => {
       dispatch(goalsLoaded({ goals }));
       setLoadingState("loaded");
       console.log("👍🏽 Goals Loaded");

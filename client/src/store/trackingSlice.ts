@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { ITracking, SavedType } from "../data/modelCrud";
+import { ISavedTracking } from "../data/modelTypes";
 import { RootState } from "./store";
 import {
   sliceAdded,
@@ -10,7 +10,7 @@ import {
 } from "./_sliceHelper";
 
 export interface TrackingState {
-  trackingRecords: Record<string, SavedType<ITracking>>;
+  trackingRecords: Record<string, ISavedTracking>;
 }
 
 const initialState: TrackingState = {
@@ -21,22 +21,20 @@ export const trackingSlice = createSlice({
   name: "tracking",
   initialState,
   reducers: {
-    trackingLoaded: sliceLoaded<TrackingState, SavedType<ITracking>>(
+    trackingLoaded: sliceLoaded<TrackingState, ISavedTracking>(
       "trackingRecords"
     ),
-    trackingAdded: sliceAdded<TrackingState, SavedType<ITracking>>(
+    trackingAdded: sliceAdded<TrackingState, ISavedTracking>("trackingRecords"),
+    trackingDeleted: sliceDeleted<TrackingState, ISavedTracking>(
       "trackingRecords"
     ),
-    trackingDeleted: sliceDeleted<TrackingState, SavedType<ITracking>>(
-      "trackingRecords"
-    ),
-    trackingUpdated: sliceUpdated<TrackingState, SavedType<ITracking>>(
+    trackingUpdated: sliceUpdated<TrackingState, ISavedTracking>(
       "trackingRecords"
     ),
   },
 });
 
-export function useTrackingInGoal(goalId: string) {
+export function useTrackingInGoal(goalId: string): ISavedTracking[] {
   const allTracking = useSelector(
     (state: RootState) => state.tracking.trackingRecords
   );

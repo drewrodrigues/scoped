@@ -1,37 +1,37 @@
-import React, { useEffect } from "react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { FaBars, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Goal, IGoal, SavedType } from "../../data/couchModel";
+import { destroy, getChildren } from "../../data/modelCrud";
+import {
+  ISavedGoal,
+  ISavedTracking,
+  isTrackableGoal,
+} from "../../data/modelTypes";
 import { goalDeleted } from "../../store/goalSlice";
 import { trackingLoaded } from "../../store/trackingSlice";
-import { GoalTrackingList } from "../tracking/goalTrackingList";
-import { TrackingDuration } from "../tracking/trackingDuration";
+import { Button } from "../shared/button";
+import { GoalTrackingList } from "../tracking/trackingList";
+import { NewTrackingForm } from "../tracking/trackingForm";
+import { GoalProgressBar } from "./goalProgressBar";
 
-export function GoalIndexItem({ ..._goal }: SavedType<IGoal>) {
-  const goal = new Goal(_goal);
-  const {
-    timeUntilDue,
-    totalDaysToComplete,
-    averageMinutesPerDayNeeded,
-    quantityShouldBeDone,
-    daysLeftUntilDue,
-  } = goal;
-  const {
-    coverPhotoUrl,
-    title,
-    dueDate,
-    trackingMethod: trackingType,
-    startDate,
-    trackingGoalQuantity,
-  } = goal.attributes;
+export function GoalIndexItem(goal: ISavedGoal) {
+  const { title, _id, _rev, coverPhotoUrl, dueDate } = goal;
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [toggleTracking, setToggleTracking] = useState(false);
 
   const dispatch = useDispatch();
   async function onDeleteGoalClick() {
-    await goal.destroy();
-    dispatch(goalDeleted({ goal: _goal }));
+    await destroy({ _id: _id, _rev: _rev });
+    dispatch(goalDeleted({ goalId: _id }));
   }
 
   async function getTrackingForGoal() {
-    const tracking = await goal.getTracking();
+    const tracking = await getChildren<ISavedTracking>(
+      "Tracking",
+      "goalId",
+      _id
+    );
     dispatch(trackingLoaded({ values: tracking }));
     console.log({ tracking });
   }

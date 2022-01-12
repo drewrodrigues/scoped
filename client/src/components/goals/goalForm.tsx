@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import Cleave from "cleave.js/react";
 import { FaCross, FaPlus, FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Goal, TrackingMethod } from "../../data/couchModel";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
 import { goalCreated } from "../../store/goalSlice";
 import { useSelectedScope } from "../../store/scopeSlice";
 import { Button } from "../shared/button";
 import { Radio } from "../shared/radio";
 import { Input } from "../shared/input";
+import { IGoal, IGoalTrackable, TrackingMethod } from "../../data/modelTypes";
+import { createOrSaveModel } from "../../data/modelCrud";
 
 interface GoalFormProps {
   onClose: () => void;
@@ -26,7 +27,7 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
   >("none");
   const [goalDueDate, setGoalDueDate] = useState("");
   const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
-  const [trackingGoalQuantity, setTrackingGoalQuantity] = useState("");
+  const [trackingGoalQuantity, setTrackingGoalQuantity] = useState(0);
 
   const [coverPhotoSearch, setCoverPhotoSearch] = useState("");
   const [coverPhotos, setCoverPhotos] = useState<string[]>([]);

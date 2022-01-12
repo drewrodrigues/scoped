@@ -4,7 +4,6 @@ import { Settings } from "../views/settings";
 import { Dashboard } from "../views/dashboard";
 import { Tasks } from "../views/tasks";
 import { Goals } from "../views/goals";
-import { Habits } from "../views/habits";
 import { Reminders } from "../views/reminders";
 
 interface RouterProps {}
@@ -16,8 +15,9 @@ export function MainRoutes({}: RouterProps) {
       <Route path="/tasks" component={Tasks} />
       <Route path="/reminders" component={Reminders} />
       <Route path="/settings" component={Settings} />
+      <Route path="/goals" component={Goals} />
       <Route path="/" component={Goals} />
-      <Route path="/" component={Habits} />
+      {/* <Route path="/" component={Habits} /> */}
     </Switch>
   );
 }
