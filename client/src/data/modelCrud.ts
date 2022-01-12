@@ -1,13 +1,5 @@
 import db from "./db";
-import moment from "moment";
-import {
-  IGoal,
-  IGoalTrackable,
-  IScope,
-  ITracking,
-  ModelStringType,
-  ModelType,
-} from "./modelTypes";
+import { ModelStringType, ModelType } from "./modelTypes";
 
 export interface UnsavedModel {
   _id: string;
@@ -39,6 +31,16 @@ export async function createOrSaveModel<Type extends ModelType>(
 ): Promise<SavedType<Type>> {
   const newOrOld = isSavedAttributes(attributes) ? "old" : "new";
 
+  let _id: string;
+
+  if (isSavedAttributes(attributes)) {
+    console.log(`ℹ️ Init saved ${type} record`);
+    _id = attributes._id;
+  } else {
+    console.log(`ℹ️ Init new ${type} record`, { attributes });
+    _id = `${type}-${Date.now().toString()}`;
+  }
+
   if (parentRecord) {
     console.info("ℹ️ Will create record with parent record id", {
       parentRecord,
@@ -50,10 +52,13 @@ export async function createOrSaveModel<Type extends ModelType>(
       attributes: attributes,
     });
     const createResponse = await db.put({
+      _id,
+      type,
       ...attributes,
     });
     const createdRecord = {
-      attributes,
+      ...attributes,
+      type,
       _rev: createResponse.rev,
       _id: createResponse.id,
     };
@@ -96,8 +101,6 @@ export async function getAll<Type extends ModelType>(
   console.log({ response, docs });
   return docs as unknown as SavedType<Type>[];
 }
-
-// TODO: re-implement
 
 export async function destroy({
   _id,
