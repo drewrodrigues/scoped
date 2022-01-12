@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { IGoal, SavedType } from "../data/modelCrud";
+import { SavedType } from "../data/modelCrud";
+import { ISavedGoal, ISavedGoalTrackable } from "../data/modelTypes";
 import { useSelectedScope } from "./scopeSlice";
 import { RootState } from "./store";
-import { sliceLoaded } from "./_sliceHelper";
 
 export interface GoalState {
-  goalRecords: Record<string, SavedType<IGoal>>;
+  goalRecords: Record<string, ISavedGoal | ISavedGoalTrackable>;
 }
 
 const initialState: GoalState = {
@@ -19,7 +19,9 @@ export const scopeSlice = createSlice({
   reducers: {
     goalsLoaded: (
       state,
-      { payload: { goals } }: PayloadAction<{ goals: SavedType<IGoal>[] }>
+      {
+        payload: { goals },
+      }: PayloadAction<{ goals: SavedType<ISavedGoal | ISavedGoalTrackable>[] }>
     ) => {
       goals.forEach((goal) => {
         state.goalRecords[goal._id] = goal;
@@ -27,29 +29,53 @@ export const scopeSlice = createSlice({
     },
     goalCreated: (
       state,
-      { payload: { goal } }: PayloadAction<{ goal: SavedType<IGoal> }>
+      {
+        payload: { goal },
+      }: PayloadAction<{ goal: SavedType<ISavedGoal | ISavedGoalTrackable> }>
     ) => {
       state.goalRecords[goal._id] = goal;
     },
     goalUpdated: (
       state,
-      { payload: { goal } }: PayloadAction<{ goal: SavedType<IGoal> }>
+      {
+        payload: { goal },
+      }: PayloadAction<{ goal: SavedType<ISavedGoal | ISavedGoalTrackable> }>
     ) => {
       state.goalRecords[goal._id] = goal;
     },
     goalDeleted: (
       state,
-      { payload: { goal } }: PayloadAction<{ goal: SavedType<IGoal> }>
+      { payload: { goalId } }: PayloadAction<{ goalId: string }>
     ) => {
-      delete state.goalRecords[goal._id];
+      delete state.goalRecords[goalId];
     },
   },
 });
 
-export function useGoalsInSelectedScope() {
+function dueDateSort(
+  a: ISavedGoal | ISavedGoalTrackable,
+  b: ISavedGoal | ISavedGoalTrackable
+) {
+  if (a.dueDate && !b.dueDate) {
+    return -1;
+  } else if (b.dueDate && !a.dueDate) {
+    return 1;
+  } else if (a.dueDate && b.dueDate) {
+    // @ts-ignore
+    return new Date(a.dueDate) - new Date(b.dueDate);
+  } else {
+    return a.title.localeCompare(b.title);
+  }
+}
+
+export function useGoalsInSelectedScope(): (
+  | ISavedGoal
+  | ISavedGoalTrackable
+)[] {
   const selectedScope = useSelectedScope();
   const allGoals = useSelector((state: RootState) => state.goal.goalRecords);
   const filteredGoals = [];
+  if (!selectedScope) return Object.values(allGoals).sort(dueDateSort);
 
   for (const [_, goalRecord] of Object.entries(allGoals)) {
     if (goalRecord.scopeId === selectedScope?._id) {
@@ -57,7 +83,7 @@ export function useGoalsInSelectedScope() {
     }
   }
 
-  return filteredGoals;
+  return filteredGoals.sort(dueDateSort);
 }
 
 export const { goalsLoaded, goalCreated, goalUpdated, goalDeleted } =
