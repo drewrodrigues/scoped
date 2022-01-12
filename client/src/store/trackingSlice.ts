@@ -49,6 +49,7 @@ export function useTrackingInGoal(goalId: string): ISavedTracking[] {
   return filteredTracking;
 }
 
-export const { trackingLoaded, trackingAdded } = trackingSlice.actions;
+export const { trackingLoaded, trackingAdded, trackingDeleted } =
+  trackingSlice.actions;
 
 export default trackingSlice.reducer;
