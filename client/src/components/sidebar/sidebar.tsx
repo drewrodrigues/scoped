@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaBrain,
-  FaBullseye,
-  FaCalendar,
-  FaCheck,
-  FaChevronCircleDown,
-  FaChevronCircleRight,
-  FaCog,
-  FaHome,
-  FaUndo,
-} from "react-icons/fa";
+import { FaBullseye, FaCheck, FaCog } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel } from "../../data/modelCrud";
 import { IScope } from "../../data/modelTypes";
@@ -24,41 +14,46 @@ import { Input } from "../shared/input";
 import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
 
 const links: SidebarLinkProps[] = [
+  // {
+  //   to: "/dashboard",
+  //   name: "Dashboard",
+  //   icon: <FaHome />,
+  // },
+  // {
+  //   to: "/calendar",
+  //   name: "Calendar",
+  //   icon: <FaCalendar />,
+  // },
   {
-    to: "/dashboard",
-    name: "Dashboard",
-    icon: <FaHome />,
-  },
-  {
-    to: "/calendar",
-    name: "Calendar",
-    icon: <FaCalendar />,
+    to: "/today",
+    name: "Today",
+    icon: <FaCheck />,
   },
   {
     to: "/goals",
     name: "Goals",
     icon: <FaBullseye />,
   },
-  {
-    to: "/tasks",
-    name: "Tasks",
-    icon: <FaCheck />,
-  },
-  {
-    to: "/habits",
-    name: "Habits",
-    icon: <FaUndo />,
-  },
-  {
-    to: "/reminders",
-    name: "Reminders",
-    icon: <FaBrain />,
-  },
-  {
-    to: "/events",
-    name: "Events",
-    icon: <FaCalendar />,
-  },
+  // {
+  //   to: "/tasks",
+  //   name: "Tasks",
+  //   icon: <FaCheck />,
+  // },
+  // {
+  //   to: "/habits",
+  //   name: "Habits",
+  //   icon: <FaUndo />,
+  // },
+  // {
+  //   to: "/reminders",
+  //   name: "Reminders",
+  //   icon: <FaBrain />,
+  // },
+  // {
+  //   to: "/events",
+  //   name: "Events",
+  //   icon: <FaCalendar />,
+  // },
 ];
 
 export function Sidebar() {
