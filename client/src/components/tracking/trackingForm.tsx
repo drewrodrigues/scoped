@@ -8,10 +8,10 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { createOrSaveModel } from "../../data/modelCrud";
+import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedTracking, ITracking } from "../../data/modelTypes";
 import { todaysDate, yesterdaysDate } from "../../helpers/date";
-import { trackingAdded } from "../../store/trackingSlice";
+import { trackingAdded, trackingDeleted } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
 import { Input } from "../shared/input";
 import { Radio } from "../shared/radio";
@@ -69,7 +69,7 @@ export function EditTrackingForm({
 }: TrackingEditFormProps) {
   const dispatch = useDispatch();
 
-  async function createTrackingOnGoal({
+  async function updateTracking({
     quantity,
     date,
   }: {
@@ -86,9 +86,15 @@ export function EditTrackingForm({
     onTrackingComplete?.();
   }
 
+  async function deleteTracking() {
+    await destroy({ _id: existingTracking._id, _rev: existingTracking._rev });
+    dispatch(trackingDeleted({ value: existingTracking }));
+  }
+
   return (
     <_TrackingForm
-      onSave={createTrackingOnGoal}
+      onSave={updateTracking}
+      onDelete={deleteTracking}
       initiatingItemRef={initiatingItemRef}
       existingTracking={existingTracking}
     />
@@ -97,12 +103,14 @@ export function EditTrackingForm({
 
 interface _TrackingFormProps {
   onSave?: (trackingAttributes: { quantity: string; date: string }) => void;
+  onDelete?: () => void;
   initiatingItemRef?: React.RefObject<HTMLElement>;
   existingTracking?: ITracking;
 }
 
 export function _TrackingForm({
   onSave: onSaveProp,
+  onDelete,
   initiatingItemRef,
   existingTracking,
 }: _TrackingFormProps) {
@@ -252,9 +260,12 @@ export function _TrackingForm({
 
       <footer className="flex justify-between">
         <Button text="Track" onClick={onTrack} />
-        <Button text="" onClick={() => null} type="gentle">
-          <FaTrash />
-        </Button>
+
+        {existingTracking && (
+          <Button text="" onClick={() => onDelete?.()} type="gentle">
+            <FaTrash />
+          </Button>
+        )}
       </footer>
     </section>
   );
