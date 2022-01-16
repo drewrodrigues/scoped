@@ -7,9 +7,7 @@ import {
 import { todaysDate } from "../helpers/date";
 import { useTrackingInGoal } from "../store/trackingSlice";
 
-export function shouldBeGoalProgression(
-  goal: ISavedGoalTrackable
-): {
+export function shouldBeGoalProgression(goal: ISavedGoalTrackable): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;
 } {
@@ -19,12 +17,13 @@ export function shouldBeGoalProgression(
   const quantityShouldBeComplete =
     (percentShouldBeComplete / 100) * goal.trackingGoalQuantity;
 
-  return { percentShouldBeComplete, quantityShouldBeComplete };
+  return {
+    percentShouldBeComplete: parseInt(percentShouldBeComplete.toFixed()),
+    quantityShouldBeComplete: parseInt(quantityShouldBeComplete.toFixed()),
+  };
 }
 
-export function computedGoalDates(
-  goal: ISavedGoal
-): {
+export function computedGoalDates(goal: ISavedGoal): {
   totalDaysForGoal: number;
   daysLeftUntilDue: number;
   wholeDaysLeft: number;
@@ -51,7 +50,10 @@ export function actualGoalProgression(
   );
   const percentComplete = (quantityComplete / goal.trackingGoalQuantity) * 100;
 
-  return { percentComplete, quantityComplete };
+  return {
+    percentComplete: parseInt(percentComplete.toFixed()),
+    quantityComplete: parseInt(percentComplete.toFixed()),
+  };
 }
 
 export function neededGoalProjections(

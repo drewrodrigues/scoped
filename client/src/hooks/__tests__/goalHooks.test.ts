@@ -29,8 +29,6 @@ const tenDayGoal = {
   trackingGoalQuantity: 100,
 } as SavedType<ISavedGoalTrackable>;
 
-const emptyTracking: SavedType<ISavedTracking>[] = [];
-
 describe("shouldBeGoalStats", () => {
   describe("when on first day of 10 day goal", () => {
     it("returns 10 `percentShouldBeComplete`", () => {
