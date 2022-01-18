@@ -30,7 +30,11 @@ export function Button({
         }
       )}
     >
-      {children || <FaPlus className="mr-[4px] text-[12px]" />}
+      {children ? (
+        <span className="mr-[4px] text-[12px]">{children}</span>
+      ) : (
+        <FaPlus className="mr-[4px] text-[12px]" />
+      )}
       {text}
     </button>
   );

@@ -1,14 +1,23 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
+import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { createOrSaveModel } from "../../data/modelCrud";
+import {
+  IGoal,
+  IGoalTrackable,
+  ISavedGoal,
+  ISavedGoalTrackable,
+  isTrackableGoal,
+  TrackingMethod,
+} from "../../data/modelTypes";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
+import { formDateToday, formDateTomorrow } from "../../helpers/date";
 import { goalCreated } from "../../store/goalSlice";
 import { useSelectedScope } from "../../store/scopeSlice";
 import { Button } from "../shared/button";
-import { Radio } from "../shared/radio";
 import { Input } from "../shared/input";
-import { IGoal, IGoalTrackable, TrackingMethod } from "../../data/modelTypes";
-import { createOrSaveModel } from "../../data/modelCrud";
+import { Radio } from "../shared/radio";
 
 interface GoalFormProps {
   onClose: () => void;
@@ -18,17 +27,71 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
 
-  const [goalTitle, setGoalTitle] = useState("");
-  const [goalStartDate, setGoalStartDate] = useState("");
-  const [goalTrackingType, setGoalTrackingType] = useState<
-    "none" | TrackingMethod
-  >("none");
-  const [goalDueDate, setGoalDueDate] = useState("");
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
-  const [trackingGoalQuantity, setTrackingGoalQuantity] = useState(0);
+  async function createGoalOnClick(
+    goal: IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
+  ) {
+    console.log({ selectedScope });
+    const savedGoal = await createOrSaveModel<IGoal | IGoalTrackable>(
+      "Goal",
+      goal
+    );
+    dispatch(goalCreated({ goal: savedGoal }));
+    onCloseProp();
+  }
+
+  function onClose() {
+    onCloseProp();
+  }
+
+  return (
+    <_GoalForm
+      onClose={onClose}
+      scopeId={selectedScope._id}
+      onSave={createGoalOnClick}
+    />
+  );
+}
+
+interface _GoalFormProps {
+  onClose: () => void;
+  onSave: (
+    goal: IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
+  ) => void;
+  scopeId: string;
+  existingGoal?: ISavedGoal | ISavedGoalTrackable;
+}
+
+export function _GoalForm({
+  existingGoal,
+  onClose,
+  scopeId,
+  onSave,
+}: _GoalFormProps) {
+  const [goalProperties, setGoalProperties] = useState<
+    IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
+  >(
+    existingGoal || {
+      title: "",
+      startDate: formDateToday(),
+      dueDate: formDateTomorrow(),
+      trackingMethod: undefined,
+      scopeId,
+      coverPhotoUrl: undefined,
+    }
+  );
 
   const [coverPhotoSearch, setCoverPhotoSearch] = useState("");
   const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
+
+  function updateGoalProperty(
+    property: keyof IGoal | keyof IGoalTrackable,
+    value: string | number
+  ) {
+    setGoalProperties((p) => ({
+      ...p,
+      [property]: value,
+    }));
+  }
 
   useEffect(() => {
     const timeout: NodeJS.Timeout = setTimeout(async () => {
@@ -40,53 +103,28 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
     return () => clearTimeout(timeout);
   }, [coverPhotoSearch]);
 
-  async function createGoalOnClick() {
-    console.log({ selectedScope });
-    const savedGoal = await createOrSaveModel<IGoal | IGoalTrackable>("Goal", {
-      title: goalTitle,
-      trackingMethod:
-        goalTrackingType === "none" ? undefined : goalTrackingType,
-      startDate: goalStartDate || undefined,
-      dueDate: goalDueDate || undefined,
-      coverPhotoUrl,
-      scopeId: selectedScope!._id,
-      trackingGoalQuantity,
-    });
-    dispatch(goalCreated({ goal: savedGoal }));
-    setGoalTitle("");
-    onCloseProp();
-  }
-
-  function onClose(e: any) {
-    if (e.target != e.currentTarget) return;
-    onCloseProp();
-  }
-
   return (
-    <div
-      className="absolute left-0 right-0 top-0 bottom-0 z-50 bg-[rgba(0,0,0,0.75)] flex justify-center items-center"
-      onClick={onClose}
-    >
+    <div className="absolute left-0 right-0 top-0 bottom-0 z-50 bg-[rgba(0,0,0,0.75)] flex justify-center items-center">
       <div className="flex flex-col p-[40px] bg-white rounded-[10px] shadow w-[400px] flex-shrink-0">
         <Input
           type="text"
-          value={goalTitle}
-          onChange={(value) => setGoalTitle(value)}
+          value={goalProperties.title}
+          onChange={(value) => updateGoalProperty("title", value)}
           placeholder="Spend 40 hours learning Spanish"
           label="Title"
         />
 
         <Input
           type="date"
-          value={goalStartDate}
-          onChange={(value) => setGoalStartDate(value)}
+          value={goalProperties.startDate}
+          onChange={(value) => updateGoalProperty("startDate", value)}
           label="Start Date"
         />
 
         <Input
           type="date"
-          value={goalDueDate}
-          onChange={(value) => setGoalDueDate(value)}
+          value={goalProperties.dueDate}
+          onChange={(value) => updateGoalProperty("dueDate", value)}
           label="Due Date"
         />
 
@@ -103,9 +141,10 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
               <img
                 src={photoUrl}
                 className={classNames("cover-photo-option", {
-                  "border-green-400 border-[5px]": coverPhotoUrl === photoUrl,
+                  "border-green-400 border-[5px]":
+                    goalProperties.coverPhotoUrl === photoUrl,
                 })}
-                onClick={() => setCoverPhotoUrl(photoUrl)}
+                onClick={() => updateGoalProperty("coverPhotoUrl", photoUrl)}
               />
             ))}
           </div>
@@ -118,38 +157,54 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
         <h4 className="mb-[5px] block text-[13px] mt-[10px]">Tracking Type</h4>
         <div className="flex mb-[10px]">
           <Radio
-            name="None"
-            value="none"
-            checkedValue={goalTrackingType}
-            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
+            label="None"
+            setName="goalTrackingType"
+            value={undefined}
+            checkedValue={goalProperties?.trackingMethod}
+            onClick={(value) =>
+              updateGoalProperty("trackingMethod", value as TrackingMethod)
+            }
           />
 
           <Radio
-            name="Yes/No"
+            label="Yes/No"
+            setName="goalTrackingType"
             value="yes/no"
-            checkedValue={goalTrackingType}
-            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
+            checkedValue={goalProperties?.trackingMethod}
+            onClick={(value) =>
+              updateGoalProperty("trackingMethod", value as TrackingMethod)
+            }
           />
 
           <Radio
-            name="Hours"
+            label="Hours"
+            setName="goalTrackingType"
             value="hours"
-            checkedValue={goalTrackingType}
-            onClick={(value) => setGoalTrackingType(value as TrackingMethod)}
+            checkedValue={goalProperties?.trackingMethod}
+            onClick={(value) =>
+              updateGoalProperty("trackingMethod", value as TrackingMethod)
+            }
           />
         </div>
 
-        {goalTrackingType !== "none" && (
+        {isTrackableGoal(goalProperties) && (
           <Input
-            label={`Goal ${goalTrackingType}`}
-            value={trackingGoalQuantity}
-            onChange={(value) => setTrackingGoalQuantity(value)}
+            label={`Goal ${goalProperties.trackingMethod}`}
+            value={goalProperties.trackingGoalQuantity}
+            onChange={(value) =>
+              updateGoalProperty("trackingGoalQuantity", value)
+            }
             placeholder="50"
             type="number"
           />
         )}
 
-        <Button onClick={createGoalOnClick} text="Create Goal" />
+        <footer className="flex justify-between">
+          <Button onClick={() => onClose()} text="Close" type="gentle">
+            <FaTimes />
+          </Button>
+          <Button onClick={() => onSave(goalProperties)} text="Create Goal" />
+        </footer>
       </div>
     </div>
   );
