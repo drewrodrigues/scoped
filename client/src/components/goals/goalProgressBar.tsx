@@ -1,10 +1,6 @@
 import React from "react";
 import { FaBullseye } from "react-icons/fa";
-import {
-  ISavedGoalTrackable,
-  ISavedTracking,
-  TrackingMethod,
-} from "../../data/modelTypes";
+import { ISavedGoal, TrackingMethod } from "../../data/modelTypes";
 import {
   actualGoalProgression,
   computedGoalDates,

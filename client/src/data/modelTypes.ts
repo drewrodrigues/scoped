@@ -4,21 +4,14 @@ export interface IScope {
   title: string;
 }
 
-export interface IGoalTrackable extends IGoal {
-  trackingMethod: TrackingMethod;
-  trackingGoalQuantity: number;
-}
-
-export function isTrackableGoal<T>(
-  goal: IGoal | IGoalTrackable
-): goal is IGoalTrackable {
-  return !!(goal as IGoalTrackable).trackingGoalQuantity;
-}
-
 export interface IGoal {
   title: string;
   scopeId: string;
   coverPhotoUrl?: string;
+
+  // tracking
+  trackingMethod?: TrackingMethod;
+  trackingGoalQuantity?: number;
 
   // make these a pair
   startDate?: string;
@@ -38,9 +31,8 @@ export interface ITracking {
 }
 
 export type ISavedGoal = SavedType<IGoal>;
-export type ISavedGoalTrackable = SavedType<IGoalTrackable>;
 export type ISavedScope = SavedType<IScope>;
 export type ISavedTracking = SavedType<ITracking>;
 
 export type ModelStringType = "Tracking" | "Scope" | "Goal";
-export type ModelType = IScope | ITracking | IGoalTrackable | IGoal;
+export type ModelType = IScope | ITracking | IGoal;

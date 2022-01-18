@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { SavedType } from "../data/modelCrud";
-import { ISavedGoal, ISavedGoalTrackable } from "../data/modelTypes";
+import { ISavedGoal } from "../data/modelTypes";
 import { useSelectedScope } from "./scopeSlice";
 import { RootState } from "./store";
 
 export interface GoalState {
-  goalRecords: Record<string, ISavedGoal | ISavedGoalTrackable>;
+  goalRecords: Record<string, ISavedGoal>;
 }
 
 const initialState: GoalState = {
@@ -19,9 +19,7 @@ export const scopeSlice = createSlice({
   reducers: {
     goalsLoaded: (
       state,
-      {
-        payload: { goals },
-      }: PayloadAction<{ goals: SavedType<ISavedGoal | ISavedGoalTrackable>[] }>
+      { payload: { goals } }: PayloadAction<{ goals: SavedType<ISavedGoal>[] }>
     ) => {
       goals.forEach((goal) => {
         state.goalRecords[goal._id] = goal;
@@ -29,17 +27,13 @@ export const scopeSlice = createSlice({
     },
     goalCreated: (
       state,
-      {
-        payload: { goal },
-      }: PayloadAction<{ goal: SavedType<ISavedGoal | ISavedGoalTrackable> }>
+      { payload: { goal } }: PayloadAction<{ goal: SavedType<ISavedGoal> }>
     ) => {
       state.goalRecords[goal._id] = goal;
     },
     goalUpdated: (
       state,
-      {
-        payload: { goal },
-      }: PayloadAction<{ goal: SavedType<ISavedGoal | ISavedGoalTrackable> }>
+      { payload: { goal } }: PayloadAction<{ goal: SavedType<ISavedGoal> }>
     ) => {
       state.goalRecords[goal._id] = goal;
     },
@@ -52,10 +46,7 @@ export const scopeSlice = createSlice({
   },
 });
 
-function dueDateSort(
-  a: ISavedGoal | ISavedGoalTrackable,
-  b: ISavedGoal | ISavedGoalTrackable
-) {
+function dueDateSort(a: ISavedGoal, b: ISavedGoal) {
   if (a.dueDate && !b.dueDate) {
     return -1;
   } else if (b.dueDate && !a.dueDate) {
@@ -68,10 +59,7 @@ function dueDateSort(
   }
 }
 
-export function useGoalsInSelectedScope(): (
-  | ISavedGoal
-  | ISavedGoalTrackable
-)[] {
+export function useGoalsInSelectedScope(): (ISavedGoal)[] {
   const selectedScope = useSelectedScope();
   const allGoals = useSelector((state: RootState) => state.goal.goalRecords);
   const filteredGoals = [];

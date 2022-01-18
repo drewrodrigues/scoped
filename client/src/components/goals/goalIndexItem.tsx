@@ -3,15 +3,11 @@ import React, { useEffect, useState } from "react";
 import { FaBars, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { destroy, getChildren } from "../../data/modelCrud";
-import {
-  ISavedGoal,
-  ISavedTracking,
-  isTrackableGoal,
-} from "../../data/modelTypes";
+import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
 import { goalDeleted } from "../../store/goalSlice";
 import { trackingLoaded } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
-import { GoalTrackingList } from "../tracking/trackingList";
+import { TrackingList } from "../tracking/trackingList";
 import { NewTrackingForm } from "../tracking/trackingForm";
 import { GoalProgressBar } from "./goalProgressBar";
 

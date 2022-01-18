@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel } from "../../data/modelCrud";
-import {
-  IGoal,
-  IGoalTrackable,
-  ISavedGoal,
-  ISavedGoalTrackable,
-  isTrackableGoal,
-  TrackingMethod,
-} from "../../data/modelTypes";
+import { IGoal, ISavedGoal, TrackingMethod } from "../../data/modelTypes";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
 import { formDateToday, formDateTomorrow } from "../../helpers/date";
 import { goalCreated } from "../../store/goalSlice";
@@ -27,14 +20,9 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
 
-  async function createGoalOnClick(
-    goal: IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
-  ) {
+  async function createGoalOnClick(goal: IGoal | ISavedGoal) {
     console.log({ selectedScope });
-    const savedGoal = await createOrSaveModel<IGoal | IGoalTrackable>(
-      "Goal",
-      goal
-    );
+    const savedGoal = await createOrSaveModel<IGoal>("Goal", goal);
     dispatch(goalCreated({ goal: savedGoal }));
     onCloseProp();
   }
@@ -54,11 +42,9 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
 
 interface _GoalFormProps {
   onClose: () => void;
-  onSave: (
-    goal: IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
-  ) => void;
+  onSave: (goal: IGoal | ISavedGoal) => void;
   scopeId: string;
-  existingGoal?: ISavedGoal | ISavedGoalTrackable;
+  existingGoal?: ISavedGoal;
 }
 
 export function _GoalForm({

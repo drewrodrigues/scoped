@@ -1,16 +1,16 @@
 import moment from "moment";
-import {
-  ISavedGoal,
-  ISavedGoalTrackable,
-  ISavedTracking,
-} from "../data/modelTypes";
+import { IGoal, ISavedGoal, ISavedTracking } from "../data/modelTypes";
 import { todaysDate } from "../helpers/date";
-import { useTrackingInGoal } from "../store/trackingSlice";
 
-export function shouldBeGoalProgression(goal: ISavedGoalTrackable): {
+export function shouldBeGoalProgression(goal: ISavedGoal): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;
 } {
+  if (!goal.trackingGoalQuantity)
+    throw new Error(
+      "shouldBeGoalProgression(): No tracking goal quantity set on Goal"
+    );
+
   const { totalDaysForGoal, daysIntoGoal } = computedGoalDates(goal);
 
   const percentShouldBeComplete = (daysIntoGoal / totalDaysForGoal) * 100;
@@ -38,12 +38,17 @@ export function computedGoalDates(goal: ISavedGoal): {
 }
 
 export function actualGoalProgression(
-  goal: ISavedGoalTrackable,
+  goal: IGoal,
   tracking: ISavedTracking[]
 ): {
   percentComplete: number;
   quantityComplete: number;
 } {
+  if (!goal.trackingGoalQuantity)
+    throw new Error(
+      "actualGoalProgression(): No tracking goal quantity set on Goal"
+    );
+
   const quantityComplete = tracking.reduce(
     (total, track) => total + track.value,
     0

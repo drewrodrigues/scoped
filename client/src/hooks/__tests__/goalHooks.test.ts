@@ -1,5 +1,5 @@
 import { SavedType } from "../../data/modelCrud";
-import { ISavedGoalTrackable, ISavedTracking } from "../../data/modelTypes";
+import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
 import { nDaysFromNow, todaysDate } from "../../helpers/date";
 import {
   actualGoalProgression,
@@ -12,7 +12,7 @@ const sameDayGoal = {
   dueDate: todaysDate().toUTCString(), // because today counts as 1 day
   trackingMethod: "hours",
   trackingGoalQuantity: 100,
-} as SavedType<ISavedGoalTrackable>;
+} as SavedType<ISavedGoal>;
 
 const oneWeekGoal = {
   startDate: todaysDate().toUTCString(),
@@ -20,14 +20,14 @@ const oneWeekGoal = {
   dueDate: nDaysFromNow(7).toUTCString(),
   trackingMethod: "hours",
   trackingGoalQuantity: 100,
-} as SavedType<ISavedGoalTrackable>;
+} as SavedType<ISavedGoal>;
 
 const tenDayGoal = {
   startDate: todaysDate().toUTCString(),
   dueDate: nDaysFromNow(9).toUTCString(), // because today counts as 1 day
   trackingMethod: "hours",
   trackingGoalQuantity: 100,
-} as SavedType<ISavedGoalTrackable>;
+} as SavedType<ISavedGoal>;
 
 describe("shouldBeGoalStats", () => {
   describe("when on first day of 10 day goal", () => {
@@ -86,7 +86,7 @@ describe("actualGoalProgression", () => {
       const { percentComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 100,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         [] as ISavedTracking[]
       );
       expect(percentComplete).toEqual(0);
@@ -96,7 +96,7 @@ describe("actualGoalProgression", () => {
       const { percentComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 100,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         []
       );
       expect(percentComplete).toEqual(0);
@@ -108,7 +108,7 @@ describe("actualGoalProgression", () => {
       const { percentComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 100,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         [{ value: 20 }, { value: 20 }, { value: 10 }] as ISavedTracking[]
       );
       expect(percentComplete).toEqual(50);
@@ -118,7 +118,7 @@ describe("actualGoalProgression", () => {
       const { percentComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 100,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         [{ value: 20 }, { value: 20 }, { value: 10 }] as ISavedTracking[]
       );
       expect(percentComplete).toEqual(50);
@@ -130,7 +130,7 @@ describe("actualGoalProgression", () => {
       const { percentComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 50,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         [{ value: 5 }, { value: 2 }, { value: 13 }] as ISavedTracking[]
       );
       expect(percentComplete).toEqual(40);
@@ -140,7 +140,7 @@ describe("actualGoalProgression", () => {
       const { quantityComplete } = actualGoalProgression(
         {
           trackingGoalQuantity: 50,
-        } as ISavedGoalTrackable,
+        } as ISavedGoal,
         [{ value: 5 }, { value: 2 }, { value: 13 }] as ISavedTracking[]
       );
       expect(quantityComplete).toEqual(20);

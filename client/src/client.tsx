@@ -6,11 +6,7 @@ import { MainRoutes } from "./components/mainRoutes";
 import { Sidebar } from "./components/sidebar/sidebar";
 import "./data/db";
 import { getAll } from "./data/modelCrud";
-import {
-  ISavedGoal,
-  ISavedGoalTrackable,
-  ISavedScope,
-} from "./data/modelTypes";
+import { ISavedGoal, ISavedScope } from "./data/modelTypes";
 import { goalsLoaded } from "./store/goalSlice";
 import { scopesLoaded } from "./store/scopeSlice";
 import { store } from "./store/store";
@@ -52,7 +48,7 @@ function Client() {
       console.log("👍🏽 Scoped Loaded");
     });
 
-    getAll<ISavedGoal | ISavedGoalTrackable>("Goal").then((goals) => {
+    getAll<ISavedGoal>("Goal").then((goals) => {
       dispatch(goalsLoaded({ goals }));
       setLoadingState("loaded");
       console.log("👍🏽 Goals Loaded");
