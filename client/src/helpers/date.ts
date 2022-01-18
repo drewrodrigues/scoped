@@ -1,5 +1,7 @@
 import moment from "moment";
 
+export const FORM_DATE_FORMAT = "YYYY-MM-DD";
+
 export function yesterdaysDate(): Date {
   return nDaysFromNow(-1);
 }
@@ -15,13 +17,13 @@ export function nDaysFromNow(n: number): Date {
 }
 
 export function formDateToday(): string {
-  return moment(todaysDate()).format("YYYY-MM-DD");
+  return moment(todaysDate()).format(FORM_DATE_FORMAT);
 }
 
 export function formDateYesterday(): string {
-  return moment(yesterdaysDate()).format("YYYY-MM-DD");
+  return moment(yesterdaysDate()).format(FORM_DATE_FORMAT);
 }
 
 export function formDateTomorrow(): string {
-  return moment(nDaysFromNow(1)).format("YYYY-MM-DD");
+  return moment(nDaysFromNow(1)).format(FORM_DATE_FORMAT);
 }

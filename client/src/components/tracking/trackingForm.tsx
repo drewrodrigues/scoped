@@ -8,6 +8,7 @@ import {
   ITracking,
   TrackingMethod,
 } from "../../data/modelTypes";
+import { formDateToday, FORM_DATE_FORMAT } from "../../helpers/date";
 import { trackingAdded, trackingDeleted } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
 import { TrackingDate } from "./trackingDate";
@@ -113,8 +114,8 @@ export function _TrackingForm({
 }: _TrackingFormProps) {
   const [date, setDate] = useState<string>(
     existingTracking?.date
-      ? moment(existingTracking.date).format("YYYY-MM-DD")
-      : moment(new Date()).format("YYYY-MM-DD")
+      ? moment(existingTracking.date).format(FORM_DATE_FORMAT)
+      : formDateToday()
   );
   const [quantity, setQuantity] = useState<number>(
     existingTracking?.value || 1
