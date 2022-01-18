@@ -1,7 +1,5 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import Cleave from "cleave.js/react";
-import { FaCross, FaPlus, FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { getPhotoListFromTerm } from "../../external/unsplashApi";
 import { goalCreated } from "../../store/goalSlice";
@@ -44,16 +42,16 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
 
   async function createGoalOnClick() {
     console.log({ selectedScope });
-    const goal = new Goal({
+    const savedGoal = await createOrSaveModel<IGoal | IGoalTrackable>("Goal", {
       title: goalTitle,
-      trackingMethod: goalTrackingType,
-      startDate: goalStartDate,
-      dueDate: goalDueDate,
+      trackingMethod:
+        goalTrackingType === "none" ? undefined : goalTrackingType,
+      startDate: goalStartDate || undefined,
+      dueDate: goalDueDate || undefined,
       coverPhotoUrl,
       scopeId: selectedScope!._id,
       trackingGoalQuantity,
     });
-    const savedGoal = await goal.save();
     dispatch(goalCreated({ goal: savedGoal }));
     setGoalTitle("");
     onCloseProp();
