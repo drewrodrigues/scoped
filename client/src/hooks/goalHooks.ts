@@ -18,8 +18,14 @@ export function shouldBeGoalProgression(goal: ISavedGoal): {
     (percentShouldBeComplete / 100) * goal.trackingGoalQuantity;
 
   return {
-    percentShouldBeComplete: parseInt(percentShouldBeComplete.toFixed()),
-    quantityShouldBeComplete: parseInt(quantityShouldBeComplete.toFixed()),
+    percentShouldBeComplete: Math.min(
+      parseInt(percentShouldBeComplete.toFixed()),
+      100
+    ),
+    quantityShouldBeComplete: Math.min(
+      parseInt(quantityShouldBeComplete.toFixed()),
+      goal.trackingGoalQuantity
+    ),
   };
 }
 
