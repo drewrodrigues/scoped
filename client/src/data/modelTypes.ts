@@ -21,7 +21,7 @@ export interface IGoal {
   photoId?: string;
 }
 
-export type TrackingMethod = "yes/no" | "minutes" | "hours";
+export type TrackingMethod = "yes/no" | "minutes" | "hours" | "quantity";
 
 export interface ITracking {
   trackingMethod: TrackingMethod;

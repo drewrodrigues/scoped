@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaBars, FaTrash } from "react-icons/fa";
+import { FaBars, FaPen, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { destroy, getChildren } from "../../data/modelCrud";
 import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
@@ -10,11 +10,14 @@ import { Button } from "../shared/button";
 import { TrackingList } from "../tracking/trackingList";
 import { NewTrackingForm } from "../tracking/trackingForm";
 import { GoalProgressBar } from "./goalProgressBar";
+import { GoalForm } from "./goalForm";
 
 export function GoalIndexItem(goal: ISavedGoal) {
   const { title, _id, _rev, coverPhotoUrl, dueDate } = goal;
   const [toggleMenu, setToggleMenu] = useState(false);
   const [toggleTracking, setToggleTracking] = useState(false);
+
+  const [toggleGoalForm, setToggleGoalForm] = useState(false);
 
   const dispatch = useDispatch();
   async function onDeleteGoalClick() {
@@ -37,47 +40,86 @@ export function GoalIndexItem(goal: ISavedGoal) {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      <TrackingDuration goalId={goal.attributes._id} />
-      <div
-        key={goal.attributes._id}
-        className="flex flex-col w-[400px] shrink-0 relative mr-[20px] hover:opacity-100 transition-opacity cursor-pointer mt-[20px]"
-      >
-        <img
-          src={coverPhotoUrl}
-          alt="Something goes here"
-          className="w-full rounded-[10px] object-cover h-full"
+    <div className="flex flex-col w-[49%]">
+      {toggleGoalForm && (
+        <GoalForm
+          existingGoal={goal}
+          onClose={() => setToggleGoalForm(false)}
         />
+      )}
 
-        <button
-          onClick={onDeleteGoalClick}
-          className="absolute top-[10px] right-[10px] bg-white py-[7px] px-[10px] rounded-[5px] text-[12px] opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
-        >
-          Delete
-        </button>
+      <section
+        key={_id}
+        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px]"
+      >
+        <header className="relative">
+          <div className="absolute top-[10px] right-[10px] flex flex-col items-end">
+            <button
+              className="bg-white py-[7px] px-[10px] mb-[5px] rounded-[5px] text-[12px] hover:opacity-100 cursor-pointer"
+              onClick={() => setToggleMenu((p) => !p)}
+            >
+              <FaBars />
+            </button>
 
-        <div>
-          <p className="text-[14px] mt-[20px]">{title}</p>
+            {toggleMenu && (
+              <div className="bg-white rounded-[5px]">
+                <button
+                  className="text-[14px] px-[11px] py-[5px] flex items-center"
+                  onClick={() => {
+                    setToggleMenu(false);
+                    setToggleGoalForm(true);
+                  }}
+                >
+                  <FaPen className="mr-[3px] text-[12px]" />
+                  Edit
+                </button>
 
-        {isTrackableGoal(goal) && <GoalProgressBar goal={goal} />}
+                <button
+                  className="text-[14px] px-[11px] py-[5px] flex items-center"
+                  onClick={onDeleteGoalClick}
+                >
+                  <FaTrash className="mr-[3px] text-[12px]" />
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+          <img
+            src={coverPhotoUrl}
+            alt="Something goes here"
+            className="w-full object-cover h-[300px]"
+          />
 
-          <p>Tracking Type: {trackingType}</p>
-          {/* <p>isOnTrack: {isOnTrack ? "true" : "false"}</p>
-        <p>TrackedQuantity: {trackedQuantity}</p> */}
-          <p>Togo: {trackingGoalQuantity}</p>
-          <p>Start: {startDate}</p>
-          <p>Due Date: {dueDate}</p>
-          <p>Total days to complete: {totalDaysToComplete}</p>
-          <p>Days left to complete: {daysLeftUntilDue}</p>
-          <p>
-            averageMinutesPerDayNeeded:
-            {averageMinutesPerDayNeeded}
+          <footer className="absolute bottom-[10px] right-[10px]">
+            <Button text="Track" onClick={() => setToggleTracking((p) => !p)} />
+          </footer>
+        </header>
+
+        {goal.trackingMethod && <GoalProgressBar goal={goal} />}
+
+        <footer className="p-[20px] bg-white justify-between items-center relative">
+          <p className="text-[16px] text-bold text-gray-700 w-full font-bold">
+            {title}
           </p>
-          <p>quantity should be done {quantityShouldBeDone}</p>
-        </div>
-      </div>
 
-      <GoalTrackingList goalId={goal.attributes._id} />
+          <TrackingList goalId={_id} />
+        </footer>
+      </section>
+      <p className="rounded-[5px] text-[10px] text-gray-500">
+        due in{" "}
+        <span className="font-bold">{moment(dueDate).fromNow(true)}</span> on{" "}
+        {moment(dueDate).format("MM/DD/YY")}
+      </p>
+      {/* Days Left: {daysLeft}
+      Total days for goal: {totalDaysForGoal}
+      Percent should be complete: {percentShouldBeComplete} */}
+      {toggleTracking && goal.trackingMethod && (
+        <NewTrackingForm
+          trackingMethod={goal.trackingMethod}
+          goalId={_id}
+          onTrackingComplete={() => setToggleTracking(false)}
+        />
+      )}
     </div>
   );
 }

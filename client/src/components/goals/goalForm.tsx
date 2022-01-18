@@ -14,9 +14,13 @@ import { Radio } from "../shared/radio";
 
 interface GoalFormProps {
   onClose: () => void;
+  existingGoal?: ISavedGoal;
 }
 
-export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
+export function GoalForm({
+  onClose: onCloseProp,
+  existingGoal,
+}: GoalFormProps) {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
 
@@ -31,11 +35,17 @@ export function GoalForm({ onClose: onCloseProp }: GoalFormProps) {
     onCloseProp();
   }
 
+  if (!selectedScope && !existingGoal)
+    throw new Error(
+      "GoalForm(): No scope selected or existing goal set when opening goal form"
+    );
+
   return (
     <_GoalForm
       onClose={onClose}
-      scopeId={selectedScope._id}
+      scopeId={selectedScope?._id!}
       onSave={createGoalOnClick}
+      existingGoal={existingGoal}
     />
   );
 }
@@ -53,27 +63,29 @@ export function _GoalForm({
   scopeId,
   onSave,
 }: _GoalFormProps) {
-  const [goalProperties, setGoalProperties] = useState<
-    IGoal | IGoalTrackable | ISavedGoal | ISavedGoalTrackable
-  >(
+  const [goalProperties, setGoalProperties] = useState<IGoal | ISavedGoal>(
     existingGoal || {
       title: "",
       startDate: formDateToday(),
       dueDate: formDateTomorrow(),
       trackingMethod: undefined,
+      trackingGoalQuantity: 10,
       scopeId,
       coverPhotoUrl: undefined,
     }
   );
 
   const [coverPhotoSearch, setCoverPhotoSearch] = useState("");
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
+  const [coverPhotos, setCoverPhotos] = useState<string[]>(() => {
+    if (existingGoal?.coverPhotoUrl) {
+      return [existingGoal.coverPhotoUrl];
+    } else {
+      return [];
+    }
+  });
 
-  function updateGoalProperty(
-    property: keyof IGoal | keyof IGoalTrackable,
-    value: string | number
-  ) {
-    setGoalProperties((p) => ({
+  function updateGoalProperty(property: keyof IGoal, value: string | number) {
+    setGoalProperties((p: IGoal | ISavedGoal) => ({
       ...p,
       [property]: value,
     }));
@@ -145,7 +157,7 @@ export function _GoalForm({
           <Radio
             label="None"
             setName="goalTrackingType"
-            value={undefined}
+            value=""
             checkedValue={goalProperties?.trackingMethod}
             onClick={(value) =>
               updateGoalProperty("trackingMethod", value as TrackingMethod)
@@ -163,6 +175,16 @@ export function _GoalForm({
           />
 
           <Radio
+            label="Minutes"
+            setName="goalTrackingType"
+            value="minutes"
+            checkedValue={goalProperties?.trackingMethod}
+            onClick={(value) =>
+              updateGoalProperty("trackingMethod", value as TrackingMethod)
+            }
+          />
+
+          <Radio
             label="Hours"
             setName="goalTrackingType"
             value="hours"
@@ -171,9 +193,19 @@ export function _GoalForm({
               updateGoalProperty("trackingMethod", value as TrackingMethod)
             }
           />
+
+          <Radio
+            label="Quantity"
+            setName="goalTrackingType"
+            value="quantity"
+            checkedValue={goalProperties?.trackingMethod}
+            onClick={(value) =>
+              updateGoalProperty("trackingMethod", value as TrackingMethod)
+            }
+          />
         </div>
 
-        {isTrackableGoal(goalProperties) && (
+        {goalProperties.trackingMethod && (
           <Input
             label={`Goal ${goalProperties.trackingMethod}`}
             value={goalProperties.trackingGoalQuantity}

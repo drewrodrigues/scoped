@@ -9,22 +9,16 @@ import {
 import { useTrackingInGoal } from "../../store/trackingSlice";
 
 interface GoalProgressBarProps {
-  goal: ISavedGoalTrackable;
+  goal: ISavedGoal;
 }
 
 export function GoalProgressBar({ goal }: GoalProgressBarProps) {
   const tracking = useTrackingInGoal(goal._id);
-  const {
-    percentShouldBeComplete,
-    quantityShouldBeComplete,
-  } = shouldBeGoalProgression(goal);
+  const { percentShouldBeComplete, quantityShouldBeComplete } =
+    shouldBeGoalProgression(goal);
 
-  const {
-    totalDaysForGoal,
-    daysLeftUntilDue,
-    wholeDaysLeft,
-    daysIntoGoal,
-  } = computedGoalDates(goal);
+  const { totalDaysForGoal, daysLeftUntilDue, wholeDaysLeft, daysIntoGoal } =
+    computedGoalDates(goal);
 
   const { quantityComplete, percentComplete } = actualGoalProgression(
     goal,
@@ -36,9 +30,9 @@ export function GoalProgressBar({ goal }: GoalProgressBarProps) {
       percentShouldBeComplete={percentShouldBeComplete}
       quantityShouldBeComplete={quantityShouldBeComplete}
       quantityComplete={quantityComplete}
-      trackingGoalQuantity={goal.trackingGoalQuantity}
+      trackingGoalQuantity={goal.trackingGoalQuantity!}
       percentComplete={percentComplete}
-      trackingType={goal.trackingMethod}
+      trackingType={goal.trackingMethod!}
     />
   );
 }
