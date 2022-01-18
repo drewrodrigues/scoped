@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { destroy, getChildren } from "../../data/modelCrud";
 import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
 import { goalDeleted } from "../../store/goalSlice";
-import { trackingLoaded } from "../../store/trackingSlice";
+import { trackingLoaded, useTrackingInGoal } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
 import { TrackingList } from "../tracking/trackingList";
 import { NewTrackingForm } from "../tracking/trackingForm";
@@ -18,6 +18,8 @@ export function GoalIndexItem(goal: ISavedGoal) {
   const [toggleTracking, setToggleTracking] = useState(false);
 
   const [toggleGoalForm, setToggleGoalForm] = useState(false);
+
+  const trackingRecords = useTrackingInGoal(goal._id);
 
   const dispatch = useDispatch();
   async function onDeleteGoalClick() {
@@ -50,7 +52,8 @@ export function GoalIndexItem(goal: ISavedGoal) {
 
       <section
         key={_id}
-        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px]"
+        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px]  rounded-[5px]"
+        style={{ boxShadow: "0 2px #eff2f3", border: "1px solid #EFF2F3" }}
       >
         <header className="relative">
           <div className="absolute top-[10px] right-[10px] flex flex-col items-end">
@@ -87,7 +90,7 @@ export function GoalIndexItem(goal: ISavedGoal) {
           <img
             src={coverPhotoUrl}
             alt="Something goes here"
-            className="w-full object-cover h-[300px]"
+            className="w-full object-cover h-[300px] rounded-t-[5px]"
           />
 
           <footer className="absolute bottom-[10px] right-[10px]">
@@ -95,15 +98,17 @@ export function GoalIndexItem(goal: ISavedGoal) {
           </footer>
         </header>
 
-        {goal.trackingMethod && <GoalProgressBar goal={goal} />}
-
         <footer className="p-[20px] bg-white justify-between items-center relative">
           <p className="text-[16px] text-bold text-gray-700 w-full font-bold">
             {title}
           </p>
 
-          <TrackingList goalId={_id} />
+          {trackingRecords.length ? (
+            <TrackingList trackingRecords={trackingRecords} />
+          ) : null}
         </footer>
+
+        {goal.trackingMethod && <GoalProgressBar goal={goal} />}
       </section>
       <p className="rounded-[5px] text-[10px] text-gray-500">
         due in{" "}

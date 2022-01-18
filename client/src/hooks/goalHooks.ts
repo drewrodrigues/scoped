@@ -62,8 +62,8 @@ export function actualGoalProgression(
   const percentComplete = (quantityComplete / goal.trackingGoalQuantity) * 100;
 
   return {
-    percentComplete: parseInt(percentComplete.toFixed()),
-    quantityComplete: parseInt(percentComplete.toFixed()),
+    percentComplete: Math.min(parseInt(percentComplete.toFixed()), 100),
+    quantityComplete: parseInt(quantityComplete.toFixed()),
   };
 }
 

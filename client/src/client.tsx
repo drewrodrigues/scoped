@@ -60,7 +60,7 @@ function Client() {
   }
 
   return (
-    <div className="flex bg-[#f7f7f7] h-[100vh]">
+    <div className="flex bg-[#F8FBFC] h-[100vh]">
       <Sidebar />
       <MainRoutes />
     </div>

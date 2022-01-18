@@ -6,12 +6,10 @@ import { ISavedTracking } from "../../data/modelTypes";
 import { TrackingItem } from "./trackingItem";
 
 interface TrackingListProps {
-  goalId: string;
+  trackingRecords: ISavedTracking[];
 }
 
-export function TrackingList({ goalId }: TrackingListProps) {
-  const trackingRecords = useTrackingInGoal(goalId);
-
+export function TrackingList({ trackingRecords }: TrackingListProps) {
   return <_TrackingList trackingRecords={trackingRecords} />;
 }
 

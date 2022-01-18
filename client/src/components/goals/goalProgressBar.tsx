@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBullseye } from "react-icons/fa";
+import { FaBullseye, FaCheck } from "react-icons/fa";
 import { ISavedGoal, TrackingMethod } from "../../data/modelTypes";
 import {
   actualGoalProgression,
@@ -50,33 +50,37 @@ export function _GoalProgressBar({
   percentComplete,
   percentShouldBeComplete,
   quantityShouldBeComplete,
-  quantityComplete: quantityCompleted,
+  quantityComplete,
   trackingGoalQuantity,
   trackingType,
 }: _GoalProgressBarProps) {
   return (
-    <section className="bg-gray-200 h-[30px] flex items-center justify-between relative">
+    <main className="w-full">
+      <div className="flex justify-between h-[20px] items-center">
+        <div
+          style={{ width: `${percentComplete || 0}%` }}
+          className="bg-green-300 h-[20px] z-10 flex justify-center items-center absolute"
+        />
+
+        <p className="relative text-[8px] ml-[7px] whitespace-nowrap z-20 flex items-center">
+          <FaCheck className="mr-[3px]" />
+          {percentComplete || 0}% / {quantityComplete}
+        </p>
+
+        <p className="text-[8px] mr-[7px] relative z-20">
+          {trackingGoalQuantity} {trackingType}
+        </p>
+      </div>
+
       <div
-        style={{ width: `${percentComplete || 0}%` }}
-        className="bg-green-300 h-[30px] absolute opacity-70 z-0"
-      />
-      <div
-        style={{ left: `${percentShouldBeComplete || 0}%` }}
-        className="h-[15px] border-l-[1px] border-l-green-700 border-dashed absolute top-[25px] z-50 flex items-end"
+        style={{ width: `${percentShouldBeComplete || 0}%` }}
+        className="flex justify-between h-[20px] items-center bg-orange-200"
       >
         <p className="text-[8px] whitespace-nowrap ml-[5px] leading-[1] flex">
           <FaBullseye className="mr-[3px]" />
           {percentShouldBeComplete}% / {quantityShouldBeComplete}
         </p>
       </div>
-
-      <p className="text-green-800 relative z-10 text-[12px] ml-[7px]">
-        {percentComplete || 0}%
-      </p>
-
-      <p className="text-gray-500 relative z-10 text-[12px] mr-[7px]">
-        {quantityCompleted} / {trackingGoalQuantity} {trackingType}
-      </p>
-    </section>
+    </main>
   );
 }
