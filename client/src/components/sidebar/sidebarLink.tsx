@@ -4,15 +4,15 @@ import { NavLink } from "react-router-dom";
 
 export interface SidebarLinkSharedProps {
   name: string;
+  onClick?: () => void;
 }
-interface NavLinkProps extends SidebarLinkSharedProps {
+export interface NavLinkProps extends SidebarLinkSharedProps {
   to: string;
   icon: JSX.Element;
 }
 
 interface StateLinkProps extends SidebarLinkSharedProps {
   isActive: boolean;
-  onClick: () => void;
 }
 
 export type SidebarLinkProps = NavLinkProps | StateLinkProps;
@@ -24,6 +24,7 @@ export function SidebarLink(props: SidebarLinkProps) {
       to={props.to}
       className="rounded-[5px] flex items-center py-[7px] px-[14px] text-[13px] hover:bg-[#e8e8e9]"
       activeClassName="font-bold"
+      onClick={props.onClick}
     >
       <span className="text-[#aaa] mr-[6px] text-[10px]">{props.icon}</span>
       {props.name}

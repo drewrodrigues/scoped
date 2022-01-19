@@ -11,19 +11,9 @@ import {
 } from "../../store/scopeSlice";
 import { Button } from "../shared/button";
 import { Input } from "../shared/input";
-import { SidebarLink, SidebarLinkProps } from "./sidebarLink";
+import { NavLinkProps, SidebarLink, SidebarLinkProps } from "./sidebarLink";
 
-const links: SidebarLinkProps[] = [
-  // {
-  //   to: "/dashboard",
-  //   name: "Dashboard",
-  //   icon: <FaHome />,
-  // },
-  // {
-  //   to: "/calendar",
-  //   name: "Calendar",
-  //   icon: <FaCalendar />,
-  // },
+const links: NavLinkProps[] = [
   {
     to: "/today",
     name: "Today",
@@ -34,26 +24,6 @@ const links: SidebarLinkProps[] = [
     name: "Goals",
     icon: <FaBullseye />,
   },
-  // {
-  //   to: "/tasks",
-  //   name: "Tasks",
-  //   icon: <FaCheck />,
-  // },
-  // {
-  //   to: "/habits",
-  //   name: "Habits",
-  //   icon: <FaUndo />,
-  // },
-  // {
-  //   to: "/reminders",
-  //   name: "Reminders",
-  //   icon: <FaBrain />,
-  // },
-  // {
-  //   to: "/events",
-  //   name: "Events",
-  //   icon: <FaCalendar />,
-  // },
 ];
 
 export function Sidebar() {
