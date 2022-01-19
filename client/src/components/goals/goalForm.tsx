@@ -165,36 +165,6 @@ export function _GoalForm({
           />
 
           <Radio
-            label="Yes/No"
-            setName="goalTrackingType"
-            value="yes/no"
-            checkedValue={goalProperties?.trackingMethod}
-            onClick={(value) =>
-              updateGoalProperty("trackingMethod", value as TrackingMethod)
-            }
-          />
-
-          <Radio
-            label="Minutes"
-            setName="goalTrackingType"
-            value="minutes"
-            checkedValue={goalProperties?.trackingMethod}
-            onClick={(value) =>
-              updateGoalProperty("trackingMethod", value as TrackingMethod)
-            }
-          />
-
-          <Radio
-            label="Hours"
-            setName="goalTrackingType"
-            value="hours"
-            checkedValue={goalProperties?.trackingMethod}
-            onClick={(value) =>
-              updateGoalProperty("trackingMethod", value as TrackingMethod)
-            }
-          />
-
-          <Radio
             label="Quantity"
             setName="goalTrackingType"
             value="quantity"
