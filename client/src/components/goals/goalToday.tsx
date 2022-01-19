@@ -60,24 +60,26 @@ export function GoalToday({ goal }: GoalTodayProps) {
               on {moment(goal.dueDate).format("MM/DD/YY")}
             </p>
 
-            <div className="flex flex-col items-start">
-              {isOnTrack ? (
-                <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-green-400 text-green-900 whitespace-pre">
-                  <FaCheck className="mr-[3px]" />
-                  On Track
-                  <span className="font-bold">
-                    {" "}
-                    {neededToBeOnTrack} due today
-                  </span>
-                </p>
-              ) : (
-                <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-red-400 text-red-900 whitespace-pre">
-                  <FaTimes className="mr-[3px]" />
-                  Falling Behind
-                  <span className="font-bold"> by {neededToBeOnTrack}</span>
-                </p>
-              )}
-            </div>
+            {goal.trackingMethod && (
+              <div className="flex flex-col items-start">
+                {isOnTrack ? (
+                  <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-green-400 text-green-900 whitespace-pre">
+                    <FaCheck className="mr-[3px]" />
+                    On Track
+                    <span className="font-bold">
+                      {" "}
+                      {neededToBeOnTrack} due today
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-red-400 text-red-900 whitespace-pre">
+                    <FaTimes className="mr-[3px]" />
+                    Falling Behind
+                    <span className="font-bold"> by {neededToBeOnTrack}</span>
+                  </p>
+                )}
+              </div>
+            )}
           </main>
 
           <aside className="flex">
@@ -85,16 +87,20 @@ export function GoalToday({ goal }: GoalTodayProps) {
               <FaArrowRight />
             </Button>
 
-            <Button
-              text={`Track ${neededToBeOnTrack}`}
-              className="ml-[5px]"
-              onClick={() => quickTrack(neededToBeOnTrack)}
-            />
-            <Button
-              text="Track Other"
-              className="ml-[5px]"
-              onClick={() => setToggleTracking((p) => !p)}
-            />
+            {goal.trackingMethod && (
+              <>
+                <Button
+                  text={`Track ${neededToBeOnTrack}`}
+                  className="ml-[5px]"
+                  onClick={() => quickTrack(neededToBeOnTrack)}
+                />
+                <Button
+                  text="Track Other"
+                  className="ml-[5px]"
+                  onClick={() => setToggleTracking((p) => !p)}
+                />
+              </>
+            )}
           </aside>
         </section>
       </li>

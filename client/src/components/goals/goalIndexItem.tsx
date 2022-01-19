@@ -93,9 +93,14 @@ export function GoalIndexItem(goal: ISavedGoal) {
             className="w-full object-cover h-[300px] rounded-t-[5px]"
           />
 
-          <footer className="absolute bottom-[10px] right-[10px]">
-            <Button text="Track" onClick={() => setToggleTracking((p) => !p)} />
-          </footer>
+          {goal.trackingMethod && (
+            <footer className="absolute bottom-[10px] right-[10px]">
+              <Button
+                text="Track"
+                onClick={() => setToggleTracking((p) => !p)}
+              />
+            </footer>
+          )}
         </header>
 
         <footer className="p-[20px] bg-white justify-between items-center relative">
@@ -115,9 +120,6 @@ export function GoalIndexItem(goal: ISavedGoal) {
         <span className="font-bold">{moment(dueDate).fromNow(true)}</span> on{" "}
         {moment(dueDate).format("MM/DD/YY")}
       </p>
-      {/* Days Left: {daysLeft}
-      Total days for goal: {totalDaysForGoal}
-      Percent should be complete: {percentShouldBeComplete} */}
       {toggleTracking && goal.trackingMethod && (
         <NewTrackingForm
           trackingMethod={goal.trackingMethod}
