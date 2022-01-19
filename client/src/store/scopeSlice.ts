@@ -48,6 +48,9 @@ export const scopeSlice = createSlice({
     scopeUpdated: (state, { payload: scope }: PayloadAction<ISavedScope>) => {
       state.scopeRecords[scope._id] = scope;
     },
+    scopeDeleted: (state, { payload: scope }: PayloadAction<ISavedScope>) => {
+      delete state.scopeRecords[scope._id];
+    },
   },
 });
 
@@ -72,7 +75,12 @@ export function useAllScopes() {
 }
 
 // Action creators are generated for each case reducer function
-export const { scopesLoaded, scopeSelected, scopeCreated, scopeUpdated } =
-  scopeSlice.actions;
+export const {
+  scopesLoaded,
+  scopeSelected,
+  scopeCreated,
+  scopeUpdated,
+  scopeDeleted,
+} = scopeSlice.actions;
 
 export default scopeSlice.reducer;

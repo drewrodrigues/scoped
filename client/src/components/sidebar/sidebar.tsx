@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { FaBullseye, FaCheck, FaCog } from "react-icons/fa";
+import { FaBullseye, FaCheck, FaCog, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { createOrSaveModel } from "../../data/modelCrud";
-import { IScope } from "../../data/modelTypes";
+import { createOrSaveModel, destroy } from "../../data/modelCrud";
+import { ISavedGoal, ISavedScope, IScope } from "../../data/modelTypes";
 import {
   scopeCreated,
+  scopeDeleted,
   scopeSelected,
   useAllScopes,
   useSelectedScope,
@@ -32,6 +33,7 @@ export function Sidebar() {
   const scopes = useAllScopes();
 
   const [newScopeText, setNewScopeText] = useState("");
+  const [openScopeMenu, setOpenScopeMenu] = useState<ISavedScope | null>(null);
 
   async function onCreateNewScope() {
     const scope = await createOrSaveModel<IScope>("Scope", {
@@ -56,6 +58,11 @@ export function Sidebar() {
     localStorage.setItem("LAST_SELECTED_STATE_LINK", stateLink.to);
   }
 
+  async function deleteScope(scope: ISavedScope) {
+    await destroy({ _id: scope._id, _rev: scope._rev });
+    dispatch(scopeDeleted(scope));
+  }
+
   if (!scopes) {
     return <p>TODO: @drew design for empty states or create general scope?</p>;
   }
@@ -70,13 +77,37 @@ export function Sidebar() {
           name={"All"}
           onClick={() => onSelectScope(null)}
         />
-        {scopes.map((scope) => (
-          <SidebarLink
-            isActive={selectedScope?._id == scope._id}
-            name={scope.title}
-            onClick={() => onSelectScope(scope._id)}
-          />
-        ))}
+        {scopes.map((scope) => {
+          return (
+            <>
+              <SidebarLink
+                isActive={selectedScope?._id == scope._id}
+                name={scope.title}
+                onClick={() => onSelectScope(scope._id)}
+                onClickMenu={() => {
+                  setOpenScopeMenu((alreadyOpenedMenu) => {
+                    if (alreadyOpenedMenu === scope) {
+                      return null;
+                    } else {
+                      return scope;
+                    }
+                  });
+                }}
+              />
+              {scope === openScopeMenu && (
+                <div className="flex flex-col rounded-[5px] py-[7px] px-[14px] text-[13px]">
+                  <button
+                    className="w-full flex items-center"
+                    onClick={() => deleteScope(scope)}
+                  >
+                    <FaTrash className="mr-[3px]" />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              )}
+            </>
+          );
+        })}
 
         <div className="p-[13px]">
           <Input

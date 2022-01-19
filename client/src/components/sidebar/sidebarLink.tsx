@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import { FaEllipsisH } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 export interface SidebarLinkSharedProps {
@@ -13,6 +14,7 @@ export interface NavLinkProps extends SidebarLinkSharedProps {
 
 interface StateLinkProps extends SidebarLinkSharedProps {
   isActive: boolean;
+  onClickMenu?: () => void;
 }
 
 export type SidebarLinkProps = NavLinkProps | StateLinkProps;
@@ -32,13 +34,18 @@ export function SidebarLink(props: SidebarLinkProps) {
   ) : (
     <a
       className={classNames(
-        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[13px] hover:bg-[#e8e8e9] cursor-pointer",
+        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[13px] hover:bg-[#e8e8e9] cursor-pointer justify-between",
         { "font-bold": props.isActive }
       )}
       onClick={props.onClick}
     >
-      {/* <span className="text-[#aaa] mr-[6px] text-[10px]">{props.icon}</span> */}
-      {props.name}
+      <span>{props.name}</span>
+      <button
+        className="hover:bg-gray-300 p-[5px] rounded-[5px] text-gray-300 hover:text-white"
+        onClick={props.onClickMenu}
+      >
+        <FaEllipsisH />
+      </button>
     </a>
   );
 }
