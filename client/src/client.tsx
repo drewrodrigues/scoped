@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Provider, useDispatch } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useHistory } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
 import { Sidebar } from "./components/sidebar/sidebar";
 import "./data/db";
@@ -35,9 +35,18 @@ function TopLeverWrapper() {
 function Client() {
   const [loadingState, setLoadingState] = useState<LoadingState>("loading");
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     const lastSelectedScopeId = localStorage.getItem("lastSelectedScopeId");
+    const lastSelectedStateLink = localStorage.getItem(
+      "LAST_SELECTED_STATE_LINK"
+    );
+
+    if (lastSelectedStateLink) {
+      history.push(lastSelectedStateLink);
+    }
+
     getAll<ISavedScope>("Scope").then((scopes) => {
       dispatch(
         scopesLoaded({

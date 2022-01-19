@@ -82,6 +82,10 @@ export function Sidebar() {
     }
   }
 
+  function saveLastStateLink(stateLink: NavLinkProps) {
+    localStorage.setItem("LAST_SELECTED_STATE_LINK", stateLink.to);
+  }
+
   if (!scopes) {
     return <p>TODO: @drew design for empty states or create general scope?</p>;
   }
@@ -114,7 +118,7 @@ export function Sidebar() {
         </div>
 
         {links.map((link) => (
-          <SidebarLink {...link} />
+          <SidebarLink {...link} onClick={() => saveLastStateLink(link)} />
         ))}
       </div>
 
