@@ -3,8 +3,8 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 
 interface ButtonProps {
-  text: string;
-  onClick: () => void;
+  onClick?: () => void;
+  text?: string;
   className?: string;
   children?: JSX.Element;
   type?: "delete" | "gentle";
@@ -31,9 +31,11 @@ export function Button({
       )}
     >
       {children ? (
-        <span className="mr-[4px] text-[12px]">{children}</span>
+        <span className={classNames("text-[12px]", { "mr-[4px]": text })}>
+          {children}
+        </span>
       ) : (
-        <FaPlus className="mr-[4px] text-[12px]" />
+        <FaPlus className={classNames("text-[12px]", { "mr-[4px]": text })} />
       )}
       {text}
     </button>

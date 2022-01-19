@@ -52,7 +52,7 @@ export function GoalIndexItem(goal: ISavedGoal) {
 
       <section
         key={_id}
-        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px]  rounded-[5px]"
+        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px] rounded-[5px]"
         style={{ boxShadow: "0 2px #eff2f3", border: "1px solid #EFF2F3" }}
       >
         <header className="relative">

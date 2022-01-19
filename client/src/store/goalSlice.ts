@@ -59,7 +59,7 @@ function dueDateSort(a: ISavedGoal, b: ISavedGoal) {
   }
 }
 
-export function useGoalsInSelectedScope(): (ISavedGoal)[] {
+export function useGoalsInSelectedScope(): ISavedGoal[] {
   const selectedScope = useSelectedScope();
   const allGoals = useSelector((state: RootState) => state.goal.goalRecords);
   const filteredGoals = [];
