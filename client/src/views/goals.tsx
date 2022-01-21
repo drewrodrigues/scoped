@@ -14,7 +14,7 @@ export function Goals({}: GoalsProps) {
   return (
     <View>
       <header className="flex justify-between items-center">
-        <h2 className="mb-[20px]">Goals</h2>
+        <h3 className="font-bold text-[22px] mb-[20px]">Goals</h3>
         <Button text="Add Goal" onClick={() => setShowGoalForm((p) => !p)} />
       </header>
 

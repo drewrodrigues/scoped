@@ -7,7 +7,7 @@ interface TodayProps {}
 export function Today({}: TodayProps) {
   return (
     <View>
-      <h3>Today</h3>
+      <h3 className="font-bold text-[22px] mb-[20px]">Today</h3>
 
       <GoalsToday />
     </View>
