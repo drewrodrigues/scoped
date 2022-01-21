@@ -62,23 +62,22 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
           { "opacity-30": wasDismissedToday }
         )}
       >
-        <img src={goal.coverPhotoUrl} alt="" className="h-[75px]" />
+        <div className="w-[150px] h-[75px]">
+          <img
+            src={goal.coverPhotoUrl}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+
         <section className="flex justify-between w-full px-[20px] text-[14px] items-center">
           <main className="leading-[1]">
             <p className="font-bold mb-[5px]">{goal.title}</p>
 
-            <p className="rounded-[5px] text-[10px] text-gray-500 mb-[5px]">
-              due in{" "}
-              <span className="font-bold">
-                {moment(goal.dueDate).fromNow(true)}
-              </span>{" "}
-              on {moment(goal.dueDate).format("MM/DD/YY")}
-            </p>
-
-            {goal.trackingMethod && (
-              <div className="flex flex-col items-start">
-                {isOnTrack ? (
-                  <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-green-400 text-green-900 whitespace-pre">
+            <div className="flex items-center">
+              {goal.trackingMethod &&
+                (isOnTrack ? (
+                  <p className="text-[8px] flex px-[7px] py-[5px] border rounded-[5px] text-green-500 whitespace-pre border-green-500">
                     <FaCheck className="mr-[3px]" />
                     On Track
                     <span className="font-bold">
@@ -87,7 +86,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                     </span>
                   </p>
                 ) : (
-                  <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-red-400 text-red-900 whitespace-pre">
+                  <p className="text-[8px] flex px-[7px] py-[5px] border rounded-[5px] text-red-500 whitespace-pre border-red-500">
                     <FaTimes className="mr-[3px]" />
                     Falling Behind
                     <span className="font-bold">
@@ -95,9 +94,15 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                       by ~{neededToBeOnTrackFormatted}
                     </span>
                   </p>
-                )}
-              </div>
-            )}
+                ))}
+              <p className="rounded-[5px] text-[8px] text-gray-500 ml-[5px]">
+                due in{" "}
+                <span className="font-bold">
+                  {moment(goal.dueDate).fromNow(true)}
+                </span>{" "}
+                on {moment(goal.dueDate).format("MM/DD/YY")}
+              </p>
+            </div>
           </main>
 
           <aside className="flex">
