@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaBullseye, FaCheck, FaCog, FaTrash } from "react-icons/fa";
+import { FaBullseye, FaCheck, FaCog, FaPlus, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedGoal, ISavedScope, IScope } from "../../data/modelTypes";
@@ -35,7 +35,8 @@ export function Sidebar() {
   const [newScopeText, setNewScopeText] = useState("");
   const [openScopeMenu, setOpenScopeMenu] = useState<ISavedScope | null>(null);
 
-  async function onCreateNewScope() {
+  async function onCreateNewScope(e: any) {
+    e.preventDefault();
     const scope = await createOrSaveModel<IScope>("Scope", {
       title: newScopeText,
     });
@@ -70,7 +71,11 @@ export function Sidebar() {
   return (
     <aside className="flex flex-col w-[200px] justify-between bg-white flex-shrink-0 border-r-[1px] border-r-[#EFF2F3]">
       <div>
-        <h1 className="py-[14px] px-[14px] text-[13px]">Scoped</h1>
+        <header className="mt-[20px] mb-[50px]">
+          {links.map((link) => (
+            <SidebarLink {...link} onClick={() => saveLastStateLink(link)} />
+          ))}
+        </header>
 
         <SidebarLink
           isActive={!selectedScope}
@@ -94,6 +99,7 @@ export function Sidebar() {
                   });
                 }}
               />
+
               {scope === openScopeMenu && (
                 <div className="flex flex-col rounded-[5px] py-[7px] px-[14px] text-[13px]">
                   <button
@@ -109,18 +115,20 @@ export function Sidebar() {
           );
         })}
 
-        <div className="p-[13px]">
-          <Input
+        <form
+          onSubmit={onCreateNewScope}
+          className="flex px-[14px] items-center mt-[10px]"
+        >
+          <input
             value={newScopeText}
-            onChange={(value) => setNewScopeText(value)}
-            placeholder="New scope title"
+            onChange={(e) => setNewScopeText(e.target.value)}
+            placeholder="Add a new scope..."
+            className="w-full text-[13px]"
           />
-          <Button text="Create Scope" onClick={onCreateNewScope} />
-        </div>
-
-        {links.map((link) => (
-          <SidebarLink {...link} onClick={() => saveLastStateLink(link)} />
-        ))}
+          <button className="text-gray-300 text-[13px] mr-[5px]">
+            <FaPlus />
+          </button>
+        </form>
       </div>
 
       <footer className="mb-[7px]">

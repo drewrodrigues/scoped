@@ -1,18 +1,16 @@
 import React, { useState } from "react";
+import { EmptyState } from "../components/emptyState";
 import { GoalForm } from "../components/goals/goalForm";
 import { GoalIndexItem } from "../components/goals/goalIndexItem";
 import { Button } from "../components/shared/button";
-import { useGoalsInSelectedScope } from "../store/goalSlice";
-import { View } from "./view";
 import GoalEmpty from "../images/goal_empty.svg";
+import { useGoalsInSelectedScope } from "../store/goalSlice";
 import { useSelectedScope } from "../store/scopeSlice";
-import { EmptyState } from "../components/emptyState";
+import { View } from "./view";
 
-interface GoalsProps {}
-
-export function Goals({}: GoalsProps) {
-  const [showGoalForm, setShowGoalForm] = useState<boolean>(false);
+export function Goals() {
   const scope = useSelectedScope();
+  const [showGoalForm, setShowGoalForm] = useState<boolean>(false);
   const goals = useGoalsInSelectedScope();
 
   return (
@@ -33,7 +31,7 @@ export function Goals({}: GoalsProps) {
       ) : (
         <EmptyState
           img={GoalEmpty}
-          title={`Hmm, looks like you don't have any $scope?.title} goals yet`}
+          title={`You don't have any ${scope?.title} goals yet`}
           subtitle="Try adding your first one"
         >
           <Button text="Add Goal" onClick={() => setShowGoalForm((p) => !p)} />

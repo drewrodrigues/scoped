@@ -24,7 +24,7 @@ export function SidebarLink(props: SidebarLinkProps) {
     <NavLink
       key={props.to}
       to={props.to}
-      className="rounded-[5px] flex items-center py-[7px] px-[14px] text-[13px] hover:bg-[#e8e8e9]"
+      className="rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9]"
       activeClassName="font-bold"
       onClick={props.onClick}
     >
@@ -34,7 +34,7 @@ export function SidebarLink(props: SidebarLinkProps) {
   ) : (
     <a
       className={classNames(
-        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[13px] hover:bg-[#e8e8e9] cursor-pointer justify-between",
+        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9] cursor-pointer justify-between",
         { "font-bold": props.isActive }
       )}
       onClick={props.onClick}
