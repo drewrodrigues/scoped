@@ -51,7 +51,7 @@ export function GoalsToday({}: GoalTodayProps) {
   let componentShown: ComponentShown;
   if (allGoalsDismissed && !showDismissed) {
     componentShown = "CompleteEmptyState";
-  } else if (showDismissed && goals.length) {
+  } else if (goals.length) {
     componentShown = "Goals";
   } else {
     componentShown = "GoalEmptyState";
