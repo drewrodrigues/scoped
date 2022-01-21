@@ -19,6 +19,9 @@ export interface IGoal {
 
   photoContainerId?: string;
   photoId?: string;
+
+  // for today view
+  lastDismissed?: string;
 }
 
 export type TrackingMethod = "yes/no" | "minutes" | "hours" | "quantity";
