@@ -83,24 +83,19 @@ export function GoalToday({ goal }: GoalTodayProps) {
           </main>
 
           <aside className="flex">
-            <Button type="gentle" onClick={() => null}>
+            {goal.trackingMethod && (
+              <Button
+                text="Track"
+                onClick={() => setToggleTracking((p) => !p)}
+              />
+            )}
+
+            <Button
+              onClick={() => dismissGoalForDay(goal)}
+              className="ml-[5px]"
+            >
               <FaArrowRight />
             </Button>
-
-            {goal.trackingMethod && (
-              <>
-                <Button
-                  text={`Track ${neededToBeOnTrack}`}
-                  className="ml-[5px]"
-                  onClick={() => quickTrack(neededToBeOnTrack)}
-                />
-                <Button
-                  text="Track Other"
-                  className="ml-[5px]"
-                  onClick={() => setToggleTracking((p) => !p)}
-                />
-              </>
-            )}
           </aside>
         </section>
       </li>

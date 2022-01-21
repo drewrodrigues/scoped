@@ -188,7 +188,7 @@ export function _GoalForm({
         )}
 
         <footer className="flex justify-between">
-          <Button onClick={() => onClose()} text="Close" type="gentle">
+          <Button onClick={() => onClose()} text="Close">
             <FaTimes />
           </Button>
           <Button onClick={() => onSave(goalProperties)} text="Create Goal" />

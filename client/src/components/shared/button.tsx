@@ -7,27 +7,16 @@ interface ButtonProps {
   text?: string;
   className?: string;
   children?: JSX.Element;
-  type?: "delete" | "gentle";
 }
 
-export function Button({
-  onClick,
-  text,
-  className,
-  children,
-  type,
-}: ButtonProps) {
+export function Button({ onClick, text, className, children }: ButtonProps) {
   return (
     <button
       onClick={onClick}
+      style={{ boxShadow: "0 1px 1px #dedede" }}
       className={classNames(
-        "text-white px-[10px] py-[7px] rounded-[5px] text-[12px] flex items-center ",
-        className,
-        {
-          "bg-gray-300": type == "gentle",
-          "bg-red-700": type === "delete",
-          "bg-green-600": type !== "delete" && type !== "gentle",
-        }
+        "px-[13px] py-[7px] rounded-[3px] text-[12px] flex items-center border",
+        className
       )}
     >
       {children ? (

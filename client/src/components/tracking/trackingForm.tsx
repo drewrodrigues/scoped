@@ -140,7 +140,7 @@ export function _TrackingForm({
         <Button text="Track" onClick={onTrack} />
 
         {existingTracking && (
-          <Button text="" onClick={() => onDelete?.()} type="gentle">
+          <Button text="" onClick={() => onDelete?.()}>
             <FaTrash />
           </Button>
         )}
