@@ -40,12 +40,14 @@ export function SidebarLink(props: SidebarLinkProps) {
       onClick={props.onClick}
     >
       <span>{props.name}</span>
-      <button
-        className="hover:bg-gray-300 p-[5px] rounded-[5px] text-gray-300 hover:text-white"
-        onClick={props.onClickMenu}
-      >
-        <FaEllipsisH />
-      </button>
+      {props.onClickMenu && (
+        <button
+          className="hover:bg-gray-300 p-[5px] rounded-[5px] text-gray-300 hover:text-white"
+          onClick={props.onClickMenu}
+        >
+          <FaEllipsisH />
+        </button>
+      )}
     </a>
   );
 }
