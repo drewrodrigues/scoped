@@ -3,6 +3,7 @@ import ScopeSliceReducer from "./scopeSlice";
 import GoalSliceReducer from "./goalSlice";
 import TrackingSliceReducer from "./trackingSlice";
 import PopoverSliceReducer from "./popoverSlice";
+import TaskSliceReducer from "./taskSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     goal: GoalSliceReducer,
     tracking: TrackingSliceReducer,
     popover: PopoverSliceReducer,
+    task: TaskSliceReducer,
   },
 });
 

@@ -28,12 +28,17 @@ const links: NavLinkProps[] = [
   {
     to: "/today",
     name: "Today",
-    icon: <FaCheck />,
+    icon: <FaCalendar />,
   },
   {
     to: "/goals",
     name: "Goals",
     icon: <FaBullseye />,
+  },
+  {
+    to: "/tasks",
+    name: "Tasks",
+    icon: <FaCheck />,
   },
 ];
 

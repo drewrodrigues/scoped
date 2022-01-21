@@ -33,9 +33,19 @@ export interface ITracking {
   goalId: string;
 }
 
+export interface ITask {
+  title: string;
+  scopeId: string;
+  complete: boolean;
+
+  // for today view
+  lastDismissed?: string;
+}
+
 export type ISavedGoal = SavedType<IGoal>;
 export type ISavedScope = SavedType<IScope>;
 export type ISavedTracking = SavedType<ITracking>;
+export type ISavedTask = SavedType<ITask>;
 
-export type ModelStringType = "Tracking" | "Scope" | "Goal";
-export type ModelType = IScope | ITracking | IGoal;
+export type ModelStringType = "Tracking" | "Scope" | "Goal" | "Task";
+export type ModelType = IScope | ITracking | IGoal | ITask;
