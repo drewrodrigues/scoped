@@ -1,13 +1,7 @@
 import classNames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
-import {
-  FaArrowRight,
-  FaCheck,
-  FaEye,
-  FaEyeSlash,
-  FaTimes,
-} from "react-icons/fa";
+import { FaCheck, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedGoal } from "../../data/modelTypes";
@@ -27,7 +21,6 @@ interface GoalTodayProps {
 export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
   const dispatch = useDispatch();
   const [toggleTracking, setToggleTracking] = useState(false);
-  const createTracking = useCreateTrackingOnGoal();
   const tracking = useTrackingInGoal(goal._id);
   const { neededToBeOnTrack, isOnTrack } = neededGoalProjections(
     goal,

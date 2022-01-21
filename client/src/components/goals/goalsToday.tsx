@@ -7,21 +7,23 @@ import { Button } from "../shared/button";
 import { GoalToday } from "./goalToday";
 import GoalsDone from "../../images/goals_done.svg";
 
+const SHOW_DISMISSED = "SHOW_DISMISSED";
+
 interface GoalTodayProps {}
 
 export function GoalsToday({}: GoalTodayProps) {
   const goals = useGoalsInSelectedScope();
   const [showDismissed, setShowDismissed] = useState(() => {
-    const savedShowDismissedSetting = localStorage.getItem("SHOW_DISMISSED");
+    const savedShowDismissedSetting = localStorage.getItem(SHOW_DISMISSED);
     console.log({ savedShowDismissedSetting });
     return !!savedShowDismissedSetting;
   });
 
   function saveDismissedSetting() {
     if (!showDismissed) {
-      localStorage.setItem("SHOW_DISMISSED", "true");
+      localStorage.setItem(SHOW_DISMISSED, "true");
     } else {
-      localStorage.removeItem("SHOW_DISMISSED");
+      localStorage.removeItem(SHOW_DISMISSED);
     }
     setShowDismissed(!showDismissed);
   }
