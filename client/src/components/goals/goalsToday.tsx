@@ -28,17 +28,32 @@ export function GoalsToday({}: GoalTodayProps) {
     setShowDismissed(!showDismissed);
   }
 
-  const allGoalsDismissed = goals.every((goal) => {
-    return (
+  const goalsDismissedCount = goals.reduce((total, goal) => {
+    if (
       goal.lastDismissed &&
       moment(goal.lastDismissed).isSame(todaysDate(), "day")
-    );
-  });
+    ) {
+      return total + 1;
+    } else {
+      return total;
+    }
+  }, 0);
+
+  const allGoalsDismissed = goalsDismissedCount === goals.length;
+  const goalsLeft = goals.length - goalsDismissedCount;
 
   return (
     <main>
       <header className="flex justify-between mb-[20px] items-center">
-        <h2>Goals</h2>
+        <div>
+          <h2>Goals</h2>
+          <h3 className="text-[10px] text-[#777]">
+            {allGoalsDismissed
+              ? "All goals handled"
+              : `${goalsLeft} goal${goalsLeft === 1 ? "" : "s"} left`}
+          </h3>
+        </div>
+
         <Button text="" onClick={saveDismissedSetting}>
           {showDismissed ? <FaEyeSlash /> : <FaEye />}
         </Button>
