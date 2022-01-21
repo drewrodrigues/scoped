@@ -22,7 +22,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
   const dispatch = useDispatch();
   const [toggleTracking, setToggleTracking] = useState(false);
   const tracking = useTrackingInGoal(goal._id);
-  const { neededToBeOnTrack, isOnTrack } = neededGoalProjections(
+  const { neededToBeOnTrackFormatted, isOnTrack } = neededGoalProjections(
     goal,
     tracking
   );
@@ -83,14 +83,17 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                     On Track
                     <span className="font-bold">
                       {" "}
-                      {neededToBeOnTrack} due today
+                      ~{neededToBeOnTrackFormatted} due today
                     </span>
                   </p>
                 ) : (
                   <p className="text-[10px] flex px-[7px] py-[5px] border rounded-[5px] bg-red-400 text-red-900 whitespace-pre">
                     <FaTimes className="mr-[3px]" />
                     Falling Behind
-                    <span className="font-bold"> by {neededToBeOnTrack}</span>
+                    <span className="font-bold">
+                      {" "}
+                      by ~{neededToBeOnTrackFormatted}
+                    </span>
                   </p>
                 )}
               </div>

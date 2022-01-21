@@ -5,6 +5,8 @@ import { todaysDate } from "../helpers/date";
 export function shouldBeGoalProgression(goal: ISavedGoal): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;
+  percentShouldBeCompleteFormatted: number;
+  quantityShouldBeCompleteFormatted: number;
 } {
   if (!goal.trackingGoalQuantity)
     throw new Error(
@@ -18,11 +20,16 @@ export function shouldBeGoalProgression(goal: ISavedGoal): {
     (percentShouldBeComplete / 100) * goal.trackingGoalQuantity;
 
   return {
-    percentShouldBeComplete: Math.min(
+    percentShouldBeComplete: Math.min(percentShouldBeComplete, 100),
+    quantityShouldBeComplete: Math.min(
+      quantityShouldBeComplete,
+      goal.trackingGoalQuantity
+    ),
+    percentShouldBeCompleteFormatted: Math.min(
       parseInt(percentShouldBeComplete.toFixed()),
       100
     ),
-    quantityShouldBeComplete: Math.min(
+    quantityShouldBeCompleteFormatted: Math.min(
       parseInt(quantityShouldBeComplete.toFixed()),
       goal.trackingGoalQuantity
     ),
@@ -40,7 +47,12 @@ export function computedGoalDates(goal: ISavedGoal): {
   const daysLeftUntilDue = moment(goal.dueDate).diff(todaysDate(), "days"); // to count today;
   const wholeDaysLeft = daysLeftUntilDue + 1;
   const daysIntoGoal = totalDaysForGoal - wholeDaysLeft;
-  return { totalDaysForGoal, daysLeftUntilDue, wholeDaysLeft, daysIntoGoal };
+  return {
+    totalDaysForGoal,
+    daysLeftUntilDue,
+    wholeDaysLeft,
+    daysIntoGoal,
+  };
 }
 
 export function actualGoalProgression(
@@ -69,9 +81,28 @@ export function actualGoalProgression(
 
 export function neededGoalProjections(
   goal: ISavedGoal,
-  tracking: ISavedTracking
+  tracking: ISavedTracking[]
 ): {
-  averageQuantityNeededPerDay: number;
+  averageNeededPerDay: number;
+  neededToBeOnTrack: number;
+  isOnTrack: boolean;
+  neededToBeOnTrackFormatted: string;
 } {
-  return { averageQuantityNeededPerDay: 1 };
+  const { totalDaysForGoal } = computedGoalDates(goal);
+  const { quantityComplete } = actualGoalProgression(goal, tracking);
+  const { quantityShouldBeComplete } = shouldBeGoalProgression(goal);
+
+  const averageNeededPerDay = goal.trackingGoalQuantity! / totalDaysForGoal;
+  const neededToBeOnTrack = quantityShouldBeComplete - quantityComplete;
+  const neededToBeOnTrackFormatted = neededToBeOnTrack.toFixed(2);
+
+  const isOnTrack =
+    quantityComplete >= quantityShouldBeComplete - averageNeededPerDay;
+
+  return {
+    averageNeededPerDay,
+    neededToBeOnTrack,
+    isOnTrack,
+    neededToBeOnTrackFormatted,
+  };
 }
