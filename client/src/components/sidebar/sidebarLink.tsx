@@ -14,7 +14,7 @@ export interface NavLinkProps extends SidebarLinkSharedProps {
 
 interface StateLinkProps extends SidebarLinkSharedProps {
   isActive: boolean;
-  onClickMenu?: () => void;
+  onClickMenu?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export type SidebarLinkProps = NavLinkProps | StateLinkProps;

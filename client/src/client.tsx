@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider, useDispatch } from "react-redux";
 import { BrowserRouter, useHistory } from "react-router-dom";
 import { MainRoutes } from "./components/mainRoutes";
+import { PopoverLayer } from "./components/popover";
 import { Sidebar } from "./components/sidebar/sidebar";
 import "./data/db";
 import { getAll } from "./data/modelCrud";
@@ -70,6 +71,7 @@ function Client() {
 
   return (
     <div className="flex bg-[#f1f3f6] h-[100vh]">
+      <PopoverLayer />
       <Sidebar />
       <MainRoutes />
     </div>

@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import ScopeSliceReducer from "./scopeSlice";
 import GoalSliceReducer from "./goalSlice";
 import TrackingSliceReducer from "./trackingSlice";
+import PopoverSliceReducer from "./popoverSlice";
 
 export const store = configureStore({
   reducer: {
     scope: ScopeSliceReducer,
     goal: GoalSliceReducer,
     tracking: TrackingSliceReducer,
+    popover: PopoverSliceReducer,
   },
 });
 
