@@ -34,14 +34,11 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
     tracking
   );
 
-  const lastTrackedDate = tracking[tracking.length - 1]?.date;
-  const wasTrackedToday =
-    lastTrackedDate && moment(lastTrackedDate).isSame(todaysDate(), "day");
   const wasDismissedToday =
     goal.lastDismissed &&
     moment(goal.lastDismissed).isSame(todaysDate(), "day");
 
-  async function dismissGoalForDay(goal: ISavedGoal) {
+  async function dismissGoalForDay() {
     const updatedGoal = await createOrSaveModel<ISavedGoal>("Goal", {
       ...goal,
       lastDismissed: todaysDate().toUTCString(),
@@ -49,12 +46,17 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
     dispatch(goalUpdated({ goal: updatedGoal }));
   }
 
-  async function undismissGoalForDay(goal: ISavedGoal) {
+  async function undismissGoalForDay() {
     const updatedGoal = await createOrSaveModel<ISavedGoal>("Goal", {
       ...goal,
       lastDismissed: yesterdaysDate().toUTCString(),
     });
     dispatch(goalUpdated({ goal: updatedGoal }));
+  }
+
+  function dismissGoalAfterTracking() {
+    setToggleTracking(false);
+    dismissGoalForDay();
   }
 
   if (wasDismissedToday && !showDismissed) return null;
@@ -103,7 +105,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
           </main>
 
           <aside className="flex">
-            {goal.trackingMethod && (
+            {goal.trackingMethod && !wasDismissedToday && (
               <Button
                 text="Track"
                 onClick={() => setToggleTracking((p) => !p)}
@@ -112,16 +114,13 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
 
             {wasDismissedToday ? (
               <Button
-                onClick={() => undismissGoalForDay(goal)}
+                onClick={() => undismissGoalForDay()}
                 className="ml-[5px]"
               >
                 <FaEye />
               </Button>
             ) : (
-              <Button
-                onClick={() => dismissGoalForDay(goal)}
-                className="ml-[5px]"
-              >
+              <Button onClick={() => dismissGoalForDay()} className="ml-[5px]">
                 <FaEyeSlash />
               </Button>
             )}
@@ -132,7 +131,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
         <NewTrackingForm
           trackingMethod={goal.trackingMethod}
           goalId={goal._id}
-          onTrackingComplete={() => setToggleTracking(false)}
+          onTrackingComplete={() => dismissGoalAfterTracking()}
         />
       )}
     </>

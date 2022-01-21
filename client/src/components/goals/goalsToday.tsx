@@ -36,13 +36,13 @@ export function GoalsToday({}: GoalTodayProps) {
   return (
     <main>
       <header className="flex justify-between mb-[20px] items-center">
-        <h2 className="font-bold">Goals</h2>
+        <h2>Goals</h2>
         <Button text="" onClick={saveDismissedSetting}>
           {showDismissed ? <FaEyeSlash /> : <FaEye />}
         </Button>
       </header>
       {allGoalsDismissed && !showDismissed ? (
-        <section className="flex flex-col justify-center items-center bg-white rounded-[3px] border py-[50px]">
+        <section className="flex flex-col justify-center items-center bg-white rounded-[3px] py-[50px]">
           <img src={GoalsDone} className="w-[500px]" />
           <h4 className="mt-[20px]">Awesome, you're all done for the day!</h4>
         </section>
