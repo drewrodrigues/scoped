@@ -7,10 +7,17 @@ import { PopoverLayer } from "./components/popover";
 import { Sidebar } from "./components/sidebar/sidebar";
 import "./data/db";
 import { getAll } from "./data/modelCrud";
-import { ISavedGoal, ISavedScope } from "./data/modelTypes";
+import {
+  ISavedGoal,
+  ISavedScope,
+  ISavedTask,
+  ISavedTracking,
+} from "./data/modelTypes";
 import { goalsLoaded } from "./store/goalSlice";
 import { scopesLoaded } from "./store/scopeSlice";
 import { store } from "./store/store";
+import { tasksLoaded } from "./store/taskSlice";
+import { trackingLoaded } from "./store/trackingSlice";
 import "./styles/output.css";
 
 declare global {
@@ -48,7 +55,8 @@ function Client() {
       history.push(lastSelectedStateLink);
     }
 
-    getAll<ISavedScope>("Scope").then((scopes) => {
+    async function loadEverything() {
+      const scopes = await getAll<ISavedScope>("Scope");
       dispatch(
         scopesLoaded({
           scopes,
@@ -56,13 +64,21 @@ function Client() {
         })
       );
       console.log("👍🏽 Scoped Loaded");
-    });
 
-    getAll<ISavedGoal>("Goal").then((goals) => {
+      const goals = await getAll<ISavedGoal>("Goal");
       dispatch(goalsLoaded({ goals }));
-      setLoadingState("loaded");
       console.log("👍🏽 Goals Loaded");
-    });
+
+      const tracking = await getAll<ISavedTracking>("Tracking");
+      dispatch(trackingLoaded({ values: tracking }));
+      console.log("👍🏽 Tracking Loaded");
+
+      const tasks = await getAll<ISavedTask>("Task");
+      dispatch(tasksLoaded({ values: tasks }));
+      setLoadingState("loaded");
+    }
+
+    loadEverything();
   }, []);
 
   if (loadingState === "loading") {
