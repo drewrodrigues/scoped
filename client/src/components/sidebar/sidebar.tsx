@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   FaBullseye,
-  FaSun,
+  FaCalendar,
+  FaCheck,
   FaCog,
+  FaEdit,
   FaPlus,
   FaTrash,
-  FaCheck,
-  FaCalendar,
 } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedScope, IScope } from "../../data/modelTypes";
 import { goalsTodayQuantities } from "../../hooks/goalHooks";
-import { useAllGoals, useGoalsInSelectedScope } from "../../store/goalSlice";
+import { useAllGoals } from "../../store/goalSlice";
 import { showPopover } from "../../store/popoverSlice";
 import {
   scopeCreated,
   scopeDeleted,
   scopeSelected,
+  scopeUpdated,
   useAllScopes,
   useSelectedScope,
 } from "../../store/scopeSlice";
@@ -65,6 +66,42 @@ export function Sidebar() {
     }
   }
 
+  const [editingScope, setEditingScope] = useState<ISavedScope | null>(null);
+  const [newEditingScopeTitle, setNewEditingScopeTitle] = useState("");
+  function onEditScopeClick(scope: ISavedScope) {
+    setEditingScope(scope);
+    setNewEditingScopeTitle(scope.title);
+  }
+
+  useEffect(() => {
+    function maintainOrTriggerUpdate(e: MouseEvent) {
+      // @ts-ignore
+      if (e.target.closest("#editScopeForm")) {
+        return;
+      } else {
+        setEditingScope(null);
+        setNewEditingScopeTitle("");
+        onUpdateScope();
+      }
+    }
+
+    if (editingScope) {
+      document.body.addEventListener("click", maintainOrTriggerUpdate);
+    }
+
+    return () =>
+      document.body.removeEventListener("click", maintainOrTriggerUpdate);
+  }, [editingScope]);
+
+  async function onUpdateScope(e?: FormEvent) {
+    e?.preventDefault();
+    const updatedScope = await createOrSaveModel<IScope>("Scope", {
+      ...editingScope,
+      title: newEditingScopeTitle,
+    });
+    dispatch(scopeUpdated(updatedScope));
+  }
+
   function onOpenScopeMenu(
     scope: ISavedScope,
     e: React.MouseEvent<HTMLButtonElement>
@@ -75,6 +112,13 @@ export function Sidebar() {
         y: e.clientY,
         component: (
           <div className="flex flex-col rounded-[5px] py-[7px] px-[14px] text-[13px]">
+            <button
+              className="w-full flex items-center"
+              onClick={() => onEditScopeClick(scope)}
+            >
+              <FaEdit className="mr-[3px]" />
+              <span>Edit</span>
+            </button>
             <button
               className="w-full flex items-center"
               onClick={() => deleteScope(scope)}
@@ -119,12 +163,30 @@ export function Sidebar() {
         {scopes.map((scope) => {
           return (
             <>
-              <SidebarLink
-                isActive={selectedScope?._id == scope._id}
-                name={scope.title}
-                onClick={() => onSelectScope(scope._id)}
-                onClickMenu={(e) => onOpenScopeMenu(scope, e)}
-              />
+              {editingScope === scope ? (
+                <form
+                  onSubmit={(e) => onUpdateScope(e)}
+                  className="flex px-[14px] items-center mt-[10px]"
+                  id="editScopeForm"
+                >
+                  <input
+                    className="w-full text-[13px]"
+                    autoFocus
+                    value={newEditingScopeTitle}
+                    onChange={(e) => setNewEditingScopeTitle(e.target.value)}
+                  />
+                  <button className="text-gray-300 text-[13px] mr-[5px]">
+                    <FaPlus />
+                  </button>
+                </form>
+              ) : (
+                <SidebarLink
+                  isActive={selectedScope?._id == scope._id}
+                  name={scope.title}
+                  onClick={() => onSelectScope(scope._id)}
+                  onClickMenu={(e) => onOpenScopeMenu(scope, e)}
+                />
+              )}
             </>
           );
         })}
