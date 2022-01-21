@@ -10,6 +10,7 @@ export interface SidebarLinkSharedProps {
 export interface NavLinkProps extends SidebarLinkSharedProps {
   to: string;
   icon: JSX.Element;
+  indicatorCount?: number;
 }
 
 interface StateLinkProps extends SidebarLinkSharedProps {
@@ -24,12 +25,20 @@ export function SidebarLink(props: SidebarLinkProps) {
     <NavLink
       key={props.to}
       to={props.to}
-      className="rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9]"
+      className="rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9] justify-between"
       activeClassName="font-bold"
       onClick={props.onClick}
     >
-      <span className="text-[#aaa] mr-[6px] text-[10px]">{props.icon}</span>
-      {props.name}
+      <p className="flex items-center">
+        <span className="text-[#aaa] mr-[6px] text-[10px]">{props.icon}</span>
+        {props.name}
+      </p>
+
+      {props.indicatorCount && (
+        <p className="text-[8px] bg-red-400 text-white py-[3px] px-[5px] rounded-full font-bold">
+          {props.indicatorCount}
+        </p>
+      )}
     </NavLink>
   ) : (
     <a

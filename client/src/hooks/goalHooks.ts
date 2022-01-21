@@ -106,3 +106,21 @@ export function neededGoalProjections(
     neededToBeOnTrackFormatted,
   };
 }
+
+export function goalsTodayQuantities(goals: ISavedGoal[]) {
+  const goalsDismissedCount = goals.reduce((total, goal) => {
+    if (
+      goal.lastDismissed &&
+      moment(goal.lastDismissed).isSame(todaysDate(), "day")
+    ) {
+      return total + 1;
+    } else {
+      return total;
+    }
+  }, 0);
+
+  const isAllGoalsDismissed = goalsDismissedCount === goals.length;
+  const goalsLeft = goals.length - goalsDismissedCount;
+
+  return { goalsLeft, isAllGoalsDismissed, goalsDismissedCount };
+}

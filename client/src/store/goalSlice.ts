@@ -74,6 +74,19 @@ export function useGoalsInSelectedScope(): ISavedGoal[] {
   return filteredGoals.sort(dueDateSort);
 }
 
+export function useAllGoals(): ISavedGoal[] {
+  const allGoalRecords = useSelector(
+    (state: RootState) => state.goal.goalRecords
+  );
+  const allGoals = [];
+
+  for (const [_, goalRecord] of Object.entries(allGoalRecords)) {
+    allGoals.push(goalRecord);
+  }
+
+  return allGoals;
+}
+
 export const { goalsLoaded, goalCreated, goalUpdated, goalDeleted } =
   scopeSlice.actions;
 

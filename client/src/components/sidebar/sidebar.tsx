@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { FaBullseye, FaCheck, FaCog, FaPlus, FaTrash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import {
+  FaBullseye,
+  FaSun,
+  FaCog,
+  FaPlus,
+  FaTrash,
+  FaCheck,
+  FaCalendar,
+} from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedScope, IScope } from "../../data/modelTypes";
+import { goalsTodayQuantities } from "../../hooks/goalHooks";
+import { useAllGoals, useGoalsInSelectedScope } from "../../store/goalSlice";
 import { showPopover } from "../../store/popoverSlice";
 import {
   scopeCreated,
@@ -30,6 +40,8 @@ export function Sidebar() {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
   const scopes = useAllScopes();
+  const goals = useAllGoals();
+  const { goalsLeft } = goalsTodayQuantities(goals);
 
   const [newScopeText, setNewScopeText] = useState("");
 
@@ -86,16 +98,16 @@ export function Sidebar() {
     dispatch(scopeDeleted(scope));
   }
 
-  if (!scopes) {
-    return <p>TODO: @drew design for empty states or create general scope?</p>;
-  }
-
   return (
     <aside className="flex flex-col w-[200px] justify-between bg-white flex-shrink-0 border-r-[1px] border-r-[#EFF2F3]">
       <div>
         <header className="mt-[20px] mb-[50px]">
           {links.map((link) => (
-            <SidebarLink {...link} onClick={() => saveLastStateLink(link)} />
+            <SidebarLink
+              {...link}
+              onClick={() => saveLastStateLink(link)}
+              indicatorCount={link.name === "Today" ? goalsLeft : undefined}
+            />
           ))}
         </header>
 

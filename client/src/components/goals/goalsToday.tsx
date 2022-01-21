@@ -9,6 +9,7 @@ import GoalsDone from "../../images/goals_done.svg";
 import { EmptyState } from "../emptyState";
 import GoalEmpty from "../../images/goal_empty.svg";
 import { useSelectedScope } from "../../store/scopeSlice";
+import { goalsTodayQuantities } from "../../hooks/goalHooks";
 
 const SHOW_DISMISSED = "SHOW_DISMISSED";
 
@@ -19,6 +20,7 @@ interface GoalTodayProps {}
 export function GoalsToday({}: GoalTodayProps) {
   const scope = useSelectedScope();
   const goals = useGoalsInSelectedScope();
+  const { isAllGoalsDismissed, goalsLeft } = goalsTodayQuantities(goals);
   const [showDismissed, setShowDismissed] = useState(() => {
     const savedShowDismissedSetting = localStorage.getItem(SHOW_DISMISSED);
     console.log({ savedShowDismissedSetting });
@@ -34,22 +36,8 @@ export function GoalsToday({}: GoalTodayProps) {
     setShowDismissed(!showDismissed);
   }
 
-  const goalsDismissedCount = goals.reduce((total, goal) => {
-    if (
-      goal.lastDismissed &&
-      moment(goal.lastDismissed).isSame(todaysDate(), "day")
-    ) {
-      return total + 1;
-    } else {
-      return total;
-    }
-  }, 0);
-
-  const allGoalsDismissed = goalsDismissedCount === goals.length;
-  const goalsLeft = goals.length - goalsDismissedCount;
-
   let componentShown: ComponentShown;
-  if (allGoalsDismissed && !showDismissed) {
+  if (isAllGoalsDismissed && !showDismissed) {
     componentShown = "CompleteEmptyState";
   } else if (goals.length) {
     componentShown = "Goals";
@@ -63,7 +51,7 @@ export function GoalsToday({}: GoalTodayProps) {
         <div>
           <h2>Goals</h2>
           <h3 className="text-[10px] text-[#777]">
-            {allGoalsDismissed
+            {isAllGoalsDismissed
               ? "All goals handled"
               : `${goalsLeft} goal${goalsLeft === 1 ? "" : "s"} left`}
           </h3>
