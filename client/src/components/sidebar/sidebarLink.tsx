@@ -43,7 +43,7 @@ export function SidebarLink(props: SidebarLinkProps) {
   ) : (
     <a
       className={classNames(
-        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9] cursor-pointer justify-between",
+        "rounded-[5px] flex items-center py-[7px] px-[14px] text-[12px] hover:bg-[#e8e8e9] cursor-pointer justify-between group",
         { "font-bold": props.isActive }
       )}
       onClick={props.onClick}
@@ -51,7 +51,7 @@ export function SidebarLink(props: SidebarLinkProps) {
       <span>{props.name}</span>
       {props.onClickMenu && (
         <button
-          className="hover:bg-gray-300 p-[5px] rounded-[5px] text-gray-300 hover:text-white"
+          className="opacity-0 p-[5px] rounded-[5px] hover:text-white group-hover:text-gray-400 group-hover:opacity-100 hover:bg-gray-300 "
           onClick={props.onClickMenu}
         >
           <FaEllipsisH />
