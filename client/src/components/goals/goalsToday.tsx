@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { createOrSaveModel } from "../../data/modelCrud";
 import { useGoalsInSelectedScope } from "../../store/goalSlice";
 import { Button } from "../shared/button";
 import { GoalToday } from "./goalToday";
-import { ISettings } from "../../data/modelTypes";
 
 interface GoalTodayProps {}
 
@@ -29,10 +27,7 @@ export function GoalsToday({}: GoalTodayProps) {
     <main>
       <header className="flex justify-between mb-[20px] items-center">
         <h2 className="font-bold">Goals</h2>
-        <Button
-          text={showDismissed ? "Hide Dismissed" : "Show Dismissed"}
-          onClick={saveDismissedSetting}
-        >
+        <Button text="" onClick={saveDismissedSetting}>
           {showDismissed ? <FaEyeSlash /> : <FaEye />}
         </Button>
       </header>

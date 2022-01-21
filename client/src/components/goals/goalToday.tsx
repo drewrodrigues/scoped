@@ -1,11 +1,17 @@
 import classNames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
-import { FaArrowRight, FaCheck, FaEyeSlash, FaTimes } from "react-icons/fa";
+import {
+  FaArrowRight,
+  FaCheck,
+  FaEye,
+  FaEyeSlash,
+  FaTimes,
+} from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedGoal } from "../../data/modelTypes";
-import { todaysDate } from "../../helpers/date";
+import { todaysDate, yesterdaysDate } from "../../helpers/date";
 import { neededGoalProjections } from "../../hooks/goalHooks";
 import { useCreateTrackingOnGoal } from "../../hooks/trackingHooks";
 import { goalUpdated } from "../../store/goalSlice";
@@ -43,6 +49,14 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
     dispatch(goalUpdated({ goal: updatedGoal }));
   }
 
+  async function undismissGoalForDay(goal: ISavedGoal) {
+    const updatedGoal = await createOrSaveModel<ISavedGoal>("Goal", {
+      ...goal,
+      lastDismissed: yesterdaysDate().toUTCString(),
+    });
+    dispatch(goalUpdated({ goal: updatedGoal }));
+  }
+
   if (wasDismissedToday && !showDismissed) return null;
 
   return (
@@ -50,9 +64,8 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
       <li
         className={classNames(
           "border mb-[10px] flex items-center bg-white rounded-[5px] overflow-hidden",
-          { "opacity-20": wasTrackedToday }
+          { "opacity-30": wasDismissedToday }
         )}
-        style={{ boxShadow: "0 2px #eff2f3", border: "1px solid #EFF2F3" }}
       >
         <img src={goal.coverPhotoUrl} alt="" className="h-[75px]" />
         <section className="flex justify-between w-full px-[20px] text-[14px] items-center">
@@ -97,12 +110,21 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
               />
             )}
 
-            <Button
-              onClick={() => dismissGoalForDay(goal)}
-              className="ml-[5px]"
-            >
-              <FaEyeSlash />
-            </Button>
+            {wasDismissedToday ? (
+              <Button
+                onClick={() => undismissGoalForDay(goal)}
+                className="ml-[5px]"
+              >
+                <FaEye />
+              </Button>
+            ) : (
+              <Button
+                onClick={() => dismissGoalForDay(goal)}
+                className="ml-[5px]"
+              >
+                <FaEyeSlash />
+              </Button>
+            )}
           </aside>
         </section>
       </li>
