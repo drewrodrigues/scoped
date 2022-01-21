@@ -6,6 +6,7 @@ import { useGoalsInSelectedScope } from "../../store/goalSlice";
 import { Button } from "../shared/button";
 import { GoalToday } from "./goalToday";
 import GoalsDone from "../../images/goals_done.svg";
+import { EmptyState } from "../emptyState";
 
 const SHOW_DISMISSED = "SHOW_DISMISSED";
 
@@ -59,10 +60,11 @@ export function GoalsToday({}: GoalTodayProps) {
         </Button>
       </header>
       {allGoalsDismissed && !showDismissed ? (
-        <section className="flex flex-col justify-center items-center bg-white rounded-[3px] py-[50px]">
-          <img src={GoalsDone} className="w-[500px]" />
-          <h4 className="mt-[20px]">Awesome, you're all done for the day!</h4>
-        </section>
+        <EmptyState
+          title="Great Job"
+          subtitle="You've handled all goals today"
+          img={GoalsDone}
+        />
       ) : (
         <ul>
           {goals.map((goal) => (
