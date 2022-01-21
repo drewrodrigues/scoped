@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import moment from "moment";
+import React, { useMemo, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { todaysDate } from "../../helpers/date";
 import { useGoalsInSelectedScope } from "../../store/goalSlice";
 import { Button } from "../shared/button";
 import { GoalToday } from "./goalToday";
+import GoalsDone from "../../images/goals_done.svg";
 
 interface GoalTodayProps {}
 
@@ -23,6 +26,13 @@ export function GoalsToday({}: GoalTodayProps) {
     setShowDismissed(!showDismissed);
   }
 
+  const allGoalsDismissed = goals.every((goal) => {
+    return (
+      goal.lastDismissed &&
+      moment(goal.lastDismissed).isSame(todaysDate(), "day")
+    );
+  });
+
   return (
     <main>
       <header className="flex justify-between mb-[20px] items-center">
@@ -31,11 +41,18 @@ export function GoalsToday({}: GoalTodayProps) {
           {showDismissed ? <FaEyeSlash /> : <FaEye />}
         </Button>
       </header>
-      <ul>
-        {goals.map((goal) => (
-          <GoalToday goal={goal} showDismissed={showDismissed} />
-        ))}
-      </ul>
+      {allGoalsDismissed && !showDismissed ? (
+        <section className="flex flex-col justify-center items-center bg-white rounded-[3px] border py-[50px]">
+          <img src={GoalsDone} className="w-[500px]" />
+          <h4 className="mt-[20px]">Awesome, you're all done for the day!</h4>
+        </section>
+      ) : (
+        <ul>
+          {goals.map((goal) => (
+            <GoalToday goal={goal} showDismissed={showDismissed} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
