@@ -6,6 +6,7 @@ import { useGoalsInSelectedScope } from "../store/goalSlice";
 import { View } from "./view";
 import GoalEmpty from "../images/goal_empty.svg";
 import { useSelectedScope } from "../store/scopeSlice";
+import { EmptyState } from "../components/emptyState";
 
 interface GoalsProps {}
 
@@ -30,14 +31,13 @@ export function Goals({}: GoalsProps) {
           ))}
         </section>
       ) : (
-        <section className="rounded-[3px] flex items-center justify-center py-[75px] flex-col">
-          <img src={GoalEmpty} className="w-[400px] mb-[50px]" />
-          <h3 className="font-bold">
-            Hmm, looks like you don't have any {scope?.title} goals yet
-          </h3>
-          <p className="text-[14px] mb-[20px]">Try adding your first one</p>
+        <EmptyState
+          img={GoalEmpty}
+          title={`Hmm, looks like you don't have any $scope?.title} goals yet`}
+          subtitle="Try adding your first one"
+        >
           <Button text="Add Goal" onClick={() => setShowGoalForm((p) => !p)} />
-        </section>
+        </EmptyState>
       )}
     </View>
   );
