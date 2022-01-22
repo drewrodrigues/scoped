@@ -155,7 +155,9 @@ export function Sidebar() {
             <SidebarLink
               {...link}
               onClick={() => saveLastStateLink(link)}
-              indicatorCount={link.name === "Today" ? goalsLeft : undefined}
+              indicatorCount={
+                link.name === "Today" && goalsLeft > 0 ? goalsLeft : undefined
+              }
             />
           ))}
         </header>
