@@ -22,6 +22,7 @@ import {
   useAllScopes,
   useSelectedScope,
 } from "../../store/scopeSlice";
+import { ColorPicker } from "../colorPicker";
 import { NavLinkProps, SidebarLink } from "./sidebarLink";
 
 const links: NavLinkProps[] = [
@@ -115,27 +116,37 @@ export function Sidebar() {
       showPopover({
         x: e.clientX,
         y: e.clientY,
-        component: (
-          <div className="flex flex-col rounded-[5px] py-[7px] px-[14px] text-[13px]">
-            <button
-              className="w-full flex items-center"
-              onClick={() => onEditScopeClick(scope)}
-            >
-              <FaEdit className="mr-[3px]" />
-              <span>Edit</span>
-            </button>
-            <button
-              className="w-full flex items-center"
-              onClick={() => deleteScope(scope)}
-            >
-              <FaTrash className="mr-[3px]" />
-              <span>Delete</span>
-            </button>
-          </div>
-        ),
+        editAction: () => onEditScopeClick(scope),
+        deleteAction: () => deleteScope(scope),
       })
     );
     e.stopPropagation();
+  }
+
+  async function updateScopeColor(scope: ISavedScope, color: string) {
+    const updatedScope = await createOrSaveModel<IScope>("Scope", {
+      ...scope,
+      color,
+    });
+    dispatch(scopeUpdated(updatedScope));
+  }
+
+  function onChangeScopeColor(
+    scope: ISavedScope,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) {
+    dispatch(
+      showPopover({
+        x: e.clientX,
+        y: e.clientY,
+        component: (
+          <ColorPicker
+            onColorSelect={(color) => updateScopeColor(scope, color)}
+          />
+        ),
+        direction: "right",
+      })
+    );
   }
 
   function saveLastStateLink(stateLink: NavLinkProps) {
@@ -192,6 +203,8 @@ export function Sidebar() {
                   name={scope.title}
                   onClick={() => onSelectScope(scope._id)}
                   onClickMenu={(e) => onOpenScopeMenu(scope, e)}
+                  onClickColor={(e) => onChangeScopeColor(scope, e)}
+                  color={scope.color}
                 />
               )}
             </>

@@ -2,6 +2,7 @@ import { SavedType } from "./modelCrud";
 
 export interface IScope {
   title: string;
+  color?: string;
 }
 
 export interface IGoal {
