@@ -1,9 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IconType } from "react-icons/lib";
 
-interface PopoverElement {
+interface GenericAction {}
+export interface PopoverElement {
   x: number;
   y: number;
-  component: JSX.Element;
+  component?: any;
+  customActions?: { action: () => void; label: string; Icon: IconType }[];
+  editAction?: () => void;
+  deleteAction?: () => void;
+  popoverId?: string | number;
+  direction?: "left" | "right";
 }
 
 interface PopoverState {
