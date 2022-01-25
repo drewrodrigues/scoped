@@ -199,6 +199,7 @@ export function Sidebar() {
                 </form>
               ) : (
                 <SidebarLink
+                  key={scope._id}
                   isActive={selectedScope?._id == scope._id}
                   name={scope.title}
                   onClick={() => onSelectScope(scope._id)}

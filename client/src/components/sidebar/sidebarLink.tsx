@@ -52,8 +52,8 @@ export function SidebarLink(props: SidebarLinkProps) {
     >
       <span className="flex items-center justify-center">
         <button
-          className="w-[15px] h-[15px] bg-gray-200 mr-[10px] rounded-[5px]"
-          style={{ backgroundColor: props.color }}
+          className="w-[15px] h-[15px] mr-[10px] rounded-[5px]"
+          style={stylesForColorButton(props.isActive, props.color)}
           onClick={props.onClickColor}
         />
         <span>{props.name}</span>
@@ -80,4 +80,20 @@ function isNavLinkProps<T>(
   attributes: NavLinkProps | StateLinkProps
 ): attributes is NavLinkProps {
   return !!(attributes as NavLinkProps).to;
+}
+
+function stylesForColorButton(isActive: boolean, color?: string) {
+  if (isActive) {
+    if (color) {
+      return { backgroundColor: color };
+    } else {
+      return { backgroundColor: "#ccc" };
+    }
+  } else {
+    if (color) {
+      return { border: `2px solid ${color}` };
+    } else {
+      return { border: `2px solid #ccc` };
+    }
+  }
 }
