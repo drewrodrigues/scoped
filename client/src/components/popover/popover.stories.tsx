@@ -13,7 +13,7 @@ export const popoverWithDefaults = () => (
     y={200}
     editAction={() => console.log("Edit the thing")}
     deleteAction={() => console.log("Delete the thing")}
-    onHideClick={() => console.log("On hide click")}
+    onDismiss={() => console.log("On hide click")}
   />
 );
 
@@ -23,7 +23,7 @@ export const popoverWithCustom = () => (
     y={200}
     editAction={() => console.log("Edit the thing")}
     deleteAction={() => console.log("Delete the thing")}
-    onHideClick={() => console.log("On hide click")}
+    onDismiss={() => console.log("On hide click")}
     customActions={[
       {
         label: "Edit",

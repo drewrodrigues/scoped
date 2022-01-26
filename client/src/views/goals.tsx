@@ -1,26 +1,33 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { EmptyState } from "../components/emptyState";
 import { GoalForm } from "../components/goals/goalForm";
 import { GoalIndexItem } from "../components/goals/goalIndexItem";
 import { Button } from "../components/shared/button";
 import GoalEmpty from "../images/goal_empty.svg";
 import { useGoalsInSelectedScope } from "../store/goalSlice";
+import { hidePopover, showPopover } from "../store/popoverSlice";
 import { useSelectedScope } from "../store/scopeSlice";
 import { View } from "./view";
 
 export function Goals() {
   const scope = useSelectedScope();
-  const [showGoalForm, setShowGoalForm] = useState<boolean>(false);
   const goals = useGoalsInSelectedScope();
+  const dispatch = useDispatch();
+
+  function showNewGoalForm() {
+    dispatch(
+      showPopover({
+        component: <GoalForm onClose={() => dispatch(hidePopover())} />,
+      })
+    );
+  }
 
   return (
-    <View>
+    <View title="Goals">
       <header className="flex justify-between items-center mb-[20px]">
-        <h3 className="font-bold text-[22px]">Goals</h3>
-        <Button text="Add Goal" onClick={() => setShowGoalForm((p) => !p)} />
+        <Button text="Add Goal" onClick={showNewGoalForm} />
       </header>
-
-      {showGoalForm && <GoalForm onClose={() => setShowGoalForm(false)} />}
 
       {goals.length ? (
         <section className="flex flex-wrap justify-between">
@@ -34,7 +41,7 @@ export function Goals() {
           title={`You don't have any ${scope?.title} goals yet`}
           subtitle="Try adding your first one"
         >
-          <Button text="Add Goal" onClick={() => setShowGoalForm((p) => !p)} />
+          <Button text="Add Goal" onClick={showNewGoalForm} />
         </EmptyState>
       )}
     </View>

@@ -3,14 +3,15 @@ import { IconType } from "react-icons/lib";
 
 interface GenericAction {}
 export interface PopoverElement {
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   component?: any;
   customActions?: { action: () => void; label: string; Icon: IconType }[];
   editAction?: () => void;
   deleteAction?: () => void;
   popoverId?: string | number;
   direction?: "left" | "right";
+  onDismiss?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 interface PopoverState {

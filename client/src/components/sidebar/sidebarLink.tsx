@@ -63,6 +63,7 @@ export function SidebarLink(props: SidebarLinkProps) {
         {props.isActive && (
           <FaCheck className="group-hover:hidden text-[12px] text-gray-600" />
         )}
+
         {props.onClickMenu && (
           <button
             className="hidden p-[5px] rounded-[5px] hover:text-white group-hover:text-gray-400 group-hover:block hover:bg-gray-300"

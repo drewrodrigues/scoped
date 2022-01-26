@@ -1,7 +1,7 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FaBars, FaPen, FaTrash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { destroy, getChildren } from "../../data/modelCrud";
 import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
 import { goalDeleted } from "../../store/goalSlice";
@@ -11,13 +11,16 @@ import { TrackingList } from "../tracking/trackingList";
 import { NewTrackingForm } from "../tracking/trackingForm";
 import { GoalProgressBar } from "./goalProgressBar";
 import { GoalForm } from "./goalForm";
+import { hidePopover, showPopover } from "../../store/popoverSlice";
+import { RootState } from "../../store/store";
+import classNames from "classnames";
 
 export function GoalIndexItem(goal: ISavedGoal) {
   const { title, _id, _rev, coverPhotoUrl, dueDate } = goal;
-  const [toggleMenu, setToggleMenu] = useState(false);
   const [toggleTracking, setToggleTracking] = useState(false);
-
-  const [toggleGoalForm, setToggleGoalForm] = useState(false);
+  const isPoppedOver = useSelector(
+    (state: RootState) => state.popover.element?.popoverId === goal._id
+  );
 
   const trackingRecords = useTrackingInGoal(goal._id);
 
@@ -37,55 +40,53 @@ export function GoalIndexItem(goal: ISavedGoal) {
     console.log({ tracking });
   }
 
+  function showGoalContextMenu(e: React.MouseEvent<HTMLButtonElement>) {
+    dispatch(
+      showPopover({
+        x: e.clientX,
+        y: e.clientY,
+        editAction: () => {
+          dispatch(
+            showPopover({
+              component: (
+                <GoalForm
+                  existingGoal={goal}
+                  onClose={() => {
+                    dispatch(hidePopover());
+                  }}
+                />
+              ),
+            })
+          );
+        },
+        deleteAction: onDeleteGoalClick,
+        popoverId: goal._id,
+      })
+    );
+  }
+
   useEffect(() => {
     getTrackingForGoal();
   }, []);
 
   return (
     <div className="flex flex-col w-[49%]">
-      {toggleGoalForm && (
-        <GoalForm
-          existingGoal={goal}
-          onClose={() => setToggleGoalForm(false)}
-        />
-      )}
-
       <section
         key={_id}
-        className="flex flex-col shrink-0 relative hover:opacity-100 mt-[20px] mb-[10px] rounded-[5px]"
+        className={classNames(
+          "flex flex-col shrink-0 relative mt-[20px] mb-[10px] rounded-[5px]",
+          { "z-40 relative": isPoppedOver }
+        )}
         style={{ boxShadow: "0 2px #eff2f3", border: "1px solid #EFF2F3" }}
       >
         <header className="relative">
           <div className="absolute top-[10px] right-[10px] flex flex-col items-end">
             <button
-              className="bg-white py-[7px] px-[10px] mb-[5px] rounded-[5px] text-[12px] hover:opacity-100 cursor-pointer"
-              onClick={() => setToggleMenu((p) => !p)}
+              className="bg-white py-[7px] px-[10px] mb-[5px] rounded-[5px] text-[12px] cursor-pointer"
+              onClick={showGoalContextMenu}
             >
               <FaBars />
             </button>
-
-            {toggleMenu && (
-              <div className="bg-white rounded-[5px]">
-                <button
-                  className="text-[14px] px-[11px] py-[5px] flex items-center"
-                  onClick={() => {
-                    setToggleMenu(false);
-                    setToggleGoalForm(true);
-                  }}
-                >
-                  <FaPen className="mr-[3px] text-[12px]" />
-                  Edit
-                </button>
-
-                <button
-                  className="text-[14px] px-[11px] py-[5px] flex items-center"
-                  onClick={onDeleteGoalClick}
-                >
-                  <FaTrash className="mr-[3px] text-[12px]" />
-                  Delete
-                </button>
-              </div>
-            )}
           </div>
           <img
             src={coverPhotoUrl}

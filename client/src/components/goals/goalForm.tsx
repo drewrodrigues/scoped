@@ -102,98 +102,99 @@ export function _GoalForm({
   }, [coverPhotoSearch]);
 
   return (
-    <div className="absolute left-0 right-0 top-0 bottom-0 z-50 bg-[rgba(0,0,0,0.75)] flex justify-center items-center">
-      <div className="flex flex-col p-[40px] bg-white rounded-[10px] shadow w-[400px] flex-shrink-0">
-        <Input
-          type="text"
-          value={goalProperties.title}
-          onChange={(value) => updateGoalProperty("title", value)}
-          placeholder="Spend 40 hours learning Spanish"
-          label="Title"
-        />
+    <div
+      className="flex flex-col p-[40px] bg-white rounded-[10px] shadow w-[400px] flex-shrink-0"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <Input
+        type="text"
+        value={goalProperties.title}
+        onChange={(value) => updateGoalProperty("title", value)}
+        placeholder="Spend 40 hours learning Spanish"
+        label="Title"
+      />
 
-        <Input
-          type="date"
-          value={goalProperties.startDate}
-          onChange={(value) => updateGoalProperty("startDate", value)}
-          label="Start Date"
-        />
+      <Input
+        type="date"
+        value={goalProperties.startDate}
+        onChange={(value) => updateGoalProperty("startDate", value)}
+        label="Start Date"
+      />
 
-        <Input
-          type="date"
-          value={goalProperties.dueDate}
-          onChange={(value) => updateGoalProperty("dueDate", value)}
-          label="Due Date"
-        />
+      <Input
+        type="date"
+        value={goalProperties.dueDate}
+        onChange={(value) => updateGoalProperty("dueDate", value)}
+        label="Due Date"
+      />
 
-        <Input
-          onChange={setCoverPhotoSearch}
-          value={coverPhotoSearch}
-          placeholder="Search"
-          label="Cover Photo"
-        />
+      <Input
+        onChange={setCoverPhotoSearch}
+        value={coverPhotoSearch}
+        placeholder="Search"
+        label="Cover Photo"
+      />
 
-        {coverPhotos.length ? (
-          <div className="flex overflow-x-scroll h-[100px]">
-            {coverPhotos.map((photoUrl) => (
-              <img
-                src={photoUrl}
-                className={classNames("cover-photo-option", {
-                  "border-green-400 border-[5px]":
-                    goalProperties.coverPhotoUrl === photoUrl,
-                })}
-                onClick={() => updateGoalProperty("coverPhotoUrl", photoUrl)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="h-[100px] w-full bg-gray-300 text-white flex items-center justify-center">
-            No Cover Photo Selected
-          </div>
-        )}
-
-        <h4 className="mb-[5px] block text-[13px] mt-[10px]">Tracking Type</h4>
-        <div className="flex mb-[10px]">
-          <Radio
-            label="None"
-            setName="goalTrackingType"
-            value=""
-            checkedValue={goalProperties?.trackingMethod}
-            onClick={(value) =>
-              updateGoalProperty("trackingMethod", value as TrackingMethod)
-            }
-          />
-
-          <Radio
-            label="Quantity"
-            setName="goalTrackingType"
-            value="quantity"
-            checkedValue={goalProperties?.trackingMethod}
-            onClick={(value) =>
-              updateGoalProperty("trackingMethod", value as TrackingMethod)
-            }
-          />
+      {coverPhotos.length ? (
+        <div className="flex overflow-x-scroll h-[100px]">
+          {coverPhotos.map((photoUrl) => (
+            <img
+              src={photoUrl}
+              className={classNames("cover-photo-option", {
+                "border-green-400 border-[5px]":
+                  goalProperties.coverPhotoUrl === photoUrl,
+              })}
+              onClick={() => updateGoalProperty("coverPhotoUrl", photoUrl)}
+            />
+          ))}
         </div>
+      ) : (
+        <div className="h-[100px] w-full bg-gray-300 text-white flex items-center justify-center">
+          No Cover Photo Selected
+        </div>
+      )}
 
-        {goalProperties.trackingMethod && (
-          <Input
-            label={`Goal ${goalProperties.trackingMethod}`}
-            value={goalProperties.trackingGoalQuantity}
-            onChange={(value) =>
-              updateGoalProperty("trackingGoalQuantity", value)
-            }
-            placeholder="50"
-            type="number"
-          />
-        )}
+      <h4 className="mb-[5px] block text-[13px] mt-[10px]">Tracking Type</h4>
+      <div className="flex mb-[10px]">
+        <Radio
+          label="None"
+          setName="goalTrackingType"
+          value=""
+          checkedValue={goalProperties?.trackingMethod}
+          onClick={(value) =>
+            updateGoalProperty("trackingMethod", value as TrackingMethod)
+          }
+        />
 
-        <footer className="flex justify-between">
-          <Button onClick={() => onClose()} text="Close">
-            <FaTimes />
-          </Button>
-          <Button onClick={() => onSave(goalProperties)} text="Create Goal" />
-        </footer>
+        <Radio
+          label="Quantity"
+          setName="goalTrackingType"
+          value="quantity"
+          checkedValue={goalProperties?.trackingMethod}
+          onClick={(value) =>
+            updateGoalProperty("trackingMethod", value as TrackingMethod)
+          }
+        />
       </div>
+
+      {goalProperties.trackingMethod && (
+        <Input
+          label={`Goal ${goalProperties.trackingMethod}`}
+          value={goalProperties.trackingGoalQuantity}
+          onChange={(value) =>
+            updateGoalProperty("trackingGoalQuantity", value)
+          }
+          placeholder="50"
+          type="number"
+        />
+      )}
+
+      <footer className="flex justify-between">
+        <Button onClick={() => onClose()} text="Close">
+          <FaTimes />
+        </Button>
+        <Button onClick={() => onSave(goalProperties)} text="Create Goal" />
+      </footer>
     </div>
   );
 }
