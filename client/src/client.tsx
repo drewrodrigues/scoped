@@ -86,7 +86,7 @@ function Client() {
   }
 
   return (
-    <div className="flex bg-[#f1f3f6] h-[100vh]">
+    <div className="flex bg-[#E9EAEE] h-[100vh]">
       <PopoverLayer />
       <Sidebar />
       <MainRoutes />
