@@ -25,11 +25,11 @@ export function TasksToday() {
     <main>
       <header className="flex justify-between mb-[20px] items-center">
         <div>
-          <h2>Goals</h2>
+          <h2>Tasks</h2>
           <h3 className="text-[10px] text-[#777]">
             {isAllTasksComplete
-              ? "All goals handled"
-              : `${tasksLeft} goal${tasksLeft === 1 ? "" : "s"} left`}
+              ? "All tasks handled"
+              : `${tasksLeft} task${tasksLeft === 1 ? "" : "s"} left`}
           </h3>
         </div>
 
