@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaArrowRight,
   FaAward,
@@ -26,7 +26,9 @@ export function Goals() {
   const scope = useSelectedScope();
   const goals = useGoalsInSelectedScope();
   const dispatch = useDispatch();
-  const [filter, setFilter] = useState<GoalStatus>(GoalStatus.InProgress);
+  const [filter, setFilter] = useState<GoalStatus>(
+    (localStorage.getItem("GOAL_FILTER") as GoalStatus) || GoalStatus.InProgress
+  );
 
   function showNewGoalForm() {
     dispatch(
@@ -47,6 +49,12 @@ export function Goals() {
   goals.forEach((goal) => {
     filteredGoals[getGoalStatus(goal)].push(goal);
   });
+
+  useEffect(() => {
+    if (filter) {
+      localStorage.setItem("GOAL_FILTER", filter);
+    }
+  }, [filter]);
 
   return (
     <View title="Goals">
