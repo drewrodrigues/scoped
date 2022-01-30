@@ -10,7 +10,7 @@ import {
 const sameDayGoal = {
   startDate: todaysDate().toUTCString(),
   dueDate: todaysDate().toUTCString(), // because today counts as 1 day
-  trackingMethod: "hours",
+  trackingMethod: "quantity",
   trackingGoalQuantity: 100,
 } as SavedType<ISavedGoal>;
 
@@ -18,14 +18,14 @@ const oneWeekGoal = {
   startDate: todaysDate().toUTCString(),
   // one week goal is actually 8 days
   dueDate: nDaysFromNow(7).toUTCString(),
-  trackingMethod: "hours",
+  trackingMethod: "quantity",
   trackingGoalQuantity: 100,
 } as SavedType<ISavedGoal>;
 
 const tenDayGoal = {
   startDate: todaysDate().toUTCString(),
   dueDate: nDaysFromNow(9).toUTCString(), // because today counts as 1 day
-  trackingMethod: "hours",
+  trackingMethod: "quantity",
   trackingGoalQuantity: 100,
 } as SavedType<ISavedGoal>;
 

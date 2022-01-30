@@ -24,7 +24,7 @@ export function Dashboard({}: DashboardProps) {
   }
 
   return (
-    <View>
+    <View title="">
       <section className="dashboard__section">
         <div className="dashboard__header">
           <h5 className="dashboard__header-title">Goals</h5>

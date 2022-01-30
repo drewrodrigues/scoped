@@ -8,19 +8,7 @@ export default {
 
 export const hours = () => (
   <_TrackingForm
-    trackingMethod="hours"
-    onSave={(values) => console.log({ values })}
-  />
-);
-export const yesNo = () => (
-  <_TrackingForm
-    trackingMethod="yes/no"
-    onSave={(values) => console.log({ values })}
-  />
-);
-export const minutes = () => (
-  <_TrackingForm
-    trackingMethod="minutes"
+    trackingMethod="quantity"
     onSave={(values) => console.log({ values })}
   />
 );

@@ -18,7 +18,7 @@ export function useCreateTrackingOnGoal() {
     callback: (newRecord: SavedType<ITracking>) => void;
   }) {
     const tracking = await createOrSaveModel<ITracking>("Tracking", {
-      trackingMethod: "hours",
+      trackingMethod: "quantity",
       value: typeof quantity === "number" ? quantity : parseInt(quantity),
       date,
       goalId,

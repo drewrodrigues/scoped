@@ -23,9 +23,19 @@ export interface IGoal {
 
   // for today view
   lastDismissed?: string;
+
+  // motivation
+  completionReward?: string;
+
+  // finished states
+  finishingState?: {
+    date: string;
+    status: "failed" | "completed";
+    note?: string;
+  };
 }
 
-export type TrackingMethod = "yes/no" | "minutes" | "hours" | "quantity";
+export type TrackingMethod = "quantity";
 
 export interface ITracking {
   trackingMethod: TrackingMethod;

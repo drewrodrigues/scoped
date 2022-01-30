@@ -3,13 +3,13 @@ import { ModelStringType, ModelType } from "./modelTypes";
 
 export interface UnsavedModel {
   _id: string;
-  type: string;
+  type: ModelStringType;
 }
 
 export interface SavedModel {
   _id: string;
   _rev: string;
-  type: string;
+  type: ModelStringType;
   createdOn: Date;
 }
 

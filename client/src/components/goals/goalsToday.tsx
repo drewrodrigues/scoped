@@ -1,15 +1,13 @@
-import moment from "moment";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { todaysDate } from "../../helpers/date";
-import { useGoalsInSelectedScope } from "../../store/goalSlice";
+import { goalsTodayQuantities } from "../../hooks/goalHooks";
+import GoalsDone from "../../images/goals_done.svg";
+import GoalEmpty from "../../images/goal_empty.svg";
+import { useGoalsInProgressInSelectedScope } from "../../store/goalSlice";
+import { useSelectedScope } from "../../store/scopeSlice";
+import { EmptyState } from "../emptyState";
 import { Button } from "../shared/button";
 import { GoalToday } from "./goalToday";
-import GoalsDone from "../../images/goals_done.svg";
-import { EmptyState } from "../emptyState";
-import GoalEmpty from "../../images/goal_empty.svg";
-import { useSelectedScope } from "../../store/scopeSlice";
-import { goalsTodayQuantities } from "../../hooks/goalHooks";
 
 const SHOW_DISMISSED = "SHOW_DISMISSED";
 
@@ -19,7 +17,7 @@ interface GoalTodayProps {}
 
 export function GoalsToday({}: GoalTodayProps) {
   const scope = useSelectedScope();
-  const goals = useGoalsInSelectedScope();
+  const goals = useGoalsInProgressInSelectedScope();
   const { isAllGoalsDismissed, goalsLeft } = goalsTodayQuantities(goals);
   const [showDismissed, setShowDismissed] = useState(() => {
     const savedShowDismissedSetting = localStorage.getItem(SHOW_DISMISSED);

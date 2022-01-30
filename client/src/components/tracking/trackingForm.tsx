@@ -43,7 +43,7 @@ export function NewTrackingForm({
     date: string;
   }) {
     const tracking = await createOrSaveModel<ITracking>("Tracking", {
-      trackingMethod: "hours",
+      trackingMethod: "quantity",
       value: parseInt(quantity),
       date,
       goalId,

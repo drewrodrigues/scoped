@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getGoalStatus, GoalStatus } from "../hooks/goalHooks";
 import { useSelector } from "react-redux";
 import { SavedType } from "../data/modelCrud";
 import { ISavedGoal } from "../data/modelTypes";
@@ -74,17 +75,32 @@ export function useGoalsInSelectedScope(): ISavedGoal[] {
   return filteredGoals.sort(dueDateSort);
 }
 
-export function useAllGoals(): ISavedGoal[] {
+export function useAllGoals(
+  filter?: (goal: ISavedGoal) => boolean
+): ISavedGoal[] {
   const allGoalRecords = useSelector(
     (state: RootState) => state.goal.goalRecords
   );
   const allGoals = [];
 
   for (const [_, goalRecord] of Object.entries(allGoalRecords)) {
-    allGoals.push(goalRecord);
+    if (filter?.(goalRecord)) {
+      allGoals.push(goalRecord);
+    } else if (!filter) {
+      allGoals.push(goalRecord);
+    }
   }
 
   return allGoals;
+}
+
+export function useGoalsInProgressInSelectedScope(): ISavedGoal[] {
+  const selectedScope = useSelectedScope();
+  return useAllGoals(
+    (goal) =>
+      getGoalStatus(goal) === GoalStatus.InProgress &&
+      (selectedScope ? goal.scopeId === selectedScope?._id : true)
+  );
 }
 
 export const { goalsLoaded, goalCreated, goalUpdated, goalDeleted } =

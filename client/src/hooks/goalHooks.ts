@@ -2,6 +2,32 @@ import moment from "moment";
 import { IGoal, ISavedGoal, ISavedTracking } from "../data/modelTypes";
 import { todaysDate } from "../helpers/date";
 
+export enum GoalStatus {
+  InProgress = "In Progress",
+  Upcoming = "Upcoming",
+  NoDates = "No Dates",
+  Failed = "Failed",
+  Completed = "Completed",
+}
+
+export function getGoalStatus(goal: ISavedGoal): GoalStatus {
+  if (goal.finishingState?.status === "completed") {
+    return GoalStatus.Completed;
+  } else if (goal.finishingState?.status === "failed") {
+    return GoalStatus.Failed;
+  } else if (!goal.startDate || !goal.dueDate) {
+    return GoalStatus.NoDates;
+  } else if (moment(goal.startDate).isAfter(todaysDate())) {
+    return GoalStatus.Upcoming;
+  } else if (moment(goal.startDate).isSameOrBefore(todaysDate())) {
+    return GoalStatus.InProgress;
+  } else {
+    throw new Error(`This shouldn't be possible with ${goal}`);
+  }
+}
+
+// ? maybe this is too complete for the UI?
+// TODO: handle rounding better
 export function shouldBeGoalProgression(goal: ISavedGoal): {
   percentShouldBeComplete: number;
   quantityShouldBeComplete: number;

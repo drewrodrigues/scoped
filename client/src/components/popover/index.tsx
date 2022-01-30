@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import React from "react";
 import ReactDOM from "react-dom";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
@@ -61,12 +60,7 @@ export function Popover({
       {ReactDOM.createPortal(
         <div
           style={{ left: xPos, top: y }}
-          className={classNames(
-            "bg-white absolute flex flex-col py-[10px] rounded-[10px] shadow-md border z-50",
-            {
-              "w-[150px]": !component,
-            }
-          )}
+          className="bg-white absolute flex flex-col py-[10px] rounded-[10px] shadow-md border z-50 w-[200px]"
         >
           {editAction && (
             <button

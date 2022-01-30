@@ -3,7 +3,7 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 
 interface ButtonProps {
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   text?: string;
   className?: string;
   children?: JSX.Element;

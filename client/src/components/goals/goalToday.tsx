@@ -1,14 +1,22 @@
 import classNames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
-import { FaCheck, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import {
+  FaCheck,
+  FaEllipsisV,
+  FaEye,
+  FaEyeSlash,
+  FaTimes,
+} from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedGoal } from "../../data/modelTypes";
 import { todaysDate, yesterdaysDate } from "../../helpers/date";
 import { neededGoalProjections } from "../../hooks/goalHooks";
 import { useCreateTrackingOnGoal } from "../../hooks/trackingHooks";
 import { goalUpdated } from "../../store/goalSlice";
+import { showPopover } from "../../store/popoverSlice";
+import { RootState } from "../../store/store";
 import { useTrackingInGoal } from "../../store/trackingSlice";
 import { Button } from "../shared/button";
 import { NewTrackingForm } from "../tracking/trackingForm";
@@ -25,6 +33,10 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
   const { neededToBeOnTrackFormatted, isOnTrack } = neededGoalProjections(
     goal,
     tracking
+  );
+
+  const isPoppedOver = useSelector(
+    (state: RootState) => state.popover.element?.popoverId === goal._id
   );
 
   const wasDismissedToday =
@@ -47,9 +59,16 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
     dispatch(goalUpdated({ goal: updatedGoal }));
   }
 
-  function dismissGoalAfterTracking() {
-    setToggleTracking(false);
-    dismissGoalForDay();
+  function showContextMenu(e: React.MouseEvent<HTMLElement>) {
+    dispatch(
+      showPopover({
+        editAction: () => console.log("edit"),
+        deleteAction: () => console.log("delete"),
+        x: e.clientX,
+        y: e.clientY,
+        popoverId: goal._id,
+      })
+    );
   }
 
   if (wasDismissedToday && !showDismissed) return null;
@@ -59,7 +78,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
       <li
         className={classNames(
           "border mb-[10px] flex items-center bg-white rounded-[5px] overflow-hidden",
-          { "opacity-30": wasDismissedToday }
+          { "opacity-30": wasDismissedToday, "z-40 relative": isPoppedOver }
         )}
       >
         <div className="w-[150px] h-[75px]">
@@ -125,6 +144,10 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                 <FaEyeSlash />
               </Button>
             )}
+
+            <Button className="ml-[5px]" onClick={showContextMenu}>
+              <FaEllipsisV />
+            </Button>
           </aside>
         </section>
       </li>
@@ -132,7 +155,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
         <NewTrackingForm
           trackingMethod={goal.trackingMethod}
           goalId={goal._id}
-          onTrackingComplete={() => dismissGoalAfterTracking()}
+          onTrackingComplete={() => setToggleTracking(false)}
         />
       )}
     </>

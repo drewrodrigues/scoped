@@ -1,18 +1,10 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import {
-  FaBullseye,
-  FaCalendar,
-  FaCheck,
-  FaCog,
-  FaEdit,
-  FaPlus,
-  FaTrash,
-} from "react-icons/fa";
+import { FaBullseye, FaCalendar, FaCheck, FaCog, FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedScope, IScope } from "../../data/modelTypes";
 import { goalsTodayQuantities } from "../../hooks/goalHooks";
-import { useAllGoals } from "../../store/goalSlice";
+import { useGoalsInProgressInSelectedScope } from "../../store/goalSlice";
 import { showPopover } from "../../store/popoverSlice";
 import {
   scopeCreated,
@@ -47,7 +39,7 @@ export function Sidebar() {
   const dispatch = useDispatch();
   const selectedScope = useSelectedScope();
   const scopes = useAllScopes();
-  const goals = useAllGoals();
+  const goals = useGoalsInProgressInSelectedScope();
   const { goalsLeft } = goalsTodayQuantities(goals);
 
   const [newScopeText, setNewScopeText] = useState("");
