@@ -44,6 +44,7 @@ export function useTasksInSelectedScope(): ISavedTask[] {
   return filteredTasks;
 }
 
-export const { tasksLoaded, taskAdded, taskDeleted } = trackingSlice.actions;
+export const { tasksLoaded, taskAdded, taskDeleted, taskUpdated } =
+  trackingSlice.actions;
 
 export default trackingSlice.reducer;
