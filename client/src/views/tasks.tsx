@@ -17,6 +17,7 @@ import {
   taskUpdated,
   useTasksInSelectedScope,
 } from "../store/taskSlice";
+import { showTaskContextMenu, toggleTask } from "../utils/taskUtils";
 import { View } from "./view";
 
 enum TaskFilter {
@@ -53,7 +54,7 @@ export function Tasks({}: TasksProps) {
       throw new Error("No scope selected");
     }
     const newTask = await createOrSaveModel<ITask>("Task", {
-      complete: false,
+      completedOn: undefined,
       title: newTitle,
       scopeId: selectedScope._id,
       dueDate,
@@ -63,40 +64,9 @@ export function Tasks({}: TasksProps) {
     setDueDate("");
   }
 
-  async function onDeleteTask(task: ISavedTask) {
-    await destroy({ _id: task._id, _rev: task._rev });
-    dispatch(taskDeleted({ value: task }));
-  }
-
-  function onEditClick(
-    e: React.MouseEvent<HTMLButtonElement>,
-    task: ISavedTask
-  ) {
-    dispatch(
-      showPopover({
-        x: e.clientX,
-        y: e.clientY,
-        popoverId: task._id,
-        editAction: () => console.log("edit the task"),
-        deleteAction: () => onDeleteTask(task),
-      })
-    );
-  }
-
-  async function onToggleTask(
-    _: React.MouseEvent<HTMLButtonElement>,
-    task: ISavedTask
-  ) {
-    const updatedTask = await createOrSaveModel<ISavedTask>("Task", {
-      ...task,
-      complete: !task.complete,
-    });
-    dispatch(taskUpdated({ value: updatedTask }));
-  }
-
   const filteredTasks: Record<TaskFilter, ISavedTask[]> = {
-    [TaskFilter.Incomplete]: tasks.filter((task) => !task.complete),
-    [TaskFilter.Complete]: tasks.filter((task) => task.complete),
+    [TaskFilter.Incomplete]: tasks.filter((task) => !task.completedOn),
+    [TaskFilter.Complete]: tasks.filter((task) => task.completedOn),
     [TaskFilter.All]: tasks,
   };
 
@@ -163,9 +133,11 @@ export function Tasks({}: TasksProps) {
         selectedFilteredTasks.map((task) => (
           <Task
             task={task}
-            onEditClick={onEditClick}
+            onContextMenuClick={(e, task) =>
+              dispatch(showTaskContextMenu(e, task))
+            }
             isPoppedOver={popoverId === task._id}
-            onCompleteClick={(e) => onToggleTask(e, task)}
+            onCompleteClick={() => dispatch(toggleTask(task))}
           />
         ))
       )}

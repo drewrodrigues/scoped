@@ -5,7 +5,7 @@ import {
   actualGoalProgression,
   computedGoalDates,
   shouldBeGoalProgression,
-} from "../goalHooks";
+} from "../goalUtils";
 
 const sameDayGoal = {
   startDate: todaysDate().toUTCString(),

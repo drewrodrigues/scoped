@@ -3,7 +3,7 @@ import { FaBullseye, FaCalendar, FaCheck, FaCog, FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedScope, IScope } from "../../data/modelTypes";
-import { goalsTodayQuantities } from "../../hooks/goalHooks";
+import { goalsTodayQuantities } from "../../utils/goalUtils";
 import { useGoalsInProgressInSelectedScope } from "../../store/goalSlice";
 import { showPopover } from "../../store/popoverSlice";
 import {

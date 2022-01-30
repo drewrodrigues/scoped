@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrSaveModel, destroy, getChildren } from "../../data/modelCrud";
 import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
 import { todaysDate } from "../../helpers/date";
-import { getGoalStatus, GoalStatus } from "../../hooks/goalHooks";
+import { getGoalStatus, GoalStatus } from "../../utils/goalUtils";
 import { goalDeleted, goalUpdated } from "../../store/goalSlice";
 import { hidePopover, showPopover } from "../../store/popoverSlice";
 import { RootState } from "../../store/store";

@@ -6,7 +6,7 @@ import { ISavedTask } from "../../data/modelTypes";
 
 interface TaskProps {
   task: ISavedTask;
-  onEditClick: (
+  onContextMenuClick: (
     e: React.MouseEvent<HTMLButtonElement>,
     task: ISavedTask
   ) => void;
@@ -16,7 +16,7 @@ interface TaskProps {
 
 export function Task({
   task,
-  onEditClick,
+  onContextMenuClick,
   isPoppedOver,
   onCompleteClick,
 }: TaskProps) {
@@ -32,11 +32,11 @@ export function Task({
           className="bg-[#E9EAEE] w-[24px] h-[24px] rounded-[7px] mr-[13px] flex items-center justify-center text-[11px]"
           onClick={onCompleteClick}
         >
-          {task.complete && <FaCheck />}
+          {task.completedOn && <FaCheck />}
         </button>
         <p
           className={classNames("text-[16px]", {
-            "line-through": task.complete,
+            "line-through": task.completedOn,
           })}
         >
           {task.title}
@@ -48,7 +48,7 @@ export function Task({
         {!isPoppedOver ? (
           <button
             className="p-[5px] rounded-[5px]"
-            onClick={(e) => onEditClick(e, task)}
+            onClick={(e) => onContextMenuClick(e, task)}
           >
             <BsThreeDotsVertical className="text-white group-hover:text-[#E9EAEE] text-[18px]" />
           </button>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getGoalStatus, GoalStatus } from "../hooks/goalHooks";
+import { getGoalStatus, GoalStatus } from "../utils/goalUtils";
 import { useSelector } from "react-redux";
 import { SavedType } from "../data/modelCrud";
 import { ISavedGoal } from "../data/modelTypes";

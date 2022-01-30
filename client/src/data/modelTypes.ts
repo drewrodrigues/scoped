@@ -47,10 +47,11 @@ export interface ITracking {
 export interface ITask {
   title: string;
   scopeId: string;
-  complete: boolean;
+  completedOn?: string;
 
   // for today view
   lastDismissed?: string;
+  dueDate?: string;
 }
 
 export type ISavedGoal = SavedType<IGoal>;

@@ -15,7 +15,7 @@ import { ItemFilter } from "../components/itemFilter";
 import { Button } from "../components/shared/button";
 import { ISavedGoal } from "../data/modelTypes";
 import { todaysDate } from "../helpers/date";
-import { getGoalStatus, GoalStatus } from "../hooks/goalHooks";
+import { getGoalStatus, GoalStatus } from "../utils/goalUtils";
 import GoalEmpty from "../images/goal_empty.svg";
 import { useGoalsInSelectedScope } from "../store/goalSlice";
 import { hidePopover, showPopover } from "../store/popoverSlice";

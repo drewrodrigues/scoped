@@ -14,7 +14,7 @@ export function View({ children, title, type }: ViewProps) {
   return (
     <main
       className={classNames(
-        "p-[40px] overflow-y-scroll w-full max-w-[1000px] mx-auto",
+        "p-[40px] overflow-y-scroll w-full max-w-[1200px] mx-auto",
         { "max-w-[600px]": type === "thin" }
       )}
     >

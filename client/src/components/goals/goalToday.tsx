@@ -6,14 +6,15 @@ import {
   FaEllipsisV,
   FaEye,
   FaEyeSlash,
+  FaPlus,
   FaTimes,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrSaveModel, destroy } from "../../data/modelCrud";
 import { ISavedGoal } from "../../data/modelTypes";
 import { todaysDate, yesterdaysDate } from "../../helpers/date";
-import { neededGoalProjections } from "../../hooks/goalHooks";
-import { useCreateTrackingOnGoal } from "../../hooks/trackingHooks";
+import { neededGoalProjections } from "../../utils/goalUtils";
+import { useCreateTrackingOnGoal } from "../../utils/trackingHooks";
 import { goalUpdated } from "../../store/goalSlice";
 import { showPopover } from "../../store/popoverSlice";
 import { RootState } from "../../store/store";
@@ -81,7 +82,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
           { "opacity-30": wasDismissedToday, "z-40 relative": isPoppedOver }
         )}
       >
-        <div className="w-[150px] h-[75px]">
+        <div className="w-[50px] h-[75px] flex-shrink-0">
           <img
             src={goal.coverPhotoUrl}
             alt=""
@@ -89,7 +90,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
           />
         </div>
 
-        <section className="flex justify-between w-full px-[20px] text-[14px] items-center">
+        <section className="flex justify-between w-full px-[10px] text-[14px] items-center">
           <main className="leading-[1]">
             <p className="font-bold mb-[5px]">{goal.title}</p>
 
@@ -98,7 +99,6 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                 (isOnTrack ? (
                   <p className="text-[8px] flex px-[7px] py-[5px] border rounded-[5px] text-green-500 whitespace-pre border-green-500">
                     <FaCheck className="mr-[3px]" />
-                    On Track
                     <span className="font-bold">
                       {" "}
                       ~{neededToBeOnTrackFormatted} due today
@@ -107,7 +107,7 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                 ) : (
                   <p className="text-[8px] flex px-[7px] py-[5px] border rounded-[5px] text-red-500 whitespace-pre border-red-500">
                     <FaTimes className="mr-[3px]" />
-                    Falling Behind
+                    Behind
                     <span className="font-bold">
                       {" "}
                       by ~{neededToBeOnTrackFormatted}
@@ -126,28 +126,27 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
 
           <aside className="flex">
             {goal.trackingMethod && !wasDismissedToday && (
-              <Button
-                text="Track"
-                onClick={() => setToggleTracking((p) => !p)}
-              />
+              <button onClick={() => setToggleTracking((p) => !p)}>
+                <FaPlus />
+              </button>
             )}
 
             {wasDismissedToday ? (
-              <Button
+              <button
                 onClick={() => undismissGoalForDay()}
                 className="ml-[5px]"
               >
                 <FaEye />
-              </Button>
+              </button>
             ) : (
-              <Button onClick={() => dismissGoalForDay()} className="ml-[5px]">
+              <button onClick={() => dismissGoalForDay()} className="ml-[5px]">
                 <FaEyeSlash />
-              </Button>
+              </button>
             )}
 
-            <Button className="ml-[5px]" onClick={showContextMenu}>
+            <button className="ml-[5px]" onClick={showContextMenu}>
               <FaEllipsisV />
-            </Button>
+            </button>
           </aside>
         </section>
       </li>

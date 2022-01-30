@@ -5,7 +5,7 @@ import {
   actualGoalProgression,
   computedGoalDates,
   shouldBeGoalProgression,
-} from "../../hooks/goalHooks";
+} from "../../utils/goalUtils";
 import { useTrackingInGoal } from "../../store/trackingSlice";
 
 interface GoalProgressBarProps {

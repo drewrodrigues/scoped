@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { goalsTodayQuantities } from "../../hooks/goalHooks";
+import { goalsTodayQuantities } from "../../utils/goalUtils";
 import GoalsDone from "../../images/goals_done.svg";
 import GoalEmpty from "../../images/goal_empty.svg";
 import { useGoalsInProgressInSelectedScope } from "../../store/goalSlice";
@@ -13,9 +13,7 @@ const SHOW_DISMISSED = "SHOW_DISMISSED";
 
 type ComponentShown = "CompleteEmptyState" | "Goals" | "GoalEmptyState";
 
-interface GoalTodayProps {}
-
-export function GoalsToday({}: GoalTodayProps) {
+export function GoalsToday() {
   const scope = useSelectedScope();
   const goals = useGoalsInProgressInSelectedScope();
   const { isAllGoalsDismissed, goalsLeft } = goalsTodayQuantities(goals);
