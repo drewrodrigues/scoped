@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaBars, FaCheck, FaTimes } from "react-icons/fa";
+import { FaAward, FaBars, FaCheck, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrSaveModel, destroy, getChildren } from "../../data/modelCrud";
 import { ISavedGoal, ISavedTracking } from "../../data/modelTypes";
@@ -161,14 +161,23 @@ export function GoalIndexItem(goal: ISavedGoal) {
           )}
         </header>
 
-        <footer className="p-[20px] bg-white justify-between items-center relative">
+        <footer className="p-[20px] bg-white relative flex items-start flex-col">
           <p className="text-[16px] text-bold text-gray-700 w-full font-bold">
             {title}
           </p>
 
-          {finishingState && (
-            <p>
-              Marked {finishingState.status} on {finishingState.date}
+          {finishingState?.status === "failed" && (
+            <p className="border rounded-[3px] text-[11px] mt-[5px] p-[5px] text-red-600 bg-red-100 border-red-200 flex items-center">
+              <FaTimes className="mr-[3px]" />
+              Marked failed on {moment(finishingState.date).format("MM/DD/YY")}
+            </p>
+          )}
+
+          {finishingState?.status === "completed" && (
+            <p className="border rounded-[3px] text-[11px] mt-[5px] p-[5px] text-green-600 bg-green-100 border-green-200 flex items-center">
+              <FaAward className="mr-[3px]" />
+              Marked complete on{" "}
+              {moment(finishingState.date).format("MM/DD/YY")}
             </p>
           )}
 
