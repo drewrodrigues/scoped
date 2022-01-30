@@ -14,12 +14,10 @@ export function TasksToday() {
   const tasks = useTasksInSelectedScope();
   const dispatch = useDispatch();
 
-  const tasksToday = tasks.filter((task) =>
-    moment(task.dueDate).isSame(todaysDate(), "day")
+  const tasksToday = tasks.filter(
+    (task) => task.dueDate && moment(task.dueDate).isSame(todaysDate(), "day")
   );
-  const isAllTasksComplete = tasksToday.every((task) => task.completedOn);
-  const { tasksLeft, isAllTasksDismissed, tasksDismissedCount } =
-    tasksTodayQuantities(tasksToday);
+  const { tasksLeft, isAllTasksDismissed } = tasksTodayQuantities(tasksToday);
 
   return (
     <main>
@@ -27,15 +25,11 @@ export function TasksToday() {
         <div>
           <h2>Tasks</h2>
           <h3 className="text-[10px] text-[#777]">
-            {isAllTasksComplete
+            {isAllTasksDismissed
               ? "All tasks handled"
               : `${tasksLeft} task${tasksLeft === 1 ? "" : "s"} left`}
           </h3>
         </div>
-
-        {/* <Button text="" onClick={() => console.log('save the things')}>
-          {showDismissed ? <FaEyeSlash /> : <FaEye />}
-        </Button> */}
       </header>
 
       {tasksToday.map((task) => (

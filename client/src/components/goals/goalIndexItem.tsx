@@ -194,11 +194,11 @@ export function GoalIndexItem(goal: ISavedGoal) {
       {(goalStatus === GoalStatus.InProgress ||
         goalStatus === GoalStatus.Upcoming) && (
         <p className="rounded-[5px] text-[10px] text-gray-500">
-          {goalStatus === GoalStatus.InProgress ? "due in" : "starting in"}{" "}
+          {goalStatus === GoalStatus.InProgress ? "due" : "starting in"}{" "}
           <span className="font-bold">
             {moment(
               goalStatus === GoalStatus.InProgress ? dueDate : startDate
-            ).fromNow(true)}
+            ).fromNow()}
           </span>{" "}
           on{" "}
           {moment(

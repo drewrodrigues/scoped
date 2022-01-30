@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import moment from "moment";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
@@ -23,26 +24,33 @@ export function Task({
   return (
     <div
       className={classNames(
-        "border pl-[15px] pr-[15px] py-[12px] bg-white flex justify-between items-center group mb-[5px] rounded-[15px]",
+        "border pl-[10px] pr-[10px] py-[6px] bg-white flex justify-between items-center group mb-[5px] rounded-[15px]",
         { "z-40 relative": isPoppedOver }
       )}
     >
       <div className="flex items-center">
         <button
-          className="bg-[#E9EAEE] w-[24px] h-[24px] rounded-[7px] mr-[13px] flex items-center justify-center text-[11px]"
+          className="bg-[#E9EAEE] w-[20px] h-[20px] rounded-[7px] mr-[10px] flex items-center justify-center text-[11px]"
           onClick={onCompleteClick}
         >
           {task.completedOn && <FaCheck />}
         </button>
-        <p
-          className={classNames("text-[16px]", {
-            "line-through": task.completedOn,
-          })}
-        >
-          {task.title}
-        </p>
+        <div>
+          <p
+            className={classNames("text-[14px]", {
+              "line-through": task.completedOn,
+            })}
+          >
+            {task.title}
+          </p>
+          {task.dueDate && (
+            <p className="text-[9px] text-gray-400 cursor-pointer mt-[5px]">
+              due {moment(task.dueDate).fromNow()} on{" "}
+              {moment(task.dueDate).format("MM/DD/YY")}
+            </p>
+          )}
+        </div>
       </div>
-      <p className="text-[10px]">{task.dueDate}</p>
 
       <aside className="group">
         {!isPoppedOver ? (

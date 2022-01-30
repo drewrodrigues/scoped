@@ -115,9 +115,9 @@ export function GoalToday({ goal, showDismissed }: GoalTodayProps) {
                   </p>
                 ))}
               <p className="rounded-[5px] text-[8px] text-gray-500 ml-[5px]">
-                due in{" "}
+                due{" "}
                 <span className="font-bold">
-                  {moment(goal.dueDate).fromNow(true)}
+                  {moment(goal.dueDate).fromNow()}
                 </span>{" "}
                 on {moment(goal.dueDate).format("MM/DD/YY")}
               </p>
