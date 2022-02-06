@@ -15,7 +15,15 @@ export function TasksToday() {
   const dispatch = useDispatch();
 
   const tasksToday = tasks.filter(
-    (task) => task.dueDate && moment(task.dueDate).isSame(todaysDate(), "day")
+    (task) => {
+      if (task.completedOn) {
+        return moment(task.completedOn).isSame(todaysDate(), "day");
+      } else if (task.dueDate) {
+        return moment(task.dueDate).isSameOrBefore(todaysDate(), "day")
+      } else {
+        return false;
+      }
+    }
   );
   const { tasksLeft, isAllTasksDismissed } = tasksTodayQuantities(tasksToday);
 
