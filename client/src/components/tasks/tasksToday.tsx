@@ -3,6 +3,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Task } from ".";
 import { todaysDate } from "../../helpers/date";
+import { completedOrDueTodayOrOverdue } from "../../helpers/filters";
 import { useTasksInSelectedScope } from "../../store/taskSlice";
 import {
   showTaskContextMenu,
@@ -15,15 +16,7 @@ export function TasksToday() {
   const dispatch = useDispatch();
 
   const tasksToday = tasks.filter(
-    (task) => {
-      if (task.completedOn) {
-        return moment(task.completedOn).isSame(todaysDate(), "day");
-      } else if (task.dueDate) {
-        return moment(task.dueDate).isSameOrBefore(todaysDate(), "day")
-      } else {
-        return false;
-      }
-    }
+    (task) => completedOrDueTodayOrOverdue(task)
   );
   const { tasksLeft, isAllTasksDismissed } = tasksTodayQuantities(tasksToday);
 
